@@ -164,14 +164,15 @@ export const AdminProductFormPage: React.FC = () => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Color management with color-specific image upload
+  // Color management with MULTIPLE color-specific images (Requested by user)
   const handleAddColor = () => {
     setColors((prev) => [
       ...prev,
       {
-        name: `Color / Finish ${prev.length + 1}`,
+        name: `Finish ${prev.length + 1}`,
         hex_code: '#8B4513',
-        image_url: ''
+        image_url: '',
+        images: []
       }
     ]);
   };
@@ -185,19 +186,64 @@ export const AdminProductFormPage: React.FC = () => {
   };
 
   const handleColorImageUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setUploadingColorIdx(index);
     try {
-      const res = await adminApi.uploadImage(file);
-      handleUpdateColor(index, 'image_url', res.url);
-      success(`Image uploaded for ${colors[index].name}`);
+      const uploadedUrls: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const res = await adminApi.uploadImage(files[i]);
+        uploadedUrls.push(res.url);
+      }
+      setColors((prev) => {
+        const updated = [...prev];
+        const currentImages = updated[index].images || (updated[index].image_url ? [updated[index].image_url!] : []);
+        const merged = [...currentImages, ...uploadedUrls];
+        updated[index] = {
+          ...updated[index],
+          image_url: merged[0] || '',
+          images: merged
+        };
+        return updated;
+      });
+      success(`Uploaded ${uploadedUrls.length} photo(s) for ${colors[index].name}`);
     } catch (err: any) {
       toastError(err.message || 'Color image upload failed');
     } finally {
       setUploadingColorIdx(null);
     }
+  };
+
+  const handleAddColorImageUrl = (index: number) => {
+    const url = prompt(`Enter image URL for ${colors[index].name}:`);
+    if (url && url.trim()) {
+      setColors((prev) => {
+        const updated = [...prev];
+        const currentImages = updated[index].images || (updated[index].image_url ? [updated[index].image_url!] : []);
+        const merged = [...currentImages, url.trim()];
+        updated[index] = {
+          ...updated[index],
+          image_url: merged[0] || '',
+          images: merged
+        };
+        return updated;
+      });
+    }
+  };
+
+  const handleRemoveColorImage = (colorIdx: number, imgIdx: number) => {
+    setColors((prev) => {
+      const updated = [...prev];
+      const currentImages = updated[colorIdx].images || (updated[colorIdx].image_url ? [updated[colorIdx].image_url!] : []);
+      const filtered = currentImages.filter((_, i) => i !== imgIdx);
+      updated[colorIdx] = {
+        ...updated[colorIdx],
+        image_url: filtered[0] || '',
+        images: filtered
+      };
+      return updated;
+    });
   };
 
   const handleRemoveColor = (index: number) => {
@@ -226,7 +272,7 @@ export const AdminProductFormPage: React.FC = () => {
       toastError('Please select a category');
       return;
     }
-    if (images.length === 0 && colors.every((c) => !c.image_url)) {
+    if (images.length === 0 && colors.every((c) => !c.image_url && (!c.images || c.images.length === 0))) {
       toastError('Please add at least one product image');
       return;
     }
@@ -237,6 +283,16 @@ export const AdminProductFormPage: React.FC = () => {
             ((formData.original_price - formData.selling_price) / formData.original_price) * 100
           )
         : 0;
+
+    // Ensure colors have both images and image_url synced
+    const normalizedColors = colors.map((c) => {
+      const allImgs = c.images && c.images.length > 0 ? c.images : c.image_url ? [c.image_url] : [];
+      return {
+        ...c,
+        image_url: allImgs[0] || '',
+        images: allImgs
+      };
+    });
 
     const payload: any = {
       name: formData.name.trim(),
@@ -262,7 +318,7 @@ export const AdminProductFormPage: React.FC = () => {
       },
       warranty_info: formData.warranty_info.trim(),
       images,
-      colors,
+      colors: normalizedColors,
       features,
       is_featured: formData.is_featured,
       is_best_seller: formData.is_best_seller,
@@ -279,7 +335,8 @@ export const AdminProductFormPage: React.FC = () => {
         await adminApi.createProduct(payload);
         success('Product published to catalog successfully');
       }
-      navigate('/admin/products');
+      // Redirect back to that category view!
+      navigate(`/admin/categories?category_id=${formData.category_id}`);
     } catch (err: any) {
       toastError(err.message || 'Failed to save product');
     } finally {
@@ -311,10 +368,10 @@ export const AdminProductFormPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-200">
         <div>
           <Link
-            to="/admin/products"
+            to={formData.category_id ? `/admin/categories?category_id=${formData.category_id}` : '/admin/categories'}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-amber-800 mb-2 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to Products List
+            <ArrowLeft className="w-4 h-4" /> Back to Category Products
           </Link>
           <h1 className="text-2xl font-bold font-serif text-stone-900 flex items-center gap-2">
             <Sparkles className="w-6 h-6 text-amber-700" />
@@ -517,105 +574,130 @@ export const AdminProductFormPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="space-y-4">
-            {colors.map((color, idx) => (
-              <div
-                key={idx}
-                className="p-4 rounded-2xl border border-stone-200 bg-stone-50/60 flex flex-col md:flex-row items-start md:items-center gap-4 transition-all"
-              >
-                {/* Color preview photo */}
-                <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-stone-200 border border-stone-300 shrink-0">
-                  {color.image_url ? (
-                    <img
-                      src={color.image_url}
-                      alt={color.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-stone-400 text-[10px] text-center p-1">
-                      <ImageIcon className="w-5 h-5 mb-0.5 opacity-60" />
-                      <span>No photo</span>
-                    </div>
-                  )}
-                  <span
-                    style={{ backgroundColor: color.hex_code || '#78350F' }}
-                    className="absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-white shadow-xs"
-                    title={`Swatch: ${color.hex_code}`}
-                  />
-                </div>
+          <div className="space-y-6">
+            {colors.map((color, idx) => {
+              const colorImages =
+                color.images && color.images.length > 0
+                  ? color.images
+                  : color.image_url
+                  ? [color.image_url]
+                  : [];
 
-                {/* Color Inputs */}
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
-                  <div>
-                    <label className="block text-[11px] font-bold text-stone-600 uppercase mb-1">
-                      Color / Polish Name
-                    </label>
-                    <input
-                      type="text"
-                      value={color.name}
-                      onChange={(e) => handleUpdateColor(idx, 'name', e.target.value)}
-                      placeholder="e.g. Honey Teak, Royal Walnut"
-                      className="w-full p-2.5 bg-white rounded-xl border border-stone-200 text-xs font-semibold focus:outline-hidden"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold text-stone-600 uppercase mb-1">
-                      Swatch Dot Color
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="color"
-                        value={color.hex_code || '#78350F'}
-                        onChange={(e) => handleUpdateColor(idx, 'hex_code', e.target.value)}
-                        className="w-9 h-9 p-0.5 rounded-lg border border-stone-300 cursor-pointer bg-white"
-                      />
-                      <input
-                        type="text"
-                        value={color.hex_code || '#78350F'}
-                        onChange={(e) => handleUpdateColor(idx, 'hex_code', e.target.value)}
-                        className="flex-1 p-2 bg-white rounded-xl border border-stone-200 text-xs font-mono"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold text-stone-600 uppercase mb-1">
-                      Color Photo (Upload / URL)
-                    </label>
-                    <div className="flex items-center gap-1.5">
-                      <input
-                        type="url"
-                        placeholder="Image URL..."
-                        value={color.image_url || ''}
-                        onChange={(e) => handleUpdateColor(idx, 'image_url', e.target.value)}
-                        className="flex-1 p-2 bg-white rounded-xl border border-stone-200 text-xs"
-                      />
-                      <label className="px-3 py-2 bg-stone-200 hover:bg-stone-300 text-stone-800 rounded-xl text-xs font-semibold cursor-pointer shrink-0">
-                        <span>{uploadingColorIdx === idx ? '...' : 'Upload'}</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleColorImageUpload(idx, e)}
-                          className="hidden"
-                          disabled={uploadingColorIdx !== null}
-                        />
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Remove button */}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveColor(idx)}
-                  className="p-2 text-stone-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 cursor-pointer self-center"
-                  title="Remove this color"
+              return (
+                <div
+                  key={idx}
+                  className="p-5 rounded-2xl border border-stone-200 bg-stone-50/70 space-y-4 transition-all"
                 >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
+                  {/* Top Bar: Name, Swatch, and Remove */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-stone-200">
+                    <div className="flex flex-1 items-center gap-3">
+                      <div className="relative">
+                        <input
+                          type="color"
+                          value={color.hex_code || '#78350F'}
+                          onChange={(e) => handleUpdateColor(idx, 'hex_code', e.target.value)}
+                          className="w-10 h-10 p-0.5 rounded-xl border border-stone-300 cursor-pointer bg-white shrink-0 shadow-xs"
+                          title="Click to choose color dot"
+                        />
+                      </div>
+                      <div className="flex-1 max-w-sm">
+                        <label className="block text-[11px] font-bold text-stone-600 uppercase mb-1">
+                          Color / Polish Name
+                        </label>
+                        <input
+                          type="text"
+                          value={color.name}
+                          onChange={(e) => handleUpdateColor(idx, 'name', e.target.value)}
+                          placeholder="e.g. Honey Teak Finish, Dark Walnut"
+                          className="w-full p-2 bg-white rounded-xl border border-stone-200 text-xs font-semibold focus:outline-hidden"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveColor(idx)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors cursor-pointer self-start sm:self-center"
+                      title="Delete this color"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Remove Color</span>
+                    </button>
+                  </div>
+
+                  {/* Multiple Photos Gallery for this specific Color */}
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <ImageIcon className="w-3.5 h-3.5 text-amber-800" />
+                        <span>Photos for {color.name || 'this color'}</span>
+                        <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold">
+                          {colorImages.length} Photos
+                        </span>
+                      </label>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleAddColorImageUrl(idx)}
+                          className="px-2.5 py-1 text-[11px] font-semibold text-stone-700 bg-white border border-stone-200 rounded-lg hover:bg-stone-50 cursor-pointer"
+                        >
+                          + Paste Photo URL
+                        </button>
+
+                        <label className="px-3 py-1 bg-amber-800 hover:bg-amber-900 text-white rounded-lg text-[11px] font-semibold cursor-pointer flex items-center gap-1 shadow-xs">
+                          <Upload className="w-3 h-3" />
+                          <span>{uploadingColorIdx === idx ? 'Uploading...' : '+ Upload Photos'}</span>
+                          <input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={(e) => handleColorImageUpload(idx, e)}
+                            className="hidden"
+                            disabled={uploadingColorIdx !== null}
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Thumbnails Row */}
+                    {colorImages.length > 0 ? (
+                      <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 gap-2.5 pt-1">
+                        {colorImages.map((imgUrl, imgIdx) => (
+                          <div
+                            key={imgIdx}
+                            className="relative aspect-square rounded-xl overflow-hidden border border-stone-200 bg-stone-100 group shadow-xs"
+                          >
+                            <img
+                              src={imgUrl}
+                              alt={`${color.name} ${imgIdx + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                            {imgIdx === 0 && (
+                              <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-stone-900/80 text-white text-[9px] font-bold">
+                                Main
+                              </span>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveColorImage(idx, imgIdx)}
+                              className="absolute top-1 right-1 p-1 rounded-md bg-rose-600/90 text-white hover:bg-rose-700 shadow-sm opacity-90 group-hover:opacity-100 transition-opacity cursor-pointer"
+                              title="Delete this photo"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="p-4 rounded-xl border-2 border-dashed border-stone-200 bg-white text-center text-xs text-stone-400">
+                        No photos added for this color yet. Click <strong>+ Upload Photos</strong> or <strong>+ Paste Photo URL</strong> above.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 

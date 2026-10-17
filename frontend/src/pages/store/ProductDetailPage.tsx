@@ -109,21 +109,89 @@ export const ProductDetailPage: React.FC = () => {
 
   // Find color object matching selected color
   const activeColorObj = product.colors?.find((c) => c.name === selectedColor);
-  const colorSpecificImage = activeColorObj?.image_url || activeColorObj?.images?.[0];
 
-  // If a color-specific image exists, prioritize it; otherwise use the selected gallery thumbnail
-  const currentImage =
-    (colorSpecificImage && selectedImageIndex === 0)
-      ? colorSpecificImage
-      : product.images[selectedImageIndex]?.url || colorSpecificImage || product.images[0]?.url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1000&q=80';
+  interface GalleryItem {
+    url: string;
+    label?: string;
+    colorName?: string;
+  }
 
-  // Handler for color selection: updates selected color and switches main view to that color's image
+  // Dynamic gallery items: prioritize all photos for the selected finish, followed by general photos & other finishes
+  const galleryItems: GalleryItem[] = React.useMemo(() => {
+    if (!product) return [];
+    const items: GalleryItem[] = [];
+    const seenUrls = new Set<string>();
+
+    // 1. Photos for the currently active selected color
+    if (activeColorObj) {
+      const colorPhotos = (activeColorObj.images && activeColorObj.images.length > 0)
+        ? activeColorObj.images
+        : (activeColorObj.image_url ? [activeColorObj.image_url] : []);
+
+      colorPhotos.forEach((url, i) => {
+        if (!seenUrls.has(url)) {
+          items.push({
+            url,
+            colorName: activeColorObj.name,
+            label: colorPhotos.length > 1 ? `${activeColorObj.name} (Photo ${i + 1}/${colorPhotos.length})` : `${activeColorObj.name} Finish`
+          });
+          seenUrls.add(url);
+        }
+      });
+    }
+
+    // 2. Standard product catalog photos
+    if (product.images && product.images.length > 0) {
+      product.images.forEach((img, i) => {
+        if (!seenUrls.has(img.url)) {
+          items.push({
+            url: img.url,
+            label: img.alt || `Product View ${i + 1}`
+          });
+          seenUrls.add(img.url);
+        }
+      });
+    }
+
+    // 3. Other color finishes' photos
+    if (product.colors) {
+      product.colors.forEach((c) => {
+        if (c.name !== selectedColor) {
+          const cPhotos = (c.images && c.images.length > 0)
+            ? c.images
+            : (c.image_url ? [c.image_url] : []);
+          cPhotos.forEach((url, i) => {
+            if (!seenUrls.has(url)) {
+              items.push({
+                url,
+                colorName: c.name,
+                label: cPhotos.length > 1 ? `${c.name} (${i + 1})` : `${c.name} Finish`
+              });
+              seenUrls.add(url);
+            }
+          });
+        }
+      });
+    }
+
+    // Fallback if no images found
+    if (items.length === 0) {
+      items.push({
+        url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1000&q=80',
+        label: product.name
+      });
+    }
+
+    return items;
+  }, [product, activeColorObj, selectedColor]);
+
+  const currentGalleryItem = galleryItems[selectedImageIndex] || galleryItems[0];
+  const currentImage = currentGalleryItem?.url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1000&q=80';
+
+  // Handler for color selection: updates selected color and switches main view to first photo of that color
   const handleSelectColor = (colorName: string) => {
     setSelectedColor(colorName);
-    const colorObj = product.colors?.find((c) => c.name === colorName);
-    if (colorObj?.image_url || (colorObj?.images && colorObj.images.length > 0)) {
-      setSelectedImageIndex(0);
-    }
+    setSelectedImageIndex(0);
   };
 
   // Image mouse move handler for zoom
@@ -179,7 +247,7 @@ export const ProductDetailPage: React.FC = () => {
             >
               <img
                 src={currentImage}
-                alt={product.name}
+                alt={currentGalleryItem?.label || product.name}
                 className="w-full h-full object-cover object-center transition-all duration-300"
               />
 
@@ -203,9 +271,16 @@ export const ProductDetailPage: React.FC = () => {
                     {discountPct}% OFF
                   </span>
                 )}
-                {activeColorObj?.name && (
-                  <span className="px-2.5 py-0.5 rounded-full bg-stone-900/80 backdrop-blur-xs text-white font-medium text-[11px] shadow-sm">
-                    Showing: {activeColorObj.name}
+                {currentGalleryItem?.colorName && (
+                  <span className="px-3 py-1 rounded-full bg-stone-900/85 backdrop-blur-xs text-white font-semibold text-[11px] shadow-sm flex items-center gap-1.5">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full border border-white/60 inline-block"
+                      style={{
+                        backgroundColor:
+                          product.colors?.find((c) => c.name === currentGalleryItem.colorName)?.hex_code || '#78350F'
+                      }}
+                    />
+                    {currentGalleryItem.label || currentGalleryItem.colorName}
                   </span>
                 )}
               </div>
@@ -213,46 +288,39 @@ export const ProductDetailPage: React.FC = () => {
 
             {/* Thumbnail Navigation Bar */}
             <div className="space-y-2">
-              <span className="text-[11px] font-semibold text-stone-500 block uppercase tracking-wider">
-                Photo Gallery ({product.images.length + (product.colors?.filter(c => c.image_url).length || 0)} views):
-              </span>
+              <div className="flex items-center justify-between text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
+                <span>Photo Gallery ({galleryItems.length} {galleryItems.length === 1 ? 'view' : 'views'}):</span>
+                {activeColorObj && ((activeColorObj.images && activeColorObj.images.length > 0) || activeColorObj.image_url) && (
+                  <span className="text-amber-800 font-bold lowercase first-letter:uppercase">
+                    {(activeColorObj.images?.length || 1)} photos in {activeColorObj.name}
+                  </span>
+                )}
+              </div>
+
               <div className="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar">
-                {/* Standard Images */}
-                {product.images.map((img, idx) => (
+                {galleryItems.map((item, idx) => (
                   <button
-                    key={`img-${idx}`}
+                    key={`gal-${idx}`}
                     type="button"
-                    onClick={() => setSelectedImageIndex(idx)}
+                    onClick={() => {
+                      setSelectedImageIndex(idx);
+                      if (item.colorName && item.colorName !== selectedColor) {
+                        setSelectedColor(item.colorName);
+                      }
+                    }}
+                    title={item.label || `Photo ${idx + 1}`}
                     className={`relative w-20 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
                       selectedImageIndex === idx
                         ? 'border-amber-700 shadow-sm scale-102 ring-2 ring-amber-600/20'
                         : 'border-stone-200 opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={img.url} alt="" className="w-full h-full object-cover" />
-                  </button>
-                ))}
-
-                {/* Color-specific images in thumbnail bar */}
-                {product.colors?.filter(c => c.image_url).map((c, idx) => (
-                  <button
-                    key={`col-${idx}`}
-                    type="button"
-                    onClick={() => {
-                      setSelectedColor(c.name);
-                      setSelectedImageIndex(0);
-                    }}
-                    title={`View ${c.name} Finish Photo`}
-                    className={`relative w-20 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
-                      selectedColor === c.name
-                        ? 'border-emerald-600 shadow-sm scale-102 ring-2 ring-emerald-500/20'
-                        : 'border-stone-200 opacity-70 hover:opacity-100'
-                    }`}
-                  >
-                    <img src={c.image_url!} alt={c.name} className="w-full h-full object-cover" />
-                    <span className="absolute bottom-0 inset-x-0 bg-stone-900/80 text-white text-[9px] text-center font-medium py-0.5 truncate px-1">
-                      {c.name}
-                    </span>
+                    <img src={item.url} alt="" className="w-full h-full object-cover" />
+                    {item.colorName && (
+                      <span className="absolute bottom-0 inset-x-0 bg-stone-900/80 text-white text-[9px] text-center font-medium py-0.5 truncate px-1">
+                        {item.colorName}
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -332,9 +400,9 @@ export const ProductDetailPage: React.FC = () => {
                       Select Finish / Color:{' '}
                       <span className="text-amber-800 font-bold">{selectedColor}</span>
                     </span>
-                    {activeColorObj?.image_url && (
+                    {activeColorObj && ((activeColorObj.images && activeColorObj.images.length > 0) || activeColorObj.image_url) && (
                       <span className="text-[11px] text-emerald-700 font-medium">
-                        ✓ Photo Available for this color
+                        ✓ {(activeColorObj.images?.length || 1)} photos available
                       </span>
                     )}
                   </div>
@@ -342,6 +410,8 @@ export const ProductDetailPage: React.FC = () => {
                   <div className="flex flex-wrap items-center gap-2.5">
                     {product.colors.map((c, i) => {
                       const isSelected = selectedColor === c.name;
+                      const colorThumb = (c.images && c.images.length > 0) ? c.images[0] : c.image_url;
+                      const photoCount = (c.images && c.images.length > 0) ? c.images.length : (c.image_url ? 1 : 0);
                       return (
                         <button
                           key={i}
@@ -353,9 +423,9 @@ export const ProductDetailPage: React.FC = () => {
                               : 'border-stone-200 text-stone-700 hover:bg-stone-50'
                           }`}
                         >
-                          {c.image_url ? (
+                          {colorThumb ? (
                             <img
-                              src={c.image_url}
+                              src={colorThumb}
                               alt={c.name}
                               className="w-5 h-5 rounded-full object-cover border border-stone-300 shrink-0"
                             />
@@ -366,6 +436,11 @@ export const ProductDetailPage: React.FC = () => {
                             />
                           )}
                           <span>{c.name}</span>
+                          {photoCount > 1 && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-stone-200/80 text-stone-700 font-normal">
+                              {photoCount} photos
+                            </span>
+                          )}
                         </button>
                       );
                     })}

@@ -13,15 +13,10 @@ import { ContactPage } from '../pages/store/ContactPage';
 
 // Admin pages
 import { AdminLoginPage } from '../pages/admin/AdminLoginPage';
-import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
-import { AdminProductsPage } from '../pages/admin/AdminProductsPage';
-import { AdminProductFormPage } from '../pages/admin/AdminProductFormPage';
 import { AdminCategoriesPage } from '../pages/admin/AdminCategoriesPage';
 import { AdminBannersPage } from '../pages/admin/AdminBannersPage';
-import { AdminOrdersPage } from '../pages/admin/AdminOrdersPage';
-import { AdminUsersPage } from '../pages/admin/AdminUsersPage';
 import { AdminSettingsPage } from '../pages/admin/AdminSettingsPage';
-import { AdminAuditLogsPage } from '../pages/admin/AdminAuditLogsPage';
+import { AdminProductFormPage } from '../pages/admin/AdminProductFormPage';
 
 // 404 Component
 const NotFoundPage: React.FC = () => {
@@ -53,22 +48,30 @@ const NotFoundPage: React.FC = () => {
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Admin Login Route (ONLY login page on the site, as requested) */}
+      {/* 
+        When typing /admin or /admin/login in URL, always open the Login interface first 
+        (as explicitly requested by user)
+      */}
+      <Route path="/admin" element={<AdminLoginPage />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />
 
-      {/* Admin Dashboard Protected Routes */}
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminDashboardPage />} />
-        <Route path="products" element={<AdminProductsPage />} />
-        <Route path="products/new" element={<AdminProductFormPage />} />
-        <Route path="products/edit/:id" element={<AdminProductFormPage />} />
-        <Route path="categories" element={<AdminCategoriesPage />} />
-        <Route path="banners" element={<AdminBannersPage />} />
-        <Route path="orders" element={<AdminOrdersPage />} />
-        <Route path="customers" element={<AdminUsersPage />} />
-        <Route path="settings" element={<AdminSettingsPage />} />
-        <Route path="audit-logs" element={<AdminAuditLogsPage />} />
+      {/* Admin Dashboard Protected Routes (ONLY Categories, Offers, Store Settings) */}
+      <Route path="/admin/categories" element={<AdminLayout />}>
+        <Route index element={<AdminCategoriesPage />} />
       </Route>
+      <Route path="/admin/banners" element={<AdminLayout />}>
+        <Route index element={<AdminBannersPage />} />
+      </Route>
+      <Route path="/admin/settings" element={<AdminLayout />}>
+        <Route index element={<AdminSettingsPage />} />
+      </Route>
+      <Route path="/admin/products/new" element={<AdminLayout />}>
+        <Route index element={<AdminProductFormPage />} />
+      </Route>
+      <Route path="/admin/products/edit/:id" element={<AdminLayout />}>
+        <Route index element={<AdminProductFormPage />} />
+      </Route>
+      <Route path="/admin/products" element={<Navigate to="/admin/categories" replace />} />
 
       {/* Public Storefront Routes wrapped in StoreLayout */}
       <Route path="/" element={<StoreLayout />}>
@@ -91,7 +94,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="privacy" element={<Navigate to="/policies/privacy" replace />} />
         <Route path="terms" element={<Navigate to="/policies/terms" replace />} />
 
-        {/* Redirect removed customer login / delivery routes */}
+        {/* Removed customer login / delivery routes */}
         <Route path="login" element={<Navigate to="/admin/login" replace />} />
         <Route path="account/*" element={<Navigate to="/" replace />} />
         <Route path="register" element={<Navigate to="/" replace />} />

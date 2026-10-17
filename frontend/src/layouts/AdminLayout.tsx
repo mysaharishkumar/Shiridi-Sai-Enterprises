@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import {
-  LayoutDashboard, Package, FolderTree, Image, ShoppingCart,
-  Users, Settings, History, LogOut, ExternalLink, Menu, X, ShieldAlert
+  FolderTree, Image, Settings, LogOut, ExternalLink, Menu, X
 } from 'lucide-react';
 import { Logo } from '../components/common/Logo';
 import { useAuth } from '../context/AuthContext';
@@ -25,15 +24,11 @@ export const AdminLayout: React.FC = () => {
     return <Navigate to="/admin/login" replace state={{ from: location }} />;
   }
 
+  // ONLY the 3 navigation items requested by user: Categories, Offers, Store Settings
   const navItems = [
-    { label: 'Overview', path: '/admin', icon: LayoutDashboard },
-    { label: 'Products', path: '/admin/products', icon: Package },
     { label: 'Categories', path: '/admin/categories', icon: FolderTree },
-    { label: 'Banners & Offers', path: '/admin/banners', icon: Image },
-    { label: 'Orders & Dispatch', path: '/admin/orders', icon: ShoppingCart },
-    { label: 'Customer Accounts', path: '/admin/customers', icon: Users },
-    { label: 'Store Settings', path: '/admin/settings', icon: Settings },
-    { label: 'Audit Logs', path: '/admin/audit-logs', icon: History }
+    { label: 'Offers', path: '/admin/banners', icon: Image },
+    { label: 'Store Settings', path: '/admin/settings', icon: Settings }
   ];
 
   const handleLogout = () => {
@@ -86,13 +81,15 @@ export const AdminLayout: React.FC = () => {
             </span>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="space-y-1">
+          {/* Navigation Links (ONLY Categories, Offers, Store Settings) */}
+          <nav className="space-y-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive =
-                item.path === '/admin'
-                  ? location.pathname === '/admin'
+                item.path === '/admin/categories'
+                  ? location.pathname === '/admin' ||
+                    location.pathname.startsWith('/admin/categories') ||
+                    location.pathname.startsWith('/admin/products')
                   : location.pathname.startsWith(item.path);
 
               return (
@@ -100,7 +97,7 @@ export const AdminLayout: React.FC = () => {
                   key={item.path}
                   to={item.path}
                   onClick={() => setMobileSidebarOpen(false)}
-                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                  className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold transition-all ${
                     isActive
                       ? 'bg-amber-800 text-white shadow-md shadow-amber-950/40'
                       : 'text-stone-400 hover:text-white hover:bg-stone-900'
@@ -119,7 +116,7 @@ export const AdminLayout: React.FC = () => {
           <Link
             to="/"
             target="_blank"
-            className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium text-stone-400 hover:text-white hover:bg-stone-900 transition-colors"
+            className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium text-stone-400 hover:text-white hover:bg-stone-900 transition-colors"
           >
             <ExternalLink className="w-4 h-4 text-amber-400" />
             <span>Open Public Store</span>
@@ -127,7 +124,7 @@ export const AdminLayout: React.FC = () => {
 
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 transition-colors text-left cursor-pointer"
+            className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 transition-colors text-left cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span>Sign Out</span>

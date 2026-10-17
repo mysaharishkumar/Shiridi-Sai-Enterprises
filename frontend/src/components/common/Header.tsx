@@ -174,21 +174,13 @@ export const Header: React.FC = () => {
             )}
           </div>
 
-          {/* Right Header Navigation & Actions (Price Showcase & Showroom Inquiries) */}
+          {/* Right Header Actions: ONLY Call Store and WhatsApp Inquiry */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* View Full Catalog */}
-            <Link
-              to="/products"
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-stone-700 hover:text-amber-900 hover:bg-amber-50/60 transition-colors"
-            >
-              <span>All Furniture</span>
-            </Link>
-
-            {/* Call Showroom Shortcut */}
+            {/* Call Store */}
             {settings?.phone && (
               <a
                 href={`tel:${settings.phone}`}
-                className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-stone-200 text-stone-800 hover:bg-stone-50 text-xs font-semibold transition-all shadow-xs"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-stone-200 text-stone-800 hover:bg-stone-50 text-xs font-semibold transition-all shadow-xs"
                 title="Call showroom directly"
               >
                 <Phone className="w-3.5 h-3.5 text-amber-700" />
@@ -205,20 +197,8 @@ export const Header: React.FC = () => {
             >
               <MessageCircle className="w-4 h-4 fill-white" />
               <span className="hidden sm:inline">WhatsApp Inquiry</span>
-              <span className="sm:hidden">Chat</span>
+              <span className="sm:hidden">WhatsApp</span>
             </a>
-
-            {/* If Admin is logged in, show direct link to Admin Dashboard */}
-            {isAuthenticated && isAdmin && (
-              <Link
-                to="/admin"
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 text-xs font-semibold transition-all shadow-xs"
-                title="Open Admin Dashboard"
-              >
-                <ShieldCheck className="w-4 h-4 text-amber-400" />
-                <span className="hidden lg:inline">Admin</span>
-              </Link>
-            )}
           </div>
         </div>
 
@@ -255,25 +235,11 @@ export const Header: React.FC = () => {
                 Home
               </Link>
               <Link
-                to="/products"
-                className="block px-3 py-2.5 rounded-lg text-stone-800 hover:bg-amber-50 hover:text-amber-900"
-              >
-                All Furniture & Price Catalog
-              </Link>
-              <Link
                 to="/contact"
                 className="block px-3 py-2.5 rounded-lg text-stone-800 hover:bg-amber-50 hover:text-amber-900"
               >
                 Showroom Location & Contact
               </Link>
-              {isAuthenticated && isAdmin && (
-                <Link
-                  to="/admin"
-                  className="block px-3 py-2.5 rounded-lg bg-stone-900 text-amber-300 font-semibold"
-                >
-                  Admin Management Dashboard
-                </Link>
-              )}
             </div>
 
             <div className="pt-4 border-t border-stone-100 space-y-2 text-xs">

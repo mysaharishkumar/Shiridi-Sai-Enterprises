@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import {
   ArrowLeft, Upload, Trash2, Plus, Star, Check, AlertCircle,
-  Eye, Image as ImageIcon, Sparkles
+  Eye, Image as ImageIcon, Sparkles, IndianRupee, Palette, Info, CheckCircle2
 } from 'lucide-react';
 import { Product, Category, ProductImage, ProductColor, ProductVariant, ProductSpecification } from '../../types';
 import { adminApi } from '../../api/client';
@@ -10,6 +10,9 @@ import { useToast } from '../../context/ToastContext';
 
 export const AdminProductFormPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const categoryIdParam = searchParams.get('category_id');
+
   const navigate = useNavigate();
   const { success, error: toastError } = useToast();
   const isEditing = Boolean(id);
@@ -18,31 +21,33 @@ export const AdminProductFormPage: React.FC = () => {
   const [loading, setLoading] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingColorIdx, setUploadingColorIdx] = useState<number | null>(null);
 
   // Form Fields
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
     description: '',
-    short_description: '',
-    category_id: '',
-    subcategory_id: '',
-    selling_price: 19999,
-    original_price: 27999,
+    category_id: categoryIdParam || '',
+    selling_price: 18999,
+    original_price: 24999,
     sku: '',
     brand: 'Shiridi Sai Enterprises',
-    material: 'Solid Burma Teak Wood',
+    material: '100% Solid Burma Teak Wood',
     finish: 'Honey Teak Satin Polish',
     total_stock: 10,
-    warranty_info: '5 Years Manufacturer Warranty on Wood Borer & Termite',
-    assembly_required: false,
+    dimensions_length: 180,
+    dimensions_width: 90,
+    dimensions_height: 75,
+    dimensions_unit: 'cm',
+    warranty_info: '5 Years Manufacturer Warranty against Wood Borer & Termite',
     is_featured: false,
     is_best_seller: false,
     is_new_arrival: false,
-    is_special_offer: false,
     is_published: true
   });
 
+  // General Image Gallery
   const [images, setImages] = useState<ProductImage[]>([
     {
       url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1000&q=80',
@@ -51,32 +56,33 @@ export const AdminProductFormPage: React.FC = () => {
     }
   ]);
 
+  // Colors with Color-Specific Photos (Requested by user)
   const [colors, setColors] = useState<ProductColor[]>([
-    { name: 'Warm Teak', hex_code: '#8B4513' },
-    { name: 'Dark Walnut', hex_code: '#3E2723' }
-  ]);
-
-  const [variants, setVariants] = useState<ProductVariant[]>([
     {
-      variant_id: 'v_1',
-      sku: 'SSE-TEAK-01',
-      color: 'Warm Teak',
-      dimensions: 'Standard Dimensions',
-      price_override: undefined,
-      stock_quantity: 5
+      name: 'Honey Teak Finish',
+      hex_code: '#8B4513',
+      image_url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      name: 'Dark Walnut Polish',
+      hex_code: '#3E2723',
+      image_url: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
     }
   ]);
 
-  const [specifications, setSpecifications] = useState<ProductSpecification[]>([
-    { label: 'Primary Timber', value: '100% Grade-A Burma Teak' },
-    { label: 'Moisture Level', value: 'Kiln-dried <12%' }
+  // Key Features list
+  const [features, setFeatures] = useState<string[]>([
+    '100% Grade-A kiln seasoned solid wood timber',
+    'Generational heirloom durability with traditional tenon & mortise joinery',
+    'Treated for borer & termite immunity'
   ]);
+  const [newFeatureText, setNewFeatureText] = useState('');
 
   useEffect(() => {
     adminApi.getCategories().then((cats) => {
       setCategories(cats);
-      if (!isEditing && cats.length > 0) {
-        setFormData((prev) => ({ ...prev, category_id: cats[0].id }));
+      if (!isEditing && !formData.category_id && cats.length > 0) {
+        setFormData((prev) => ({ ...prev, category_id: categoryIdParam || cats[0].id }));
       }
     });
 
@@ -88,9 +94,7 @@ export const AdminProductFormPage: React.FC = () => {
             name: prod.name,
             slug: prod.slug,
             description: prod.description,
-            short_description: prod.short_description || '',
             category_id: prod.category_id,
-            subcategory_id: prod.subcategory_id || '',
             selling_price: prod.selling_price,
             original_price: prod.original_price || prod.selling_price,
             sku: prod.sku || '',
@@ -98,25 +102,27 @@ export const AdminProductFormPage: React.FC = () => {
             material: prod.material || '',
             finish: prod.finish || '',
             total_stock: prod.total_stock,
+            dimensions_length: prod.dimensions?.length || 180,
+            dimensions_width: prod.dimensions?.width || 90,
+            dimensions_height: prod.dimensions?.height || 75,
+            dimensions_unit: prod.dimensions?.unit || 'cm',
             warranty_info: prod.warranty_info || '',
-            assembly_required: prod.assembly_required,
             is_featured: prod.is_featured,
             is_best_seller: prod.is_best_seller,
             is_new_arrival: prod.is_new_arrival,
-            is_special_offer: prod.is_special_offer,
             is_published: prod.is_published
           });
           if (prod.images && prod.images.length > 0) setImages(prod.images);
-          if (prod.colors) setColors(prod.colors);
-          if (prod.variants) setVariants(prod.variants);
-          if (prod.specifications) setSpecifications(prod.specifications);
+          if (prod.colors && prod.colors.length > 0) setColors(prod.colors);
+          if (prod.features && prod.features.length > 0) setFeatures(prod.features);
         })
         .catch((err) => toastError(err.message || 'Failed to load product'))
         .finally(() => setLoading(false));
     }
   }, [id, isEditing]);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Gallery image file upload
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -127,7 +133,7 @@ export const AdminProductFormPage: React.FC = () => {
         ...prev,
         { url: res.url, alt: file.name, is_primary: prev.length === 0, public_id: res.public_id }
       ]);
-      success('Image uploaded successfully');
+      success('Product image uploaded');
     } catch (err: any) {
       toastError(err.message || 'Image upload failed');
     } finally {
@@ -136,7 +142,7 @@ export const AdminProductFormPage: React.FC = () => {
   };
 
   const handleAddImageUrl = () => {
-    const url = prompt('Enter public image URL:');
+    const url = prompt('Enter image URL:');
     if (url && url.trim()) {
       setImages((prev) => [
         ...prev,
@@ -158,91 +164,120 @@ export const AdminProductFormPage: React.FC = () => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Color Swatches handlers
+  // Color management with color-specific image upload
   const handleAddColor = () => {
-    const name = prompt('Color or Finish name (e.g. Royal Emerald Green):');
-    if (!name) return;
-    const hex = prompt('Hex code (e.g. #064E3B):', '#78350F') || '#78350F';
-    setColors((prev) => [...prev, { name, hex_code: hex }]);
-  };
-
-  const removeColor = (index: number) => {
-    setColors((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // Specifications handlers
-  const handleAddSpec = () => {
-    setSpecifications((prev) => [...prev, { label: '', value: '' }]);
-  };
-
-  const updateSpec = (index: number, key: 'label' | 'value', val: string) => {
-    setSpecifications((prev) => {
-      const copy = [...prev];
-      copy[index][key] = val;
-      return copy;
-    });
-  };
-
-  const removeSpec = (index: number) => {
-    setSpecifications((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // Variant handlers
-  const handleAddVariant = () => {
-    setVariants((prev) => [
+    setColors((prev) => [
       ...prev,
       {
-        variant_id: `v_${Date.now()}`,
-        sku: `${formData.sku}-V${prev.length + 1}`,
-        color: colors[0]?.name || 'Standard',
-        dimensions: 'Standard Dimensions',
-        stock_quantity: 5
+        name: `Color / Finish ${prev.length + 1}`,
+        hex_code: '#8B4513',
+        image_url: ''
       }
     ]);
   };
 
-  const updateVariant = (index: number, field: string, val: any) => {
-    setVariants((prev) => {
-      const copy = [...prev];
-      (copy[index] as any)[field] = val;
-      return copy;
+  const handleUpdateColor = (index: number, field: keyof ProductColor, value: any) => {
+    setColors((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
     });
   };
 
-  const removeVariant = (index: number) => {
-    setVariants((prev) => prev.filter((_, i) => i !== index));
+  const handleColorImageUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingColorIdx(index);
+    try {
+      const res = await adminApi.uploadImage(file);
+      handleUpdateColor(index, 'image_url', res.url);
+      success(`Image uploaded for ${colors[index].name}`);
+    } catch (err: any) {
+      toastError(err.message || 'Color image upload failed');
+    } finally {
+      setUploadingColorIdx(null);
+    }
   };
 
+  const handleRemoveColor = (index: number) => {
+    setColors((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Feature bullet points
+  const handleAddFeature = () => {
+    if (!newFeatureText.trim()) return;
+    setFeatures([...features, newFeatureText.trim()]);
+    setNewFeatureText('');
+  };
+
+  const handleRemoveFeature = (index: number) => {
+    setFeatures(features.filter((_, i) => i !== index));
+  };
+
+  // Submit Handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.category_id) {
-      toastError('Please complete required fields');
+    if (!formData.name.trim()) {
+      toastError('Please enter product title');
+      return;
+    }
+    if (!formData.category_id) {
+      toastError('Please select a category');
+      return;
+    }
+    if (images.length === 0 && colors.every((c) => !c.image_url)) {
+      toastError('Please add at least one product image');
       return;
     }
 
-    if (images.length === 0) {
-      toastError('Please provide at least one product image');
-      return;
-    }
+    const calculatedDiscount =
+      formData.original_price > formData.selling_price
+        ? Math.round(
+            ((formData.original_price - formData.selling_price) / formData.original_price) * 100
+          )
+        : 0;
+
+    const payload: any = {
+      name: formData.name.trim(),
+      slug:
+        formData.slug.trim() ||
+        formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
+      description: formData.description.trim(),
+      category_id: formData.category_id,
+      selling_price: Number(formData.selling_price),
+      original_price: Number(formData.original_price),
+      discount_percentage: calculatedDiscount,
+      sku: formData.sku.trim() || undefined,
+      brand: formData.brand.trim() || 'Shiridi Sai Enterprises',
+      material: formData.material.trim(),
+      finish: formData.finish.trim(),
+      total_stock: Number(formData.total_stock) || 1,
+      in_stock: Number(formData.total_stock) > 0,
+      dimensions: {
+        length: Number(formData.dimensions_length),
+        width: Number(formData.dimensions_width),
+        height: Number(formData.dimensions_height),
+        unit: formData.dimensions_unit
+      },
+      warranty_info: formData.warranty_info.trim(),
+      images,
+      colors,
+      features,
+      is_featured: formData.is_featured,
+      is_best_seller: formData.is_best_seller,
+      is_new_arrival: formData.is_new_arrival,
+      is_published: formData.is_published
+    };
 
     setSubmitting(true);
     try {
-      const selectedCat = categories.find((c) => c.id === formData.category_id);
-      const payload = {
-        ...formData,
-        category_name: selectedCat?.name,
-        images,
-        colors,
-        variants,
-        specifications
-      };
-
       if (isEditing && id) {
         await adminApi.updateProduct(id, payload);
-        success(`Product '${formData.name}' updated successfully!`);
+        success('Product updated successfully');
       } else {
         await adminApi.createProduct(payload);
-        success(`Product '${formData.name}' created successfully!`);
+        success('Product published to catalog successfully');
       }
       navigate('/admin/products');
     } catch (err: any) {
@@ -252,75 +287,87 @@ export const AdminProductFormPage: React.FC = () => {
     }
   };
 
+  const discountSavings =
+    formData.original_price > formData.selling_price
+      ? formData.original_price - formData.selling_price
+      : 0;
+  const discountPercent =
+    formData.original_price > formData.selling_price
+      ? Math.round((discountSavings / formData.original_price) * 100)
+      : 0;
+
   if (loading) {
     return (
-      <div className="p-8 text-center text-stone-500 animate-pulse">
-        Loading product details...
+      <div className="p-10 max-w-5xl mx-auto text-center animate-pulse space-y-4">
+        <div className="h-8 bg-stone-200 rounded w-1/3 mx-auto" />
+        <div className="h-64 bg-stone-200 rounded-2xl" />
       </div>
     );
   }
 
-  // Auto discount calculation for preview
-  const discountPct =
-    formData.original_price > formData.selling_price
-      ? Math.round(((formData.original_price - formData.selling_price) / formData.original_price) * 100)
-      : 0;
-
   return (
-    <div className="p-6 sm:p-8 lg:p-10 space-y-8 max-w-5xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+    <div className="p-6 sm:p-8 lg:p-10 max-w-5xl mx-auto space-y-8">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-200">
+        <div>
           <Link
             to="/admin/products"
-            className="p-2 rounded-xl bg-white border border-stone-200 text-stone-700 hover:bg-stone-50"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-amber-800 mb-2 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" /> Back to Products List
           </Link>
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold font-serif text-stone-900 tracking-tight">
-              {isEditing ? `Edit Product: ${formData.name}` : 'Create New Furniture Item'}
-            </h1>
-            <p className="text-xs text-stone-500">
-              Configure product details, pricing, variants, and high-res photography.
-            </p>
-          </div>
+          <h1 className="text-2xl font-bold font-serif text-stone-900 flex items-center gap-2">
+            <Sparkles className="w-6 h-6 text-amber-700" />
+            {isEditing ? `Edit Product: ${formData.name}` : 'Add Furniture Piece to Catalog'}
+          </h1>
+          <p className="text-stone-500 text-xs sm:text-sm mt-0.5">
+            Set pricing, upload photos for each color finish, provide dimensions, and describe timber craftsmanship.
+          </p>
         </div>
+
+        <button
+          onClick={handleSubmit}
+          disabled={submitting}
+          className="px-6 py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs tracking-wider uppercase shadow-md transition-all cursor-pointer disabled:opacity-50"
+        >
+          {submitting ? 'Saving...' : isEditing ? 'Save Changes' : 'Publish Product'}
+        </button>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        {/* 1. Basic Information */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
-          <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-100">
-            1. Basic Information
+        {/* SECTION 1: Basic Information & Category */}
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-6">
+          <h2 className="text-base font-bold font-serif text-stone-900 pb-3 border-b border-stone-100 flex items-center gap-2">
+            <Info className="w-4 h-4 text-amber-800" />
+            1. Basic Information & Category
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Product Title *
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                Product Title / Name *
               </label>
               <input
                 type="text"
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="e.g. Royal Grand 7-Seater Teak Wood L-Shape Sofa Set"
-                className="w-full p-2.5 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:bg-white focus:outline-hidden"
+                placeholder="e.g. Royal Burma Teak 6-Seater Dining Table"
+                className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-sm font-medium focus:bg-white focus:outline-hidden focus:border-amber-600"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
                 Category *
               </label>
               <select
                 required
                 value={formData.category_id}
                 onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                className="w-full p-2.5 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden"
+                className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden focus:border-amber-600"
               >
-                <option value="">Select Category</option>
+                <option value="">-- Choose Category --</option>
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
@@ -330,190 +377,317 @@ export const AdminProductFormPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                SKU (Stock Keeping Unit)
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                SKU / Model Number
               </label>
               <input
                 type="text"
                 value={formData.sku}
                 onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                placeholder="e.g. SSE-SOFA-RG07"
-                className="w-full p-2.5 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:bg-white focus:outline-hidden"
+                placeholder="e.g. SSE-DT-6S-01"
+                className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden"
               />
             </div>
 
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Short Summary (Card preview)
-              </label>
-              <input
-                type="text"
-                value={formData.short_description}
-                onChange={(e) => setFormData({ ...formData, short_description: e.target.value })}
-                placeholder="One sentence overview of timber grade and cushioning."
-                className="w-full p-2.5 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:bg-white focus:outline-hidden"
-              />
-            </div>
-
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Detailed Product Description *
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                Product Description & Information *
               </label>
               <textarea
-                rows={4}
                 required
+                rows={4}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Comprehensive description of craftsmanship, wood species, warranty, and room styling."
-                className="w-full p-2.5 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:bg-white focus:outline-hidden"
+                placeholder="Provide detailed description of the design, wood seasoning, comfort, joints, and ideal living room setup..."
+                className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden leading-relaxed"
               />
             </div>
           </div>
         </div>
 
-        {/* 2. Pricing & Stock */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
-          <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-100">
-            2. Pricing & Inventory
+        {/* SECTION 2: Pricing (Original Price & Discount Price) */}
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-6">
+          <h2 className="text-base font-bold font-serif text-stone-900 pb-3 border-b border-stone-100 flex items-center gap-2">
+            <IndianRupee className="w-4 h-4 text-amber-800" />
+            2. Showroom Price & Discounts (Customer Price Showcase)
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Selling Price (₹ INR) *
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                Original Price (M.R.P.) in ₹ *
               </label>
-              <input
-                type="number"
-                required
-                value={formData.selling_price}
-                onChange={(e) => setFormData({ ...formData, selling_price: Number(e.target.value) })}
-                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 font-bold font-mono focus:bg-white"
-              />
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 font-bold">₹</span>
+                <input
+                  type="number"
+                  required
+                  min="0"
+                  value={formData.original_price}
+                  onChange={(e) =>
+                    setFormData({ ...formData, original_price: parseFloat(e.target.value) || 0 })
+                  }
+                  className="w-full pl-8 pr-4 py-3 bg-stone-50 rounded-xl border border-stone-200 text-sm font-bold text-stone-900 focus:bg-white focus:outline-hidden"
+                />
+              </div>
+              <p className="text-[11px] text-stone-400 mt-1">
+                Display as strikethrough price to show customer savings.
+              </p>
             </div>
 
             <div>
-              <label className="block font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Original MRP (₹ INR)
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                Discount Price (Offer Price) in ₹ *
               </label>
-              <input
-                type="number"
-                value={formData.original_price}
-                onChange={(e) => setFormData({ ...formData, original_price: Number(e.target.value) })}
-                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 font-mono focus:bg-white"
-              />
-              {discountPct > 0 && (
-                <span className="text-[11px] text-emerald-700 font-bold mt-1 inline-block">
-                  Auto Discount: {discountPct}% OFF
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 font-bold">₹</span>
+                <input
+                  type="number"
+                  required
+                  min="1"
+                  value={formData.selling_price}
+                  onChange={(e) =>
+                    setFormData({ ...formData, selling_price: parseFloat(e.target.value) || 0 })
+                  }
+                  className="w-full pl-8 pr-4 py-3 bg-stone-50 rounded-xl border border-stone-200 text-sm font-bold text-amber-900 focus:bg-white focus:outline-hidden"
+                />
+              </div>
+              <p className="text-[11px] text-stone-400 mt-1">
+                Final price customers will see on the website.
+              </p>
+            </div>
+          </div>
+
+          {/* Live Discount Calculator Preview */}
+          <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="w-10 h-10 rounded-full bg-amber-800 text-white flex items-center justify-center font-bold text-sm">
+                %
+              </span>
+              <div>
+                <span className="text-xs text-stone-600 block">Live Price Discovery Preview:</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-base font-bold text-stone-900">
+                    Offer: ₹{formData.selling_price.toLocaleString('en-IN')}
+                  </span>
+                  {formData.original_price > formData.selling_price && (
+                    <span className="text-xs text-stone-400 line-through">
+                      M.R.P. ₹{formData.original_price.toLocaleString('en-IN')}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {discountSavings > 0 ? (
+              <div className="text-right">
+                <span className="inline-block px-3 py-1 rounded-full bg-emerald-600 text-white font-bold text-xs uppercase shadow-xs">
+                  {discountPercent}% OFF
                 </span>
-              )}
-            </div>
-
-            <div>
-              <label className="block font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Total Available Stock *
-              </label>
-              <input
-                type="number"
-                required
-                value={formData.total_stock}
-                onChange={(e) => setFormData({ ...formData, total_stock: Number(e.target.value) })}
-                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 font-mono focus:bg-white"
-              />
-            </div>
-
-            <div>
-              <label className="block font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Wood / Material
-              </label>
-              <input
-                type="text"
-                value={formData.material}
-                onChange={(e) => setFormData({ ...formData, material: e.target.value })}
-                placeholder="e.g. Solid Burma Teak Wood"
-                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 focus:bg-white"
-              />
-            </div>
-
-            <div>
-              <label className="block font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Finish & Polish
-              </label>
-              <input
-                type="text"
-                value={formData.finish}
-                onChange={(e) => setFormData({ ...formData, finish: e.target.value })}
-                placeholder="e.g. Natural Teak Satin Polish"
-                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 focus:bg-white"
-              />
-            </div>
-
-            <div>
-              <label className="block font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Warranty Information
-              </label>
-              <input
-                type="text"
-                value={formData.warranty_info}
-                onChange={(e) => setFormData({ ...formData, warranty_info: e.target.value })}
-                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 focus:bg-white"
-              />
-            </div>
+                <span className="text-xs font-semibold text-emerald-800 block mt-0.5">
+                  Customer Saves ₹{discountSavings.toLocaleString('en-IN')}
+                </span>
+              </div>
+            ) : (
+              <span className="text-xs text-stone-500 italic">No discount (Selling at full price)</span>
+            )}
           </div>
         </div>
 
-        {/* 3. Product Photography (Multiple Images & Upload) */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-stone-100">
-            <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider">
-              3. Photography & Media
-            </h2>
+        {/* SECTION 3: Colors & Photos for EACH Color (Requested by user) */}
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-stone-100">
+            <div>
+              <h2 className="text-base font-bold font-serif text-stone-900 flex items-center gap-2">
+                <Palette className="w-4 h-4 text-amber-800" />
+                3. Color Finishes & Product Images for EACH Color
+              </h2>
+              <p className="text-xs text-stone-500 mt-0.5">
+                Add each available wood polish/color and upload the exact photo showing that color.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleAddColor}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors cursor-pointer self-start"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Another Color</span>
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            {colors.map((color, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-2xl border border-stone-200 bg-stone-50/60 flex flex-col md:flex-row items-start md:items-center gap-4 transition-all"
+              >
+                {/* Color preview photo */}
+                <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-stone-200 border border-stone-300 shrink-0">
+                  {color.image_url ? (
+                    <img
+                      src={color.image_url}
+                      alt={color.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-stone-400 text-[10px] text-center p-1">
+                      <ImageIcon className="w-5 h-5 mb-0.5 opacity-60" />
+                      <span>No photo</span>
+                    </div>
+                  )}
+                  <span
+                    style={{ backgroundColor: color.hex_code || '#78350F' }}
+                    className="absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-white shadow-xs"
+                    title={`Swatch: ${color.hex_code}`}
+                  />
+                </div>
+
+                {/* Color Inputs */}
+                <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+                  <div>
+                    <label className="block text-[11px] font-bold text-stone-600 uppercase mb-1">
+                      Color / Polish Name
+                    </label>
+                    <input
+                      type="text"
+                      value={color.name}
+                      onChange={(e) => handleUpdateColor(idx, 'name', e.target.value)}
+                      placeholder="e.g. Honey Teak, Royal Walnut"
+                      className="w-full p-2.5 bg-white rounded-xl border border-stone-200 text-xs font-semibold focus:outline-hidden"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-stone-600 uppercase mb-1">
+                      Swatch Dot Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={color.hex_code || '#78350F'}
+                        onChange={(e) => handleUpdateColor(idx, 'hex_code', e.target.value)}
+                        className="w-9 h-9 p-0.5 rounded-lg border border-stone-300 cursor-pointer bg-white"
+                      />
+                      <input
+                        type="text"
+                        value={color.hex_code || '#78350F'}
+                        onChange={(e) => handleUpdateColor(idx, 'hex_code', e.target.value)}
+                        className="flex-1 p-2 bg-white rounded-xl border border-stone-200 text-xs font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-stone-600 uppercase mb-1">
+                      Color Photo (Upload / URL)
+                    </label>
+                    <div className="flex items-center gap-1.5">
+                      <input
+                        type="url"
+                        placeholder="Image URL..."
+                        value={color.image_url || ''}
+                        onChange={(e) => handleUpdateColor(idx, 'image_url', e.target.value)}
+                        className="flex-1 p-2 bg-white rounded-xl border border-stone-200 text-xs"
+                      />
+                      <label className="px-3 py-2 bg-stone-200 hover:bg-stone-300 text-stone-800 rounded-xl text-xs font-semibold cursor-pointer shrink-0">
+                        <span>{uploadingColorIdx === idx ? '...' : 'Upload'}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleColorImageUpload(idx, e)}
+                          className="hidden"
+                          disabled={uploadingColorIdx !== null}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Remove button */}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveColor(idx)}
+                  className="p-2 text-stone-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 cursor-pointer self-center"
+                  title="Remove this color"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* SECTION 4: General Photo Gallery */}
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-stone-100">
+            <div>
+              <h2 className="text-base font-bold font-serif text-stone-900 flex items-center gap-2">
+                <ImageIcon className="w-4 h-4 text-amber-800" />
+                4. General Product Photo Gallery
+              </h2>
+              <p className="text-xs text-stone-500 mt-0.5">
+                Overall shots, closeups of joints, zoom details, and lifestyle photos.
+              </p>
+            </div>
+
             <div className="flex items-center gap-2">
-              <label className="px-3 py-1.5 rounded-xl bg-amber-800 text-white text-xs font-semibold cursor-pointer hover:bg-amber-900 transition-colors inline-flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleAddImageUrl}
+                className="px-3 py-1.5 rounded-xl border border-stone-300 hover:bg-stone-50 text-xs font-semibold text-stone-700"
+              >
+                + Paste URL
+              </button>
+              <label className="px-4 py-1.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold cursor-pointer flex items-center gap-1.5 shadow-xs">
                 <Upload className="w-3.5 h-3.5" />
-                <span>{uploadingImage ? 'Uploading...' : 'Upload File'}</span>
+                <span>{uploadingImage ? 'Uploading...' : 'Upload Photo'}</span>
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleFileUpload}
+                  onChange={handleGalleryUpload}
                   className="hidden"
                   disabled={uploadingImage}
                 />
               </label>
-              <button
-                type="button"
-                onClick={handleAddImageUrl}
-                className="px-3 py-1.5 rounded-xl border border-stone-300 text-xs font-semibold hover:bg-stone-50 cursor-pointer"
-              >
-                + Add Image URL
-              </button>
             </div>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {images.map((img, idx) => (
+            {images.map((img, i) => (
               <div
-                key={idx}
-                className={`relative group rounded-2xl overflow-hidden border-2 p-1.5 bg-stone-50 ${
-                  img.is_primary ? 'border-amber-700 ring-2 ring-amber-600/20' : 'border-stone-200'
+                key={i}
+                className={`relative aspect-4/3 rounded-2xl overflow-hidden border-2 bg-stone-100 group ${
+                  img.is_primary ? 'border-amber-700 ring-2 ring-amber-600/30' : 'border-stone-200'
                 }`}
               >
-                <div className="aspect-4/3 rounded-xl overflow-hidden bg-stone-200">
-                  <img src={img.url} alt="" className="w-full h-full object-cover" />
-                </div>
-                <div className="mt-2 flex items-center justify-between text-[11px]">
+                <img src={img.url} alt="" className="w-full h-full object-cover" />
+
+                {/* Primary Badge */}
+                {img.is_primary && (
+                  <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-amber-800 text-white font-bold text-[10px] shadow-sm">
+                    Main Photo
+                  </span>
+                )}
+
+                {/* Hover overlay actions */}
+                <div className="absolute inset-0 bg-stone-950/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                  {!img.is_primary && (
+                    <button
+                      type="button"
+                      onClick={() => setPrimaryImage(i)}
+                      className="p-1.5 rounded-lg bg-white text-stone-900 text-[10px] font-bold shadow-md hover:bg-amber-100 cursor-pointer"
+                      title="Set as Main Cover Photo"
+                    >
+                      Make Main
+                    </button>
+                  )}
                   <button
                     type="button"
-                    onClick={() => setPrimaryImage(idx)}
-                    className={`font-semibold cursor-pointer ${
-                      img.is_primary ? 'text-amber-800 font-bold' : 'text-stone-500 hover:text-stone-800'
-                    }`}
-                  >
-                    {img.is_primary ? '★ Primary Cover' : 'Set as Primary'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => removeImage(idx)}
-                    className="text-rose-500 hover:text-rose-700 p-1"
+                    onClick={() => removeImage(i)}
+                    className="p-1.5 rounded-lg bg-rose-600 text-white text-[10px] font-bold shadow-md hover:bg-rose-700 cursor-pointer"
+                    title="Remove Photo"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -523,231 +697,203 @@ export const AdminProductFormPage: React.FC = () => {
           </div>
         </div>
 
-        {/* 4. Color Variants & Dimensions */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-stone-100">
-            <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider">
-              4. Colors & Specific Variants
-            </h2>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleAddColor}
-                className="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold cursor-pointer"
-              >
-                + Add Color Swatch
-              </button>
-              <button
-                type="button"
-                onClick={handleAddVariant}
-                className="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold cursor-pointer"
-              >
-                + Add Variant SKU
-              </button>
+        {/* SECTION 5: Timber, Dimensions & Specifications */}
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-6">
+          <h2 className="text-base font-bold font-serif text-stone-900 pb-3 border-b border-stone-100 flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-amber-800" />
+            5. Timber Craftsmanship & Dimensions
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                Primary Material / Timber
+              </label>
+              <input
+                type="text"
+                value={formData.material}
+                onChange={(e) => setFormData({ ...formData, material: e.target.value })}
+                placeholder="e.g. 100% Solid Burma Teak Wood"
+                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                Polish & Finish
+              </label>
+              <input
+                type="text"
+                value={formData.finish}
+                onChange={(e) => setFormData({ ...formData, finish: e.target.value })}
+                placeholder="e.g. Honey Teak Melamine Polish"
+                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                Dimensions (Length × Width × Height)
+              </label>
+              <div className="grid grid-cols-4 gap-3">
+                <input
+                  type="number"
+                  placeholder="Length"
+                  value={formData.dimensions_length}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dimensions_length: parseFloat(e.target.value) || 0 })
+                  }
+                  className="p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs text-center font-bold"
+                />
+                <input
+                  type="number"
+                  placeholder="Width"
+                  value={formData.dimensions_width}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dimensions_width: parseFloat(e.target.value) || 0 })
+                  }
+                  className="p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs text-center font-bold"
+                />
+                <input
+                  type="number"
+                  placeholder="Height"
+                  value={formData.dimensions_height}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dimensions_height: parseFloat(e.target.value) || 0 })
+                  }
+                  className="p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs text-center font-bold"
+                />
+                <select
+                  value={formData.dimensions_unit}
+                  onChange={(e) => setFormData({ ...formData, dimensions_unit: e.target.value })}
+                  className="p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs font-bold"
+                >
+                  <option value="cm">cm</option>
+                  <option value="inches">inches</option>
+                  <option value="feet">feet</option>
+                  <option value="mm">mm</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                Warranty & Guarantee Information
+              </label>
+              <input
+                type="text"
+                value={formData.warranty_info}
+                onChange={(e) => setFormData({ ...formData, warranty_info: e.target.value })}
+                placeholder="e.g. 5 Years Manufacturer Warranty against Wood Borer & Termite"
+                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden"
+              />
             </div>
           </div>
 
-          {/* Color swatches */}
-          {colors.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-1">
-              {colors.map((c, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-stone-200 bg-stone-50 text-xs"
-                >
-                  <span
-                    style={{ backgroundColor: c.hex_code }}
-                    className="w-3.5 h-3.5 rounded-full border border-stone-300 shadow-inner"
-                  />
-                  <span className="font-medium text-stone-800">{c.name}</span>
+          {/* Key Feature Highlights */}
+          <div className="pt-4 border-t border-stone-100 space-y-3">
+            <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+              Key Craftsmanship Bullet Points:
+            </label>
+
+            <div className="space-y-2">
+              {features.map((feat, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-700 shrink-0" />
+                  <span className="flex-1 text-xs text-stone-800">{feat}</span>
                   <button
                     type="button"
-                    onClick={() => removeColor(i)}
-                    className="text-stone-400 hover:text-rose-600 ml-1"
+                    onClick={() => handleRemoveFeature(i)}
+                    className="p-1 text-stone-400 hover:text-rose-600"
                   >
-                    ×
+                    <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
               ))}
             </div>
-          )}
 
-          {/* Variants Table */}
-          {variants.length > 0 && (
-            <div className="space-y-2 pt-2">
-              <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">
-                Configured Variants
-              </span>
-              <div className="space-y-2">
-                {variants.map((v, i) => (
-                  <div
-                    key={v.variant_id || i}
-                    className="grid grid-cols-1 sm:grid-cols-5 gap-2 p-3 bg-stone-50 rounded-2xl border border-stone-200 text-xs items-center"
-                  >
-                    <input
-                      type="text"
-                      placeholder="Variant SKU"
-                      value={v.sku || ''}
-                      onChange={(e) => updateVariant(i, 'sku', e.target.value)}
-                      className="p-2 bg-white rounded-lg border border-stone-200"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Color Name"
-                      value={v.color || ''}
-                      onChange={(e) => updateVariant(i, 'color', e.target.value)}
-                      className="p-2 bg-white rounded-lg border border-stone-200"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Dimensions / Size"
-                      value={v.dimensions || ''}
-                      onChange={(e) => updateVariant(i, 'dimensions', e.target.value)}
-                      className="p-2 bg-white rounded-lg border border-stone-200"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Stock Qty"
-                      value={v.stock_quantity}
-                      onChange={(e) => updateVariant(i, 'stock_quantity', Number(e.target.value))}
-                      className="p-2 bg-white rounded-lg border border-stone-200"
-                    />
-                    <div className="flex items-center justify-between">
-                      <input
-                        type="number"
-                        placeholder="Price Override"
-                        value={v.price_override || ''}
-                        onChange={(e) =>
-                          updateVariant(
-                            i,
-                            'price_override',
-                            e.target.value ? Number(e.target.value) : undefined
-                          )
-                        }
-                        className="w-24 p-2 bg-white rounded-lg border border-stone-200"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeVariant(i)}
-                        className="text-stone-400 hover:text-rose-600 p-1"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="flex gap-2 pt-2">
+              <input
+                type="text"
+                value={newFeatureText}
+                onChange={(e) => setNewFeatureText(e.target.value)}
+                placeholder="e.g. Handcrafted floral carving on headboard"
+                className="flex-1 p-2 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden"
+              />
+              <button
+                type="button"
+                onClick={handleAddFeature}
+                className="px-4 py-2 bg-stone-800 hover:bg-stone-900 text-white rounded-xl text-xs font-semibold"
+              >
+                + Add Bullet
+              </button>
             </div>
-          )}
-        </div>
-
-        {/* 5. Specifications & Attributes */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-stone-100">
-            <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider">
-              5. Technical Specifications Table
-            </h2>
-            <button
-              type="button"
-              onClick={handleAddSpec}
-              className="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold cursor-pointer"
-            >
-              + Add Specification Row
-            </button>
-          </div>
-
-          <div className="space-y-2">
-            {specifications.map((s, idx) => (
-              <div key={idx} className="flex items-center gap-3 text-xs">
-                <input
-                  type="text"
-                  placeholder="Label (e.g. Foam Density)"
-                  value={s.label}
-                  onChange={(e) => updateSpec(idx, 'label', e.target.value)}
-                  className="w-1/3 p-2.5 bg-stone-50 rounded-xl border border-stone-200 focus:bg-white"
-                />
-                <input
-                  type="text"
-                  placeholder="Value (e.g. 40 High Resilient (HR) Foam)"
-                  value={s.value}
-                  onChange={(e) => updateSpec(idx, 'value', e.target.value)}
-                  className="flex-1 p-2.5 bg-stone-50 rounded-xl border border-stone-200 focus:bg-white"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeSpec(idx)}
-                  className="p-2 text-stone-400 hover:text-rose-600"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
           </div>
         </div>
 
-        {/* 6. Visibility, Badges & Publishing */}
+        {/* SECTION 6: Badges & Visibility */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
-          <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-100">
-            6. Badges & Publishing Controls
+          <h2 className="text-base font-bold font-serif text-stone-900 pb-3 border-b border-stone-100">
+            6. Badges & Storefront Visibility
           </h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-semibold">
-            <label className="flex items-center gap-2 p-3 rounded-xl border border-stone-200 hover:bg-stone-50 cursor-pointer">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <label className="flex items-center gap-2 p-3 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50">
               <input
                 type="checkbox"
                 checked={formData.is_published}
                 onChange={(e) => setFormData({ ...formData, is_published: e.target.checked })}
-                className="w-4 h-4 text-amber-700 rounded"
+                className="rounded text-amber-800 focus:ring-amber-500 w-4 h-4"
               />
-              <span>Published Live</span>
+              <span className="text-xs font-semibold text-stone-800">Published (Visible)</span>
             </label>
 
-            <label className="flex items-center gap-2 p-3 rounded-xl border border-stone-200 hover:bg-stone-50 cursor-pointer">
+            <label className="flex items-center gap-2 p-3 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50">
               <input
                 type="checkbox"
                 checked={formData.is_featured}
                 onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                className="w-4 h-4 text-amber-700 rounded"
+                className="rounded text-amber-800 focus:ring-amber-500 w-4 h-4"
               />
-              <span>Featured Showcase</span>
+              <span className="text-xs font-semibold text-stone-800">Featured Piece</span>
             </label>
 
-            <label className="flex items-center gap-2 p-3 rounded-xl border border-stone-200 hover:bg-stone-50 cursor-pointer">
+            <label className="flex items-center gap-2 p-3 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50">
               <input
                 type="checkbox"
                 checked={formData.is_best_seller}
                 onChange={(e) => setFormData({ ...formData, is_best_seller: e.target.checked })}
-                className="w-4 h-4 text-amber-700 rounded"
+                className="rounded text-amber-800 focus:ring-amber-500 w-4 h-4"
               />
-              <span>Best Seller</span>
+              <span className="text-xs font-semibold text-stone-800">Best Seller</span>
             </label>
 
-            <label className="flex items-center gap-2 p-3 rounded-xl border border-stone-200 hover:bg-stone-50 cursor-pointer">
+            <label className="flex items-center gap-2 p-3 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50">
               <input
                 type="checkbox"
                 checked={formData.is_new_arrival}
                 onChange={(e) => setFormData({ ...formData, is_new_arrival: e.target.checked })}
-                className="w-4 h-4 text-amber-700 rounded"
+                className="rounded text-amber-800 focus:ring-amber-500 w-4 h-4"
               />
-              <span>New Arrival</span>
+              <span className="text-xs font-semibold text-stone-800">New Arrival</span>
             </label>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-4 pt-4 border-t border-stone-200">
+        {/* Bottom Save Action */}
+        <div className="flex items-center justify-end gap-4 pt-4">
           <Link
             to="/admin/products"
-            className="px-6 py-3 rounded-2xl border border-stone-300 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+            className="px-5 py-2.5 rounded-xl border border-stone-300 text-stone-700 text-xs font-semibold hover:bg-stone-50"
           >
             Cancel
           </Link>
           <button
             type="submit"
             disabled={submitting}
-            className="px-8 py-3.5 rounded-2xl bg-amber-800 hover:bg-amber-900 active:scale-98 text-white font-bold text-xs tracking-wider uppercase shadow-lg shadow-amber-950/20 cursor-pointer disabled:opacity-50"
+            className="px-8 py-3 rounded-xl bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs tracking-wider uppercase shadow-md transition-all cursor-pointer"
           >
-            {submitting ? 'Saving Product...' : isEditing ? 'Update Product' : 'Publish Product'}
+            {submitting ? 'Saving Product...' : isEditing ? 'Update Product' : 'Publish to Catalog'}
           </button>
         </div>
       </form>

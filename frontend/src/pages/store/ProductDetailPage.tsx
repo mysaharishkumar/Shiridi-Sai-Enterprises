@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
-  Star, ShoppingBag, Truck, ShieldCheck, RefreshCw, Check,
-  ChevronRight, ArrowLeft, Heart, Share2, HelpCircle, AlertCircle
+  Star, ShieldCheck, Check, ChevronRight, ArrowLeft,
+  Phone, MessageCircle, MapPin, Sparkles, Clock, Info, CheckCircle2
 } from 'lucide-react';
 import { Product } from '../../types';
 import { storeApi } from '../../api/client';
-import { useCart } from '../../context/CartContext';
 import { useStore } from '../../context/StoreContext';
 import { ProductCard } from '../../components/store/ProductCard';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { settings } = useStore();
-  const { addItem } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -27,9 +25,6 @@ export const ProductDetailPage: React.FC = () => {
   // Selection state
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedVariantId, setSelectedVariantId] = useState<string>('');
-  const [quantity, setQuantity] = useState(1);
-  const [isAdding, setIsAdding] = useState(false);
-  const [added, setAdded] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -39,7 +34,7 @@ export const ProductDetailPage: React.FC = () => {
         const prod = await storeApi.getProduct(slug);
         setProduct(prod);
 
-        // Set initial selected color / variant
+        // Set initial selected color
         if (prod.colors && prod.colors.length > 0) {
           setSelectedColor(prod.colors[0].name);
         }
@@ -82,7 +77,7 @@ export const ProductDetailPage: React.FC = () => {
       <div className="max-w-2xl mx-auto px-4 py-24 text-center space-y-4">
         <h2 className="text-2xl font-bold font-serif text-stone-900">Product Not Found</h2>
         <p className="text-stone-500 text-sm">
-          The requested furniture piece might be unpublished or no longer in catalog.
+          The requested furniture piece might be unpublished or no longer in our catalog.
         </p>
         <Link
           to="/products"
@@ -94,23 +89,42 @@ export const ProductDetailPage: React.FC = () => {
     );
   }
 
-  // Determine current active price & stock based on selected variant
+  // Determine current active price based on selected variant
   let currentPrice = product.selling_price;
-  let currentOriginalPrice = product.original_price;
-  let currentStock = product.total_stock;
+  let currentOriginalPrice = product.original_price || product.selling_price;
 
   if (selectedVariantId) {
     const v = product.variants?.find((item) => item.variant_id === selectedVariantId);
-    if (v) {
-      if (v.price_override) currentPrice = v.price_override;
-      if (v.stock_quantity !== undefined) currentStock = v.stock_quantity;
+    if (v && v.price_override) {
+      currentPrice = v.price_override;
     }
   }
 
-  const isOutOfStock = !product.in_stock || currentStock <= 0;
-  const isLowStock = currentStock > 0 && currentStock <= 5;
+  const discountSavings =
+    currentOriginalPrice > currentPrice ? currentOriginalPrice - currentPrice : 0;
+  const discountPct =
+    currentOriginalPrice > currentPrice
+      ? Math.round(((currentOriginalPrice - currentPrice) / currentOriginalPrice) * 100)
+      : product.discount_percentage || 0;
 
-  const currentImage = product.images[selectedImageIndex]?.url || product.images[0]?.url;
+  // Find color object matching selected color
+  const activeColorObj = product.colors?.find((c) => c.name === selectedColor);
+  const colorSpecificImage = activeColorObj?.image_url || activeColorObj?.images?.[0];
+
+  // If a color-specific image exists, prioritize it; otherwise use the selected gallery thumbnail
+  const currentImage =
+    (colorSpecificImage && selectedImageIndex === 0)
+      ? colorSpecificImage
+      : product.images[selectedImageIndex]?.url || colorSpecificImage || product.images[0]?.url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1000&q=80';
+
+  // Handler for color selection: updates selected color and switches main view to that color's image
+  const handleSelectColor = (colorName: string) => {
+    setSelectedColor(colorName);
+    const colorObj = product.colors?.find((c) => c.name === colorName);
+    if (colorObj?.image_url || (colorObj?.images && colorObj.images.length > 0)) {
+      setSelectedImageIndex(0);
+    }
+  };
 
   // Image mouse move handler for zoom
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -120,32 +134,34 @@ export const ProductDetailPage: React.FC = () => {
     setZoomPosition({ x, y });
   };
 
-  const handleAddToCart = async () => {
-    if (isOutOfStock) return;
-    setIsAdding(true);
-    try {
-      await addItem(product.id, quantity, selectedVariantId || undefined, selectedColor || undefined);
-      setAdded(true);
-      setTimeout(() => setAdded(false), 2500);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsAdding(false);
-    }
-  };
+  const whatsappPhone = settings?.whatsapp_number
+    ? settings.whatsapp_number.replace(/[^0-9]/g, '')
+    : '919876543210';
+
+  const whatsappInquiryText = encodeURIComponent(
+    `Hello Shiridi Sai Enterprises, I am inquiring about "${product.name}".\n\n- Offer Price: ₹${currentPrice.toLocaleString('en-IN')}\n- Selected Finish: ${selectedColor || 'Standard'}\n- Product Link: ${window.location.href}\n\nPlease share availability, customization options, and showroom viewing details.`
+  );
 
   return (
     <div className="bg-[#FCFBF9] min-h-screen py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-stone-500 mb-6 font-medium">
-          <Link to="/" className="hover:text-stone-900 transition-colors">
+          <Link to="/" className="hover:text-amber-800 transition-colors">
             Home
           </Link>
           <ChevronRight className="w-3.5 h-3.5" />
-          <Link to={`/category/${product.category_id}`} className="hover:text-stone-900 transition-colors">
-            {product.category_name || 'Category'}
+          <Link to="/products" className="hover:text-amber-800 transition-colors">
+            All Furniture
           </Link>
+          {product.category_name && (
+            <>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <Link to={`/category/${product.category_id}`} className="hover:text-amber-800 transition-colors">
+                {product.category_name}
+              </Link>
+            </>
+          )}
           <ChevronRight className="w-3.5 h-3.5" />
           <span className="text-stone-900 truncate max-w-xs">{product.name}</span>
         </div>
@@ -156,7 +172,7 @@ export const ProductDetailPage: React.FC = () => {
           <div className="space-y-4">
             {/* Main Image Container */}
             <div
-              className="relative aspect-4/3 w-full rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 cursor-crosshair group"
+              className="relative aspect-4/3 w-full rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 cursor-crosshair group shadow-inner"
               onMouseEnter={() => setZoomActive(true)}
               onMouseLeave={() => setZoomActive(false)}
               onMouseMove={handleMouseMove}
@@ -164,17 +180,17 @@ export const ProductDetailPage: React.FC = () => {
               <img
                 src={currentImage}
                 alt={product.name}
-                className="w-full h-full object-cover object-center transition-all duration-200"
+                className="w-full h-full object-cover object-center transition-all duration-300"
               />
 
               {/* Magnified Zoom Lens */}
               {zoomActive && (
                 <div
-                  className="hidden md:block absolute inset-0 pointer-events-none z-20 rounded-2xl overflow-hidden border border-amber-500 shadow-2xl"
+                  className="hidden md:block absolute inset-0 pointer-events-none z-20 rounded-2xl overflow-hidden border-2 border-amber-500/80 shadow-2xl"
                   style={{
                     backgroundImage: `url(${currentImage})`,
                     backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                    backgroundSize: '220%',
+                    backgroundSize: '240%',
                     backgroundRepeat: 'no-repeat',
                   }}
                 />
@@ -182,20 +198,30 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Badges */}
               <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5 pointer-events-none">
-                {product.discount_percentage ? (
-                  <span className="px-2.5 py-1 rounded-full bg-rose-600 text-white font-bold text-xs tracking-wide shadow-md uppercase">
-                    {product.discount_percentage}% OFF
+                {discountPct > 0 && (
+                  <span className="px-3 py-1 rounded-full bg-rose-600 text-white font-bold text-xs tracking-wide shadow-md uppercase">
+                    {discountPct}% OFF
                   </span>
-                ) : null}
+                )}
+                {activeColorObj?.name && (
+                  <span className="px-2.5 py-0.5 rounded-full bg-stone-900/80 backdrop-blur-xs text-white font-medium text-[11px] shadow-sm">
+                    Showing: {activeColorObj.name}
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Thumbnail Navigation Bar */}
-            {product.images && product.images.length > 1 && (
+            <div className="space-y-2">
+              <span className="text-[11px] font-semibold text-stone-500 block uppercase tracking-wider">
+                Photo Gallery ({product.images.length + (product.colors?.filter(c => c.image_url).length || 0)} views):
+              </span>
               <div className="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar">
+                {/* Standard Images */}
                 {product.images.map((img, idx) => (
                   <button
-                    key={idx}
+                    key={`img-${idx}`}
+                    type="button"
                     onClick={() => setSelectedImageIndex(idx)}
                     className={`relative w-20 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
                       selectedImageIndex === idx
@@ -206,24 +232,47 @@ export const ProductDetailPage: React.FC = () => {
                     <img src={img.url} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
+
+                {/* Color-specific images in thumbnail bar */}
+                {product.colors?.filter(c => c.image_url).map((c, idx) => (
+                  <button
+                    key={`col-${idx}`}
+                    type="button"
+                    onClick={() => {
+                      setSelectedColor(c.name);
+                      setSelectedImageIndex(0);
+                    }}
+                    title={`View ${c.name} Finish Photo`}
+                    className={`relative w-20 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
+                      selectedColor === c.name
+                        ? 'border-emerald-600 shadow-sm scale-102 ring-2 ring-emerald-500/20'
+                        : 'border-stone-200 opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <img src={c.image_url!} alt={c.name} className="w-full h-full object-cover" />
+                    <span className="absolute bottom-0 inset-x-0 bg-stone-900/80 text-white text-[9px] text-center font-medium py-0.5 truncate px-1">
+                      {c.name}
+                    </span>
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
           </div>
 
-          {/* Right Column: Product Information & Buying Actions */}
+          {/* Right Column: Product Information, Price Breakdown & Inquiry Actions */}
           <div className="flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               {/* Category, Rating & SKU */}
               <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                 <span className="font-bold text-amber-800 uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200/60">
-                  {product.category_name}
+                  {product.category_name || 'Furniture Collection'}
                 </span>
 
                 <div className="flex items-center gap-3 text-stone-500">
                   <div className="flex items-center gap-1 text-amber-600 font-bold">
                     <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
                     <span>{product.rating || 4.8}</span>
-                    <span className="text-stone-400 font-normal">({product.review_count || 24} reviews)</span>
+                    <span className="text-stone-400 font-normal">({product.review_count || 24} ratings)</span>
                   </div>
                   {product.sku && <span>SKU: {product.sku}</span>}
                 </div>
@@ -234,64 +283,107 @@ export const ProductDetailPage: React.FC = () => {
                 {product.name}
               </h1>
 
-              {/* Price & Discount */}
-              <div className="flex items-baseline gap-3 pt-1">
-                <span className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-serif">
-                  ₹{currentPrice.toLocaleString('en-IN')}
-                </span>
-                {currentOriginalPrice && currentOriginalPrice > currentPrice && (
-                  <span className="text-lg text-stone-400 line-through">
-                    ₹{currentOriginalPrice.toLocaleString('en-IN')}
+              {/* Transparent Price Discovery Box */}
+              <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200 space-y-2">
+                <div className="flex items-baseline gap-3">
+                  <div className="text-xs uppercase tracking-wider font-bold text-stone-500">
+                    Showroom Offer Price:
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-baseline gap-3">
+                  <span className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-sans tracking-tight">
+                    ₹{currentPrice.toLocaleString('en-IN')}
                   </span>
-                )}
-                <span className="text-xs text-stone-500 font-medium">Inclusive of all taxes</span>
+
+                  {currentOriginalPrice > currentPrice && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg text-stone-400 line-through">
+                        M.R.P. ₹{currentOriginalPrice.toLocaleString('en-IN')}
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold">
+                        Save ₹{discountSavings.toLocaleString('en-IN')} ({discountPct}% OFF)
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <p className="text-xs text-stone-500">
+                  Direct manufacturer price. Taxes included. Visit our showroom to inspect the finish.
+                </p>
               </div>
 
-              {/* Short Description */}
-              <p className="text-stone-600 text-xs sm:text-sm leading-relaxed font-light">
-                {product.description}
-              </p>
+              {/* Information About Product */}
+              <div>
+                <h3 className="text-xs font-bold text-stone-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                  <Info className="w-3.5 h-3.5 text-amber-800" />
+                  About This Furniture Piece
+                </h3>
+                <p className="text-stone-600 text-xs sm:text-sm leading-relaxed font-normal whitespace-pre-line">
+                  {product.description}
+                </p>
+              </div>
 
-              {/* Color Selection */}
+              {/* Color Finish Selection with Color-Specific Images */}
               {product.colors && product.colors.length > 0 && (
                 <div className="pt-2">
                   <div className="flex items-center justify-between text-xs mb-2">
                     <span className="font-bold text-stone-800 uppercase tracking-wider">
-                      Available Color: <span className="text-amber-800 font-semibold">{selectedColor}</span>
+                      Select Finish / Color:{' '}
+                      <span className="text-amber-800 font-bold">{selectedColor}</span>
                     </span>
+                    {activeColorObj?.image_url && (
+                      <span className="text-[11px] text-emerald-700 font-medium">
+                        ✓ Photo Available for this color
+                      </span>
+                    )}
                   </div>
-                  <div className="flex items-center gap-2.5">
-                    {product.colors.map((c, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setSelectedColor(c.name)}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-medium transition-all cursor-pointer ${
-                          selectedColor === c.name
-                            ? 'border-amber-700 bg-amber-50/70 text-amber-950 shadow-xs'
-                            : 'border-stone-200 text-stone-700 hover:bg-stone-50'
-                        }`}
-                      >
-                        <span
-                          style={{ backgroundColor: c.hex_code || '#78350F' }}
-                          className="w-3.5 h-3.5 rounded-full border border-stone-300 shadow-inner"
-                        />
-                        <span>{c.name}</span>
-                      </button>
-                    ))}
+
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    {product.colors.map((c, i) => {
+                      const isSelected = selectedColor === c.name;
+                      return (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => handleSelectColor(c.name)}
+                          className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                            isSelected
+                              ? 'border-amber-700 bg-amber-50/80 text-amber-950 shadow-xs ring-2 ring-amber-600/30'
+                              : 'border-stone-200 text-stone-700 hover:bg-stone-50'
+                          }`}
+                        >
+                          {c.image_url ? (
+                            <img
+                              src={c.image_url}
+                              alt={c.name}
+                              className="w-5 h-5 rounded-full object-cover border border-stone-300 shrink-0"
+                            />
+                          ) : (
+                            <span
+                              style={{ backgroundColor: c.hex_code || '#78350F' }}
+                              className="w-4 h-4 rounded-full border border-stone-300 shadow-inner shrink-0"
+                            />
+                          )}
+                          <span>{c.name}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
-              {/* Variant / Size Selection */}
+              {/* Variant / Size Options */}
               {product.variants && product.variants.length > 1 && (
                 <div className="pt-2">
                   <span className="block text-xs font-bold text-stone-800 uppercase tracking-wider mb-2">
-                    Select Dimensions / Variant:
+                    Dimensions / Size Variant:
                   </span>
                   <div className="grid grid-cols-2 gap-2">
                     {product.variants.map((v) => (
                       <button
                         key={v.variant_id}
+                        type="button"
                         onClick={() => setSelectedVariantId(v.variant_id)}
                         className={`p-2.5 rounded-xl border text-left text-xs transition-all cursor-pointer ${
                           selectedVariantId === v.variant_id
@@ -301,7 +393,7 @@ export const ProductDetailPage: React.FC = () => {
                       >
                         <div className="truncate">{v.dimensions || v.color || v.sku}</div>
                         {v.price_override && (
-                          <div className="text-amber-800 font-semibold mt-0.5">
+                          <div className="text-amber-800 font-bold mt-0.5">
                             ₹{v.price_override.toLocaleString('en-IN')}
                           </div>
                         )}
@@ -310,219 +402,177 @@ export const ProductDetailPage: React.FC = () => {
                   </div>
                 </div>
               )}
+            </div>
 
-              {/* Stock Status Notification */}
-              <div className="pt-2">
-                {isOutOfStock ? (
-                  <div className="flex items-center gap-2 text-rose-700 bg-rose-50 p-3 rounded-xl border border-rose-200 text-xs font-semibold">
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                    <span>Currently out of stock. Contact us for custom order booking.</span>
-                  </div>
-                ) : isLowStock ? (
-                  <div className="flex items-center gap-2 text-amber-800 bg-amber-50 p-2.5 rounded-xl border border-amber-200 text-xs font-medium">
-                    <span className="w-2 h-2 rounded-full bg-amber-600 animate-ping" />
-                    <span>Hurry! Only {currentStock} left in warehouse.</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 text-xs font-semibold">
-                    <Check className="w-4 h-4 text-emerald-600" />
-                    <span>In Stock & Ready for White-Glove Dispatch</span>
-                  </div>
+            {/* Direct Inquiry & Showroom Contact Buttons (Replaces Delivery / Cart) */}
+            <div className="space-y-3 pt-4 border-t border-stone-200">
+              <span className="text-xs font-bold text-stone-700 uppercase tracking-wider block">
+                Interested in this piece? Inquire directly with our showroom:
+              </span>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* WhatsApp Price Inquiry */}
+                <a
+                  href={`https://wa.me/${whatsappPhone}?text=${whatsappInquiryText}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm tracking-wide shadow-md shadow-emerald-900/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+                >
+                  <MessageCircle className="w-5 h-5 fill-white shrink-0" />
+                  <span>Inquire on WhatsApp</span>
+                </a>
+
+                {/* Call Showroom Directly */}
+                {settings?.phone && (
+                  <a
+                    href={`tel:${settings.phone}`}
+                    className="py-3.5 px-4 rounded-2xl border-2 border-stone-800 hover:bg-stone-900 hover:text-white text-stone-900 font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Phone className="w-4 h-4 shrink-0 text-amber-700 group-hover:text-amber-300" />
+                    <span>Call: {settings.phone}</span>
+                  </a>
                 )}
               </div>
-            </div>
 
-            {/* Quantity Selector & Add to Cart Buttons */}
-            <div className="space-y-4 pt-4 border-t border-stone-200">
-              <div className="flex items-center gap-4">
-                {/* Quantity Controls */}
-                <div className="flex items-center rounded-xl border border-stone-300 bg-stone-50 p-1">
-                  <button
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    disabled={quantity <= 1 || isOutOfStock}
-                    className="w-8 h-8 rounded-lg bg-white flex items-center justify-center font-bold text-stone-700 hover:bg-stone-100 disabled:opacity-40"
-                  >
-                    -
-                  </button>
-                  <span className="w-12 text-center text-sm font-bold text-stone-900">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity((q) => Math.min(currentStock, q + 1))}
-                    disabled={quantity >= currentStock || isOutOfStock}
-                    className="w-8 h-8 rounded-lg bg-white flex items-center justify-center font-bold text-stone-700 hover:bg-stone-100 disabled:opacity-40"
-                  >
-                    +
-                  </button>
-                </div>
-
-                {/* Add to Cart Button */}
-                <button
-                  onClick={handleAddToCart}
-                  disabled={isOutOfStock || isAdding}
-                  className={`flex-1 py-3.5 px-6 rounded-2xl font-bold text-sm tracking-wide shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                    isOutOfStock
-                      ? 'bg-stone-200 text-stone-400 cursor-not-allowed shadow-none'
-                      : added
-                      ? 'bg-emerald-700 text-white shadow-emerald-900/20'
-                      : 'bg-amber-800 hover:bg-amber-900 active:scale-98 text-white shadow-amber-950/20'
-                  }`}
-                >
-                  {added ? (
-                    <>
-                      <Check className="w-5 h-5" />
-                      <span>Added to Shopping Cart!</span>
-                    </>
-                  ) : isAdding ? (
-                    <span className="animate-pulse">Adding...</span>
-                  ) : (
-                    <>
-                      <ShoppingBag className="w-5 h-5" />
-                      <span>Add to Cart (₹{(currentPrice * quantity).toLocaleString('en-IN')})</span>
-                    </>
-                  )}
-                </button>
-              </div>
-
-              {/* Cash On Delivery Assurance */}
-              <div className="p-3 bg-amber-50/60 rounded-xl border border-amber-200/80 flex items-center gap-3 text-xs text-amber-900">
-                <Truck className="w-5 h-5 text-amber-800 shrink-0" />
-                <div>
-                  <span className="font-bold">Cash on Delivery (COD) Available: </span>
-                  <span>Pay upon safe arrival and installation at your home.</span>
+              {/* Showroom Visit Card */}
+              <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200 flex items-start gap-3 text-xs text-stone-700">
+                <MapPin className="w-5 h-5 text-amber-800 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="font-bold text-stone-900">
+                    Visit Shiridi Sai Enterprises Showroom:
+                  </p>
+                  <p className="text-stone-600 leading-relaxed">
+                    {settings?.address || 'Showroom Address: Hyderabad, Telangana.'}
+                  </p>
+                  <p className="text-[11px] text-amber-800 font-semibold flex items-center gap-1.5 pt-0.5">
+                    <Clock className="w-3.5 h-3.5" /> Open Mon-Sat 10 AM - 9 PM • Sunday 10:30 AM - 8 PM
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Service & Guarantee Badges */}
+            {/* Quality & Craft Badges */}
             <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-100 text-center">
               <div className="p-2">
-                <Truck className="w-4 h-4 text-amber-700 mx-auto mb-1" />
-                <span className="text-[11px] font-semibold text-stone-900 block">White-Glove</span>
-                <span className="text-[10px] text-stone-500">Free Assembly</span>
+                <Sparkles className="w-4 h-4 text-amber-700 mx-auto mb-1" />
+                <span className="text-[11px] font-semibold text-stone-900 block">Solid Wood</span>
+                <span className="text-[10px] text-stone-500">Heirloom Timber</span>
               </div>
               <div className="p-2">
                 <ShieldCheck className="w-4 h-4 text-amber-700 mx-auto mb-1" />
                 <span className="text-[11px] font-semibold text-stone-900 block">5 - 10 Yr</span>
-                <span className="text-[10px] text-stone-500">Wood Warranty</span>
+                <span className="text-[10px] text-stone-500">Borer Warranty</span>
               </div>
               <div className="p-2">
-                <RefreshCw className="w-4 h-4 text-amber-700 mx-auto mb-1" />
-                <span className="text-[11px] font-semibold text-stone-900 block">7-Day</span>
-                <span className="text-[10px] text-stone-500">Replacement</span>
+                <CheckCircle2 className="w-4 h-4 text-amber-700 mx-auto mb-1" />
+                <span className="text-[11px] font-semibold text-stone-900 block">Custom Sizes</span>
+                <span className="text-[10px] text-stone-500">Made To Measure</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Specifications & Product Overview Tabbed Box */}
+        {/* Specifications & Detailed Product Information Box */}
         <div className="mt-12 bg-white rounded-3xl border border-stone-200/90 p-6 sm:p-8 lg:p-10 shadow-xs">
-          <h2 className="text-xl font-bold font-serif text-stone-900 pb-4 border-b border-stone-200 mb-6">
-            Product Specifications & Craft Details
+          <h2 className="text-xl font-bold font-serif text-stone-900 pb-4 border-b border-stone-200 mb-6 flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-amber-700" />
+            Detailed Product Information & Specifications
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Left Specs Table */}
             <div>
               <h3 className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
-                Key Attributes
+                Material & Timber Attributes
               </h3>
               <dl className="divide-y divide-stone-100 border border-stone-200 rounded-2xl overflow-hidden text-xs">
                 {product.material && (
-                  <div className="p-3 bg-stone-50/50 flex justify-between">
-                    <dt className="font-semibold text-stone-600">Primary Material</dt>
-                    <dd className="font-medium text-stone-900">{product.material}</dd>
+                  <div className="p-3.5 bg-stone-50/50 flex justify-between">
+                    <dt className="font-semibold text-stone-600">Primary Material / Timber</dt>
+                    <dd className="font-bold text-stone-900">{product.material}</dd>
                   </div>
                 )}
                 {product.finish && (
-                  <div className="p-3 flex justify-between">
+                  <div className="p-3.5 flex justify-between">
                     <dt className="font-semibold text-stone-600">Finish & Polish</dt>
                     <dd className="font-medium text-stone-900">{product.finish}</dd>
                   </div>
                 )}
                 {product.brand && (
-                  <div className="p-3 bg-stone-50/50 flex justify-between">
-                    <dt className="font-semibold text-stone-600">Brand / Maker</dt>
+                  <div className="p-3.5 bg-stone-50/50 flex justify-between">
+                    <dt className="font-semibold text-stone-600">Brand / Manufacturer</dt>
                     <dd className="font-medium text-stone-900">{product.brand}</dd>
                   </div>
                 )}
                 {product.dimensions && (
-                  <div className="p-3 flex justify-between">
-                    <dt className="font-semibold text-stone-600">Dimensions (L x W x H)</dt>
+                  <div className="p-3.5 flex justify-between">
+                    <dt className="font-semibold text-stone-600">Dimensions</dt>
                     <dd className="font-medium text-stone-900">
-                      {product.dimensions.length} x {product.dimensions.width} x {product.dimensions.height}{' '}
+                      {product.dimensions.length} × {product.dimensions.width} × {product.dimensions.height}{' '}
                       {product.dimensions.unit}
                     </dd>
                   </div>
                 )}
                 {product.warranty_info && (
-                  <div className="p-3 bg-stone-50/50 flex justify-between">
+                  <div className="p-3.5 bg-stone-50/50 flex justify-between">
                     <dt className="font-semibold text-stone-600">Warranty Coverage</dt>
-                    <dd className="font-medium text-stone-900">{product.warranty_info}</dd>
+                    <dd className="font-medium text-emerald-800">{product.warranty_info}</dd>
                   </div>
                 )}
-                <div className="p-3 flex justify-between">
-                  <dt className="font-semibold text-stone-600">Assembly</dt>
-                  <dd className="font-medium text-stone-900">
-                    {product.assembly_required ? 'Provided Free at Delivery' : 'Pre-assembled'}
-                  </dd>
-                </div>
               </dl>
             </div>
 
-            {/* Right Features & Custom Specifications */}
-            <div className="space-y-6">
-              {product.specifications && product.specifications.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
-                    Technical Specifications
-                  </h3>
-                  <div className="space-y-2 text-xs">
-                    {product.specifications.map((s, i) => (
-                      <div key={i} className="flex justify-between py-1.5 border-b border-stone-100">
-                        <span className="text-stone-500 font-medium">{s.label}</span>
-                        <span className="text-stone-900 font-semibold">{s.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            {/* Right: Key Features & Information */}
+            <div className="space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
+                Craftsmanship & Highlights
+              </h3>
+
+              {product.features && product.features.length > 0 ? (
+                <ul className="space-y-2 text-xs text-stone-700">
+                  {product.features.map((feat, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-600 mt-1.5 shrink-0" />
+                      <span className="leading-relaxed">{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-stone-500 leading-relaxed">
+                  Crafted using 100% seasoned solid timber with traditional tenon and mortise joints for maximum generational durability.
+                </p>
               )}
 
-              {product.features && product.features.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
-                    Highlights & Construction
-                  </h3>
-                  <ul className="space-y-2 text-xs text-stone-600">
-                    {product.features.map((f, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {/* Extra Customization Notice */}
+              <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 text-xs text-amber-950 space-y-1 mt-4">
+                <span className="font-bold block">Need a Custom Size or Different Polish?</span>
+                <p className="text-stone-700 leading-relaxed">
+                  Shiridi Sai Enterprises provides custom furniture making. Bring your room measurements or inspiration designs to our showroom or contact us on WhatsApp.
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Related Products Section */}
+        {/* Related Products Carousel */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <div className="flex items-center justify-between mb-8 pb-4 border-b border-stone-200">
-              <h2 className="text-xl sm:text-2xl font-bold font-serif text-stone-900">
-                You May Also Like
-              </h2>
-              <Link
-                to={`/category/${product.category_id}`}
-                className="text-xs font-semibold text-amber-800 hover:text-amber-900"
-              >
-                View Category Catalog →
+            <div className="flex items-end justify-between mb-8 pb-4 border-b border-stone-200">
+              <div>
+                <span className="text-xs font-bold text-amber-700 uppercase tracking-widest">
+                  Explore More
+                </span>
+                <h2 className="text-2xl font-bold font-serif text-stone-900 tracking-tight mt-1">
+                  Similar Furniture Designs
+                </h2>
+              </div>
+              <Link to="/products" className="text-xs font-bold text-amber-800 hover:underline">
+                View All →
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {relatedProducts.map((p) => (
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+              {relatedProducts.slice(0, 4).map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
             </div>

@@ -3,23 +3,13 @@ import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import { StoreLayout } from '../layouts/StoreLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
 
-// Storefront pages
+// Storefront Showcase pages
 import { HomePage } from '../pages/store/HomePage';
 import { CategoryPage } from '../pages/store/CategoryPage';
 import { ProductsCatalogPage } from '../pages/store/ProductsCatalogPage';
 import { ProductDetailPage } from '../pages/store/ProductDetailPage';
-import { CartPage } from '../pages/store/CartPage';
-import { CheckoutPage } from '../pages/store/CheckoutPage';
-import { OrderConfirmationPage } from '../pages/store/OrderConfirmationPage';
-import { TrackOrderPage } from '../pages/store/TrackOrderPage';
 import { PoliciesPage } from '../pages/store/PoliciesPage';
 import { ContactPage } from '../pages/store/ContactPage';
-
-// Customer Account pages
-import { LoginPage } from '../pages/account/LoginPage';
-import { RegisterPage } from '../pages/account/RegisterPage';
-import { OrdersPage } from '../pages/account/OrdersPage';
-import { ProfilePage } from '../pages/account/ProfilePage';
 
 // Admin pages
 import { AdminLoginPage } from '../pages/admin/AdminLoginPage';
@@ -53,7 +43,7 @@ const NotFoundPage: React.FC = () => {
           to="/products"
           className="px-6 py-2.5 rounded-full bg-stone-100 text-stone-800 text-xs font-semibold uppercase tracking-wider hover:bg-stone-200 transition-colors"
         >
-          Browse All Furniture
+          Browse All Furniture & Prices
         </Link>
       </div>
     </div>
@@ -63,7 +53,7 @@ const NotFoundPage: React.FC = () => {
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Admin Login Route */}
+      {/* Admin Login Route (ONLY login page on the site, as requested) */}
       <Route path="/admin/login" element={<AdminLoginPage />} />
 
       {/* Admin Dashboard Protected Routes */}
@@ -87,39 +77,29 @@ export const AppRoutes: React.FC = () => {
         {/* Categories */}
         <Route path="category/:slug" element={<CategoryPage />} />
         <Route path="categories/:slug" element={<CategoryPage />} />
+        <Route path="categories" element={<Navigate to="/products" replace />} />
 
-        {/* Products */}
+        {/* Products Price Showcase & Catalog */}
         <Route path="products" element={<ProductsCatalogPage />} />
         <Route path="product/:slug" element={<ProductDetailPage />} />
         <Route path="products/:slug" element={<ProductDetailPage />} />
 
-        {/* Cart & Checkout */}
-        <Route path="cart" element={<CartPage />} />
-        <Route path="checkout" element={<CheckoutPage />} />
-        <Route path="order-confirmation/:orderNumber" element={<OrderConfirmationPage />} />
-
-        {/* Order Tracking */}
-        <Route path="track-order" element={<TrackOrderPage />} />
-        <Route path="track-order/:orderNumber" element={<TrackOrderPage />} />
-
-        {/* Customer Accounts */}
-        <Route path="login" element={<LoginPage />} />
-        <Route path="account/login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="account/register" element={<RegisterPage />} />
-        <Route path="account/orders" element={<OrdersPage />} />
-        <Route path="orders" element={<OrdersPage />} />
-        <Route path="account/profile" element={<ProfilePage />} />
-        <Route path="profile" element={<ProfilePage />} />
-
-        {/* Information & Policies */}
+        {/* Showroom Information & Warranty Policies */}
         <Route path="contact" element={<ContactPage />} />
         <Route path="policies" element={<PoliciesPage />} />
         <Route path="policies/:type" element={<PoliciesPage />} />
-        <Route path="delivery-info" element={<Navigate to="/policies/delivery" replace />} />
-        <Route path="returns" element={<Navigate to="/policies/returns" replace />} />
         <Route path="privacy" element={<Navigate to="/policies/privacy" replace />} />
         <Route path="terms" element={<Navigate to="/policies/terms" replace />} />
+
+        {/* Redirect removed customer login / delivery routes */}
+        <Route path="login" element={<Navigate to="/admin/login" replace />} />
+        <Route path="account/*" element={<Navigate to="/" replace />} />
+        <Route path="register" element={<Navigate to="/" replace />} />
+        <Route path="cart" element={<Navigate to="/products" replace />} />
+        <Route path="checkout" element={<Navigate to="/products" replace />} />
+        <Route path="order-confirmation/*" element={<Navigate to="/" replace />} />
+        <Route path="track-order/*" element={<Navigate to="/" replace />} />
+        <Route path="track-order" element={<Navigate to="/" replace />} />
 
         {/* 404 Catch-All */}
         <Route path="*" element={<NotFoundPage />} />

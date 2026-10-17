@@ -200,8 +200,8 @@ export const HomePage: React.FC = () => {
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="font-semibold text-sm text-white">Cash on Delivery (COD)</h4>
-                    <p className="text-xs text-stone-400 mt-0.5">Inspect your furniture at your doorstep before paying.</p>
+                    <h4 className="font-semibold text-sm text-white">Transparent Pricing</h4>
+                    <p className="text-xs text-stone-400 mt-0.5">Direct workshop pricing with clear M.R.P. and discount savings.</p>
                   </div>
                 </div>
               </div>

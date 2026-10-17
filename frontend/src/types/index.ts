@@ -65,12 +65,14 @@ export interface ProductImage {
   alt?: string;
   is_primary: boolean;
   public_id?: string;
+  color?: string;
 }
 
 export interface ProductColor {
   name: string;
   hex_code?: string;
   image_url?: string;
+  images?: string[];
 }
 
 export interface ProductVariant {

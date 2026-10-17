@@ -7,11 +7,13 @@ class ProductImage(BaseModel):
     alt: Optional[str] = None
     is_primary: bool = False
     public_id: Optional[str] = None
+    color: Optional[str] = None
 
 class ProductColor(BaseModel):
     name: str
     hex_code: Optional[str] = "#78350F"
     image_url: Optional[str] = None
+    images: Optional[List[str]] = []
 
 class ProductVariant(BaseModel):
     variant_id: str

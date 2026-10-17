@@ -1,0 +1,60 @@
+services:
+  # -------------------------------------------------------------
+  # Backend API Service (Python FastAPI + Uvicorn + Motor Async)
+  # -------------------------------------------------------------
+  - type: web
+    name: shiridi-sai-enterprises-api
+    env: python
+    rootDir: backend
+    plan: free
+    region: oregon
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_NAME
+        value: shiridi_sai_enterprises
+      - key: MONGODB_URI
+        sync: false
+        # Enter your MongoDB Atlas connection URI in Render dashboard:
+        # mongodb+srv://<user>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 10080
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: BACKEND_CORS_ORIGINS
+        value: '["*"]'
+
+  # -------------------------------------------------------------
+  # Frontend Client (React 19 + TypeScript + Vite + Tailwind v4)
+  # -------------------------------------------------------------
+  - type: web
+    name: shiridi-sai-enterprises-store
+    env: static
+    rootDir: frontend
+    plan: free
+    region: oregon
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: "./dist"
+    routes:
+      - type: rewrite
+        source: "/*"
+        destination: "/index.html"
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: shiridi-sai-enterprises-api
+          property: host
+        value: "https://${shiridi-sai-enterprises-api.host}/api/v1"

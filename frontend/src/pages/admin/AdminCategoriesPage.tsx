@@ -18,6 +18,7 @@ export const AdminCategoriesPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchFilter, setSearchFilter] = useState('');
+  const [productSearchFilter, setProductSearchFilter] = useState('');
 
   // Selected Category View state (When clicking a category, e.g. "Sofas")
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -83,6 +84,7 @@ export const AdminCategoriesPage: React.FC = () => {
   const handleBackToCategories = () => {
     setSelectedCategory(null);
     setCategoryProducts([]);
+    setProductSearchFilter('');
     setSearchParams({});
   };
 
@@ -199,6 +201,14 @@ export const AdminCategoriesPage: React.FC = () => {
     c.name.toLowerCase().includes(searchFilter.toLowerCase())
   );
 
+  const displayedCategoryProducts = productSearchFilter.trim()
+    ? categoryProducts.filter(
+        (p) =>
+          p.name.toLowerCase().includes(productSearchFilter.toLowerCase()) ||
+          (p.sku && p.sku.toLowerCase().includes(productSearchFilter.toLowerCase()))
+      )
+    : categoryProducts;
+
   return (
     <div className="p-3.5 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6 sm:space-y-8">
       {/* ============================================================== */}
@@ -207,53 +217,52 @@ export const AdminCategoriesPage: React.FC = () => {
       {/* ============================================================== */}
       {selectedCategory ? (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
-          {/* Back button & Category Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-200">
-            <div>
+          {/* Top Bar: Back button & Search Bar (Same like Customer Interface) */}
+          <div className="flex items-center gap-2 max-w-xl">
+            <button
+              type="button"
+              onClick={handleBackToCategories}
+              className="shrink-0 inline-flex items-center gap-1 px-3 py-2 bg-amber-800 hover:bg-amber-900 text-white rounded-full text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+              title="Back to All Categories"
+              aria-label="Back"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back</span>
+            </button>
+
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={productSearchFilter}
+                onChange={(e) => setProductSearchFilter(e.target.value)}
+                placeholder={`Search in ${selectedCategory.name}...`}
+                className="w-full pl-9 pr-16 py-2 bg-stone-100 hover:bg-stone-50 focus:bg-white text-stone-900 placeholder-stone-500 rounded-full text-xs border border-stone-200 focus:outline-hidden focus:border-amber-600 shadow-inner transition-colors"
+              />
+              <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <button
                 type="button"
-                onClick={handleBackToCategories}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 hover:text-amber-900 mb-2 transition-colors cursor-pointer group"
+                className="absolute right-1 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-amber-800 text-white text-[10px] font-semibold rounded-full shadow-xs"
               >
-                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                <span>Back to All Categories</span>
+                Search
               </button>
-
-              <div className="flex items-center gap-3">
-                <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900">
-                  {selectedCategory.name}
-                </h1>
-                <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold">
-                  {categoryProducts.length} Items in Catalog
-                </span>
-              </div>
-              <p className="text-xs text-stone-500 mt-1 max-w-xl">
-                {selectedCategory.description || 'Viewing all furniture pieces in this category.'}
-              </p>
             </div>
+          </div>
 
-            {/* Action Buttons: Add Product & Edit Category */}
+          {/* Category Header (Without the 2 removed buttons) */}
+          <div className="pb-4 border-b border-stone-200">
             <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => handleOpenEdit(selectedCategory)}
-                className="px-4 py-2.5 rounded-xl border border-stone-300 text-stone-700 hover:bg-stone-50 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-              >
-                <Edit className="w-3.5 h-3.5" />
-                <span>Edit Category</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  navigate(`/admin/products/new?category_id=${selectedCategory.id}`)
-                }
-                className="px-5 py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-bold uppercase tracking-wider shadow-md transition-all flex items-center gap-2 cursor-pointer active:scale-98"
-              >
-                <PackagePlus className="w-4 h-4" />
-                <span>➕ Add Product to {selectedCategory.name}</span>
-              </button>
+              <h1 className="text-xl sm:text-2xl font-bold font-serif text-stone-900">
+                {selectedCategory.name}
+              </h1>
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-xs font-bold">
+                {categoryProducts.length} Items in Catalog
+              </span>
             </div>
+            {selectedCategory.description && (
+              <p className="text-xs text-stone-500 mt-1 max-w-xl">
+                {selectedCategory.description}
+              </p>
+            )}
           </div>
 
           {/* Products List for this Category (2 Columns on mobile!) */}
@@ -284,7 +293,7 @@ export const AdminCategoriesPage: React.FC = () => {
               </div>
 
               {/* Product Cards in this Category */}
-              {categoryProducts.map((prod) => {
+              {displayedCategoryProducts.map((prod) => {
                 const primaryImage =
                   prod.images.find((img) => img.is_primary)?.url ||
                   prod.colors?.[0]?.image_url ||
@@ -410,43 +419,35 @@ export const AdminCategoriesPage: React.FC = () => {
         /* VIEW 2: VISUAL CATEGORY CARDS (Click any card to view products) */
         /* ============================================================== */
         <div className="space-y-6">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-bold font-serif text-stone-900 flex items-center gap-2.5">
-                <FolderTree className="w-6 h-6 text-amber-700" />
-                Categories & Furniture Collections
-              </h1>
-              <p className="text-stone-500 text-xs sm:text-sm mt-1">
-                Click any category card to view its products and add new pieces.
-              </p>
-            </div>
-
-            <button
-              onClick={handleOpenCreate}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow-sm transition-all cursor-pointer self-start"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Create New Category</span>
-            </button>
-          </div>
-
-          {/* Search bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-stone-200 shadow-xs">
-            <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          {/* 1. Search Bar FIRST (Same like Customer Interface) */}
+          <div className="flex items-center gap-2 max-w-xl">
+            <div className="relative flex-1">
               <input
                 type="text"
                 value={searchFilter}
                 onChange={(e) => setSearchFilter(e.target.value)}
-                placeholder="Search category name..."
-                className="w-full pl-9 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs text-stone-800 focus:bg-white focus:outline-hidden focus:border-amber-600"
+                placeholder="Search furniture categories & collections..."
+                className="w-full pl-9 pr-16 py-2 bg-stone-100 hover:bg-stone-50 focus:bg-white text-stone-900 placeholder-stone-500 rounded-full text-xs border border-stone-200 focus:outline-hidden focus:border-amber-600 shadow-inner transition-colors"
               />
+              <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <button
+                type="button"
+                className="absolute right-1 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-amber-800 text-white text-[10px] font-semibold rounded-full shadow-xs"
+              >
+                Search
+              </button>
             </div>
+          </div>
 
-            <div className="text-xs text-stone-500 font-medium">
-              Click any category card to open its product catalog.
-            </div>
+          {/* 2. "Categories & Furniture Collections" AFTER the search bar */}
+          <div className="pb-1">
+            <h1 className="text-xl sm:text-2xl font-bold font-serif text-stone-900 flex items-center gap-2">
+              <FolderTree className="w-5 h-5 text-amber-700" />
+              <span>Categories & Furniture Collections</span>
+            </h1>
+            <p className="text-stone-500 text-xs mt-1">
+              Click any category card to view its products and add new pieces.
+            </p>
           </div>
 
           {/* Category Cards Grid (2 Columns on Mobile - Like Customer Categories Page!) */}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Lock, Mail, ShieldCheck, ArrowRight, LogOut, CheckCircle2 } from 'lucide-react';
 import { Logo } from '../../components/common/Logo';
 import { useAuth } from '../../context/AuthContext';
@@ -7,6 +7,8 @@ import { useToast } from '../../context/ToastContext';
 
 export const AdminLoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromPath = (location.state as any)?.from?.pathname || '/admin/categories';
   const { user, isAuthenticated, isAdmin, login, logout } = useAuth();
   const { success, error: toastError } = useToast();
 
@@ -25,7 +27,7 @@ export const AdminLoginPage: React.FC = () => {
         return;
       }
       success(`Welcome to Management Portal, ${loggedUser.name}`);
-      navigate('/admin/categories');
+      navigate(fromPath);
     } catch {
       // Toast already shown in AuthContext
     } finally {
@@ -55,33 +57,6 @@ export const AdminLoginPage: React.FC = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4 sm:px-0">
         <div className="bg-stone-900/90 py-8 px-6 sm:px-10 rounded-3xl border border-stone-800 shadow-2xl space-y-6">
-          {/* If already authenticated, give quick action or allow re-login */}
-          {isAuthenticated && isAdmin && (
-            <div className="p-4 rounded-2xl bg-amber-950/40 border border-amber-800/50 space-y-3 text-xs">
-              <div className="flex items-center gap-2 text-amber-300 font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Active Session: {user?.name} ({user?.email})</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => navigate('/admin/categories')}
-                  className="flex-1 py-2 px-3 rounded-xl bg-amber-800 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <span>Open Categories</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => logout()}
-                  className="py-2 px-3 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 font-semibold text-xs transition-colors cursor-pointer"
-                  title="Switch Account"
-                >
-                  Switch User
-                </button>
-              </div>
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

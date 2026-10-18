@@ -15,14 +15,20 @@ export function getCartSessionId(): string {
 }
 
 export function getAuthToken(): string | null {
-  return localStorage.getItem('sse_auth_token');
+  try {
+    localStorage.removeItem('sse_auth_token');
+  } catch {}
+  return sessionStorage.getItem('sse_auth_token');
 }
 
 export function setAuthToken(token: string | null): void {
-  if (token) {
-    localStorage.setItem('sse_auth_token', token);
-  } else {
+  try {
     localStorage.removeItem('sse_auth_token');
+  } catch {}
+  if (token) {
+    sessionStorage.setItem('sse_auth_token', token);
+  } else {
+    sessionStorage.removeItem('sse_auth_token');
   }
 }
 

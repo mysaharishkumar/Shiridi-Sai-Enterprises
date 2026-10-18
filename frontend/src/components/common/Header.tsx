@@ -71,20 +71,6 @@ export const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-40 bg-white/98 backdrop-blur-md border-b border-stone-200/80 shadow-xs">
-      {/* Top Announcement Bar */}
-      {settings?.announcement_enabled && (
-        <div className="bg-stone-900 text-stone-200 text-xs py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse shrink-0" />
-          <span className="truncate max-w-4xl">{settings.announcement_text}</span>
-          <span className="hidden md:inline-block text-stone-500">•</span>
-          <a
-            href={`tel:${settings.phone}`}
-            className="hidden md:inline-flex items-center gap-1 text-amber-300 hover:text-white underline decoration-amber-400/50 underline-offset-2 shrink-0 font-medium"
-          >
-            <Phone className="w-3 h-3" /> Showroom Call: {settings.phone}
-          </a>
-        </div>
-      )}
 
       {/* Main Header Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

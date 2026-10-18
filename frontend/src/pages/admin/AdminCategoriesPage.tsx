@@ -200,7 +200,7 @@ export const AdminCategoriesPage: React.FC = () => {
   );
 
   return (
-    <div className="p-6 sm:p-8 lg:p-10 max-w-7xl mx-auto space-y-8">
+    <div className="p-3.5 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6 sm:space-y-8">
       {/* ============================================================== */}
       {/* VIEW 1: CATEGORY DETAIL WITH ALL PRODUCTS + ADD PRODUCT BUTTON */}
       {/* (Triggered when clicking a category, e.g. "Sofas")              */}
@@ -256,30 +256,30 @@ export const AdminCategoriesPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Products List for this Category */}
+          {/* Products List for this Category (2 Columns on mobile!) */}
           {loadingProducts ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-72 bg-stone-200/70 rounded-2xl animate-pulse" />
+                <div key={i} className="h-56 sm:h-72 bg-stone-200/70 rounded-2xl animate-pulse" />
               ))}
             </div>
           ) : categoryProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
               {/* Quick Add Card */}
               <div
                 onClick={() =>
                   navigate(`/admin/products/new?category_id=${selectedCategory.id}`)
                 }
-                className="flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-dashed border-amber-300 hover:border-amber-600 bg-amber-50/30 hover:bg-amber-50/70 transition-all cursor-pointer min-h-[300px] text-center group"
+                className="flex flex-col items-center justify-center p-3 sm:p-6 rounded-2xl border-2 border-dashed border-amber-300 hover:border-amber-600 bg-amber-50/30 hover:bg-amber-50/70 transition-all cursor-pointer min-h-[190px] sm:min-h-[280px] text-center group"
               >
-                <div className="w-12 h-12 rounded-full bg-white border border-amber-300 text-amber-800 flex items-center justify-center mb-3 shadow-xs group-hover:scale-110 transition-transform">
-                  <Plus className="w-6 h-6" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-amber-300 text-amber-800 flex items-center justify-center mb-2 sm:mb-3 shadow-xs group-hover:scale-110 transition-transform">
+                  <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h4 className="font-bold text-sm text-stone-900 group-hover:text-amber-900">
-                  Add Another {selectedCategory.name.replace(/s$/, '')}
+                <h4 className="font-bold text-xs sm:text-sm text-stone-900 group-hover:text-amber-900">
+                  Add {selectedCategory.name.replace(/s$/, '')}
                 </h4>
-                <p className="text-xs text-stone-500 mt-1 max-w-xs">
-                  Set prices, upload multiple color photos, and add dimensions.
+                <p className="text-[10px] sm:text-xs text-stone-500 mt-0.5 max-w-xs line-clamp-1">
+                  + Upload photos
                 </p>
               </div>
 
@@ -307,31 +307,31 @@ export const AdminCategoriesPage: React.FC = () => {
 
                       {/* Discount Badge */}
                       {prod.discount_percentage ? (
-                        <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-600 text-white font-bold text-[10px] uppercase shadow-sm">
+                        <span className="absolute top-2 left-2 px-1.5 sm:px-2 py-0.5 rounded-full bg-rose-600 text-white font-bold text-[9px] sm:text-[10px] uppercase shadow-sm">
                           {prod.discount_percentage}% OFF
                         </span>
                       ) : null}
 
                       {/* Stock badge */}
-                      <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-stone-900/80 backdrop-blur-xs text-white text-[10px] font-semibold">
+                      <span className="absolute bottom-2 left-2 px-1.5 sm:px-2 py-0.5 rounded-md bg-stone-900/80 backdrop-blur-xs text-white text-[9px] sm:text-[10px] font-semibold">
                         Stock: {prod.total_stock}
                       </span>
                     </div>
 
                     {/* Product Details */}
-                    <div className="p-4 flex flex-col flex-1 justify-between gap-3">
+                    <div className="p-2.5 sm:p-4 flex flex-col flex-1 justify-between gap-2">
                       <div>
-                        <h4 className="font-bold text-sm text-stone-900 line-clamp-2 leading-snug">
+                        <h4 className="font-bold text-xs sm:text-sm text-stone-900 line-clamp-1 sm:line-clamp-2 leading-snug">
                           {prod.name}
                         </h4>
 
                         {/* Price discovery display */}
-                        <div className="flex items-baseline gap-2 mt-2">
-                          <span className="text-base font-bold text-stone-900">
+                        <div className="flex flex-wrap items-baseline gap-1 mt-1 sm:mt-2">
+                          <span className="text-xs sm:text-base font-bold text-stone-900">
                             ₹{prod.selling_price.toLocaleString('en-IN')}
                           </span>
                           {prod.original_price && prod.original_price > prod.selling_price && (
-                            <span className="text-xs text-stone-400 line-through">
+                            <span className="text-[10px] sm:text-xs text-stone-400 line-through">
                               ₹{prod.original_price.toLocaleString('en-IN')}
                             </span>
                           )}
@@ -339,39 +339,42 @@ export const AdminCategoriesPage: React.FC = () => {
 
                         {/* Available colors indicator */}
                         {prod.colors && prod.colors.length > 0 && (
-                          <div className="flex items-center gap-1.5 mt-2.5">
-                            <span className="text-[10px] text-stone-400 font-medium">Finishes:</span>
+                          <div className="flex items-center gap-1 mt-1 sm:mt-2">
+                            <span className="text-[9px] sm:text-[10px] text-stone-400 font-medium hidden sm:inline">Finishes:</span>
                             <div className="flex items-center gap-1">
-                              {prod.colors.map((c, idx) => (
+                              {prod.colors.slice(0, 3).map((c, idx) => (
                                 <span
                                   key={idx}
                                   title={`${c.name} (${c.images?.length || (c.image_url ? 1 : 0)} photos)`}
                                   style={{ backgroundColor: c.hex_code || '#78350F' }}
-                                  className="w-3.5 h-3.5 rounded-full border border-stone-300 shadow-xs"
+                                  className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border border-stone-300 shadow-xs"
                                 />
                               ))}
+                              {prod.colors.length > 3 && (
+                                <span className="text-[9px] text-stone-400">+{prod.colors.length - 3}</span>
+                              )}
                             </div>
                           </div>
                         )}
                       </div>
 
                       {/* Actions: Edit & Delete */}
-                      <div className="pt-3 border-t border-stone-100 grid grid-cols-2 gap-2">
+                      <div className="pt-2 border-t border-stone-100 grid grid-cols-2 gap-1.5">
                         <button
                           type="button"
                           onClick={() => navigate(`/admin/products/edit/${prod.id}`)}
-                          className="py-1.5 px-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                          className="py-1 sm:py-1.5 px-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 text-[10px] sm:text-xs font-semibold flex items-center justify-center gap-1 transition-colors cursor-pointer"
                         >
-                          <Edit className="w-3.5 h-3.5" />
+                          <Edit className="w-3 h-3" />
                           <span>Edit</span>
                         </button>
 
                         <button
                           type="button"
                           onClick={() => handleDeleteProduct(prod)}
-                          className="py-1.5 px-2 rounded-xl border border-stone-200 text-rose-600 hover:bg-rose-50 text-xs font-semibold flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                          className="py-1 sm:py-1.5 px-1.5 rounded-lg border border-stone-200 text-rose-600 hover:bg-rose-50 text-[10px] sm:text-xs font-semibold flex items-center justify-center gap-1 transition-colors cursor-pointer"
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 className="w-3 h-3" />
                           <span>Delete</span>
                         </button>
                       </div>
@@ -446,21 +449,21 @@ export const AdminCategoriesPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Category Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {/* Category Cards Grid (2 Columns on Mobile - Like Customer Categories Page!) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
             {/* Create New Category Card */}
             <div
               onClick={handleOpenCreate}
-              className="flex flex-col items-center justify-center p-8 rounded-2xl border-2 border-dashed border-stone-300 hover:border-amber-600 bg-stone-50/50 hover:bg-amber-50/30 transition-all cursor-pointer min-h-[280px] group text-center"
+              className="flex flex-col items-center justify-center p-3.5 sm:p-6 rounded-2xl border-2 border-dashed border-stone-300 hover:border-amber-600 bg-stone-50/50 hover:bg-amber-50/30 transition-all cursor-pointer min-h-[190px] sm:min-h-[260px] group text-center"
             >
-              <div className="w-14 h-14 rounded-full bg-white border border-stone-200 flex items-center justify-center text-stone-400 group-hover:text-amber-800 group-hover:scale-110 shadow-sm transition-all mb-3">
-                <Plus className="w-7 h-7" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-stone-200 flex items-center justify-center text-stone-400 group-hover:text-amber-800 group-hover:scale-110 shadow-xs transition-all mb-2 sm:mb-3">
+                <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <h3 className="font-bold text-sm text-stone-900 group-hover:text-amber-900">
-                Add New Category
+              <h3 className="font-bold text-xs sm:text-sm text-stone-900 group-hover:text-amber-900">
+                Add Category
               </h3>
-              <p className="text-xs text-stone-500 max-w-xs mt-1">
-                Create a new category card with cover photo.
+              <p className="text-[10px] sm:text-xs text-stone-400 mt-0.5 line-clamp-1">
+                + New collection
               </p>
             </div>
 
@@ -482,67 +485,67 @@ export const AdminCategoriesPage: React.FC = () => {
                   />
 
                   {/* Status & Count Badges */}
-                  <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1.5">
-                    <span className="px-2.5 py-0.5 rounded-full bg-stone-900/80 backdrop-blur-xs text-white text-[10px] font-bold">
-                      {cat.product_count ?? 0} Products
+                  <div className="absolute top-2 left-2 z-10 flex items-center gap-1">
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-stone-900/80 backdrop-blur-xs text-white text-[9px] sm:text-[10px] font-bold">
+                      {cat.product_count ?? 0} Items
                     </span>
                     {cat.is_active ? (
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-700 text-white text-[10px] font-semibold">
+                      <span className="px-1.5 py-0.5 rounded-full bg-emerald-700 text-white text-[9px] font-semibold hidden xs:inline">
                         Live
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded-full bg-stone-600 text-white text-[10px] font-semibold">
+                      <span className="px-1.5 py-0.5 rounded-full bg-stone-600 text-white text-[9px] font-semibold hidden xs:inline">
                         Hidden
                       </span>
                     )}
                   </div>
 
-                  {/* Quick Edit/Delete on Hover */}
-                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1 z-10">
+                  {/* Quick Edit/Delete Buttons */}
+                  <div className="absolute top-2 right-2 flex items-center gap-1 z-10">
                     <button
                       onClick={(e) => handleOpenEdit(cat, e)}
-                      className="p-1.5 rounded-lg bg-white/90 text-stone-700 hover:text-amber-800 hover:bg-white shadow-sm transition-colors cursor-pointer"
+                      className="p-1 sm:p-1.5 rounded-lg bg-white/90 text-stone-700 hover:text-amber-800 hover:bg-white shadow-xs transition-colors cursor-pointer"
                       title="Edit Category Details"
                     >
-                      <Edit className="w-3.5 h-3.5" />
+                      <Edit className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </button>
                     <button
                       onClick={(e) => handleDeleteCategory(cat, e)}
-                      className="p-1.5 rounded-lg bg-white/90 text-stone-700 hover:text-rose-600 hover:bg-white shadow-sm transition-colors cursor-pointer"
+                      className="p-1 sm:p-1.5 rounded-lg bg-white/90 text-stone-700 hover:text-rose-600 hover:bg-white shadow-xs transition-colors cursor-pointer"
                       title="Delete Category"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </button>
                   </div>
                 </div>
 
                 {/* Category Info */}
-                <div className="p-4 flex flex-col flex-1 justify-between gap-3">
+                <div className="p-2.5 sm:p-4 flex flex-col flex-1 justify-between gap-2">
                   <div>
-                    <h3 className="font-bold text-base text-stone-900 group-hover:text-amber-900 transition-colors">
+                    <h3 className="font-bold text-xs sm:text-base text-stone-900 group-hover:text-amber-900 transition-colors line-clamp-1">
                       {cat.name}
                     </h3>
-                    <p className="text-xs text-stone-500 line-clamp-2 mt-1 leading-relaxed">
-                      {cat.description || 'Click to view all products in this category.'}
+                    <p className="text-[10px] sm:text-xs text-stone-500 line-clamp-1 sm:line-clamp-2 mt-0.5 leading-snug">
+                      {cat.description || `${cat.product_count ?? 0} pieces in collection.`}
                     </p>
                   </div>
 
                   {/* Direct Action Buttons */}
-                  <div className="pt-3 border-t border-stone-100 space-y-2">
+                  <div className="pt-2 border-t border-stone-100 space-y-1 sm:space-y-1.5">
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/admin/products/new?category_id=${cat.id}`);
                       }}
-                      className="w-full py-2 px-3 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="w-full py-1.5 sm:py-2 px-2 rounded-lg sm:rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-[10px] sm:text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer active:scale-95"
                     >
-                      <PackagePlus className="w-3.5 h-3.5" />
-                      <span>➕ Add Product to this Category</span>
+                      <PackagePlus className="w-3 h-3" />
+                      <span className="truncate">+ Add Product</span>
                     </button>
 
-                    <div className="text-center text-[11px] font-semibold text-amber-800 group-hover:underline">
-                      View All {cat.name} ({cat.product_count ?? 0}) →
+                    <div className="text-center text-[10px] sm:text-[11px] font-semibold text-amber-800 group-hover:underline truncate">
+                      View All ({cat.product_count ?? 0}) →
                     </div>
                   </div>
                 </div>

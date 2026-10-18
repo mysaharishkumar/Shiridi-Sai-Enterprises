@@ -117,73 +117,68 @@ export const ProductDetailPage: React.FC = () => {
   }
 
   // Dynamic gallery items: prioritize all photos for the selected finish, followed by general photos & other finishes
-  const galleryItems: GalleryItem[] = React.useMemo(() => {
-    if (!product) return [];
-    const items: GalleryItem[] = [];
-    const seenUrls = new Set<string>();
+  const galleryItems: GalleryItem[] = [];
+  const seenUrls = new Set<string>();
 
-    // 1. Photos for the currently active selected color
-    if (activeColorObj) {
-      const colorPhotos = (activeColorObj.images && activeColorObj.images.length > 0)
-        ? activeColorObj.images
-        : (activeColorObj.image_url ? [activeColorObj.image_url] : []);
+  // 1. Photos for the currently active selected color
+  if (activeColorObj) {
+    const colorPhotos = (activeColorObj.images && activeColorObj.images.length > 0)
+      ? activeColorObj.images
+      : (activeColorObj.image_url ? [activeColorObj.image_url] : []);
 
-      colorPhotos.forEach((url, i) => {
-        if (!seenUrls.has(url)) {
-          items.push({
-            url,
-            colorName: activeColorObj.name,
-            label: colorPhotos.length > 1 ? `${activeColorObj.name} (Photo ${i + 1}/${colorPhotos.length})` : `${activeColorObj.name} Finish`
-          });
-          seenUrls.add(url);
-        }
-      });
-    }
+    colorPhotos.forEach((url, i) => {
+      if (!seenUrls.has(url)) {
+        galleryItems.push({
+          url,
+          colorName: activeColorObj.name,
+          label: colorPhotos.length > 1 ? `${activeColorObj.name} (Photo ${i + 1}/${colorPhotos.length})` : `${activeColorObj.name} Finish`
+        });
+        seenUrls.add(url);
+      }
+    });
+  }
 
-    // 2. Standard product catalog photos
-    if (product.images && product.images.length > 0) {
-      product.images.forEach((img, i) => {
-        if (!seenUrls.has(img.url)) {
-          items.push({
-            url: img.url,
-            label: img.alt || `Product View ${i + 1}`
-          });
-          seenUrls.add(img.url);
-        }
-      });
-    }
+  // 2. Standard product catalog photos
+  if (product.images && product.images.length > 0) {
+    product.images.forEach((img, i) => {
+      if (!seenUrls.has(img.url)) {
+        galleryItems.push({
+          url: img.url,
+          label: img.alt || `Product View ${i + 1}`
+        });
+        seenUrls.add(img.url);
+      }
+    });
+  }
 
-    // 3. Other color finishes' photos
-    if (product.colors) {
-      product.colors.forEach((c) => {
-        if (c.name !== selectedColor) {
-          const cPhotos = (c.images && c.images.length > 0)
-            ? c.images
-            : (c.image_url ? [c.image_url] : []);
-          cPhotos.forEach((url, i) => {
-            if (!seenUrls.has(url)) {
-              items.push({
-                url,
-                colorName: c.name,
-                label: cPhotos.length > 1 ? `${c.name} (${i + 1})` : `${c.name} Finish`
-              });
-              seenUrls.add(url);
-            }
-          });
-        }
-      });
-    }
+  // 3. Other color finishes' photos
+  if (product.colors) {
+    product.colors.forEach((c) => {
+      if (c.name !== selectedColor) {
+        const cPhotos = (c.images && c.images.length > 0)
+          ? c.images
+          : (c.image_url ? [c.image_url] : []);
+        cPhotos.forEach((url, i) => {
+          if (!seenUrls.has(url)) {
+            galleryItems.push({
+              url,
+              colorName: c.name,
+              label: cPhotos.length > 1 ? `${c.name} (${i + 1})` : `${c.name} Finish`
+            });
+            seenUrls.add(url);
+          }
+        });
+      }
+    });
+  }
 
-    // Fallback if no images found
-    if (items.length === 0) {
-      items.push({
-        url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1000&q=80',
-        label: product.name
-      });
-    }
-
-    return items;
-  }, [product, activeColorObj, selectedColor]);
+  // Fallback if no images found
+  if (galleryItems.length === 0) {
+    galleryItems.push({
+      url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1000&q=80',
+      label: product.name
+    });
+  }
 
   const currentGalleryItem = galleryItems[selectedImageIndex] || galleryItems[0];
   const currentImage = currentGalleryItem?.url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1000&q=80';
@@ -211,27 +206,57 @@ export const ProductDetailPage: React.FC = () => {
   );
 
   return (
-    <div className="bg-[#FCFBF9] min-h-screen py-8">
+    <div className="bg-[#FCFBF9] min-h-screen py-6 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs text-stone-500 mb-6 font-medium">
-          <Link to="/" className="hover:text-amber-800 transition-colors">
-            Home
-          </Link>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <Link to="/products" className="hover:text-amber-800 transition-colors">
-            All Furniture
-          </Link>
-          {product.category_name && (
-            <>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <Link to={`/category/${product.category_id}`} className="hover:text-amber-800 transition-colors">
-                {product.category_name}
+        {/* Amazon-style Prominent Back Button & Breadcrumbs Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 bg-white p-3 sm:p-4 rounded-2xl border border-stone-200/90 shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => {
+                if (window.history.length > 1) {
+                  window.history.back();
+                } else if (product.category_id) {
+                  window.location.href = `/category/${product.category_id}`;
+                } else {
+                  window.location.href = '/';
+                }
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-bold tracking-wide shadow-xs transition-all cursor-pointer active:scale-95"
+              title="Back to Previous Page"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>← Back</span>
+            </button>
+
+            {product.category_name && (
+              <Link
+                to={`/category/${product.category_id}`}
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-amber-50 text-stone-700 hover:text-amber-800 text-xs font-semibold transition-colors"
+              >
+                <span>{product.category_name}</span>
               </Link>
-            </>
-          )}
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-stone-900 truncate max-w-xs">{product.name}</span>
+            )}
+
+            <span className="hidden sm:inline text-stone-300">•</span>
+            <span className="hidden sm:inline text-xs text-stone-600 truncate max-w-xs">{product.name}</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link
+              to="/"
+              className="text-xs font-semibold text-stone-500 hover:text-amber-800 transition-colors"
+            >
+              Home
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <Link
+              to="/products"
+              className="text-xs font-semibold text-amber-800 hover:text-amber-900 transition-colors"
+            >
+              All Furniture
+            </Link>
+          </div>
         </div>
 
         {/* Product Details Main Grid */}

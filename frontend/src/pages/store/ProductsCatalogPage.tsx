@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import {
   SlidersHorizontal, ChevronRight, Search, X, RotateCcw,
-  Check, ArrowUpDown
+  Check, ArrowUpDown, ArrowLeft
 } from 'lucide-react';
 import { ProductCard } from '../../components/store/ProductCard';
 import { Product } from '../../types';
@@ -13,7 +13,7 @@ export const ProductsCatalogPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { categories } = useStore();
 
-  const searchQuery = searchParams.get('q') || '';
+  const searchQuery = searchParams.get('search') || searchParams.get('q') || '';
   const categoryParam = searchParams.get('category') || '';
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -88,15 +88,41 @@ export const ProductsCatalogPage: React.FC = () => {
   return (
     <div className="bg-[#FCFBF9] min-h-screen py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb & Title */}
-        <div className="flex items-center gap-2 text-xs text-stone-500 mb-3 font-medium">
-          <Link to="/" className="hover:text-stone-900 transition-colors">
-            Home
-          </Link>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-stone-900">
-            {localSearch ? `Search Results for "${localSearch}"` : 'All Furniture Collections'}
-          </span>
+        {/* Amazon-style Prominent Back Button & Navigation Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 bg-white p-3 sm:p-4 rounded-2xl border border-stone-200/90 shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => {
+                if (window.history.length > 1) {
+                  window.history.back();
+                } else {
+                  window.location.href = '/';
+                }
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-bold tracking-wide shadow-xs transition-all cursor-pointer active:scale-95"
+              title="Back to Previous Page"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>← Back</span>
+            </button>
+
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-amber-50 text-stone-700 hover:text-amber-800 text-xs font-semibold transition-colors"
+            >
+              <span>Home</span>
+            </Link>
+
+            <span className="text-stone-300">•</span>
+            <span className="text-xs text-stone-600 font-medium">
+              {localSearch ? `Search Results for "${localSearch}"` : 'All Furniture Collections'}
+            </span>
+          </div>
+
+          <div className="text-xs text-stone-500">
+            Showing <strong>{products.length}</strong> of <strong>{total}</strong> products
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 mb-8 border-b border-stone-200">

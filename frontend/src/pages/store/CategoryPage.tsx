@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   SlidersHorizontal, ChevronRight, Search, X, RotateCcw,
-  Sparkles, Check, ArrowUpDown
+  Sparkles, Check, ArrowUpDown, ArrowLeft
 } from 'lucide-react';
 import { ProductCard } from '../../components/store/ProductCard';
 import { Product, Category } from '../../types';
@@ -109,17 +109,40 @@ export const CategoryPage: React.FC = () => {
         )}
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-amber-200/80 mb-3 font-medium">
-            <Link to="/" className="hover:text-white transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <Link to="/products" className="hover:text-white transition-colors">
-              Collections
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white">{category?.name || slug}</span>
+          {/* Amazon-style Prominent Back Button & Navigation Bar */}
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <div className="flex items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.history.length > 1) {
+                    window.history.back();
+                  } else {
+                    window.location.href = '/';
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95 border border-white/25"
+                title="Back to Previous Page"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>← Back</span>
+              </button>
+
+              <Link
+                to="/"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-stone-200 hover:text-white text-xs font-medium transition-colors"
+              >
+                <span>Home</span>
+              </Link>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-amber-200/80 font-medium">
+              <Link to="/products" className="hover:text-white transition-colors">
+                All Furniture
+              </Link>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <span className="text-white font-semibold">{category?.name || slug}</span>
+            </div>
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-serif text-white tracking-tight">

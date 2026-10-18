@@ -208,57 +208,6 @@ export const ProductDetailPage: React.FC = () => {
   return (
     <div className="bg-[#FCFBF9] min-h-screen py-6 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Amazon-style Prominent Back Button & Breadcrumbs Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 bg-white p-3 sm:p-4 rounded-2xl border border-stone-200/90 shadow-xs">
-          <div className="flex items-center gap-2.5">
-            <button
-              type="button"
-              onClick={() => {
-                if (window.history.length > 1) {
-                  window.history.back();
-                } else if (product.category_id) {
-                  window.location.href = `/category/${product.category_id}`;
-                } else {
-                  window.location.href = '/';
-                }
-              }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-bold tracking-wide shadow-xs transition-all cursor-pointer active:scale-95"
-              title="Back to Previous Page"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back</span>
-            </button>
-
-            {product.category_name && (
-              <Link
-                to={`/category/${product.category_id}`}
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-amber-50 text-stone-700 hover:text-amber-800 text-xs font-semibold transition-colors"
-              >
-                <span>{product.category_name}</span>
-              </Link>
-            )}
-
-            <span className="hidden sm:inline text-stone-300">•</span>
-            <span className="hidden sm:inline text-xs text-stone-600 truncate max-w-xs">{product.name}</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Link
-              to="/"
-              className="text-xs font-semibold text-stone-500 hover:text-amber-800 transition-colors"
-            >
-              Home
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
-            <Link
-              to="/products"
-              className="text-xs font-semibold text-amber-800 hover:text-amber-900 transition-colors"
-            >
-              All Furniture
-            </Link>
-          </div>
-        </div>
-
         {/* Product Details Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 bg-white p-6 sm:p-8 lg:p-10 rounded-3xl border border-stone-200/90 shadow-xs">
           {/* Left Column: Image Gallery with Magnifier */}
@@ -510,26 +459,14 @@ export const ProductDetailPage: React.FC = () => {
                 Interested in this piece? Inquire directly with our showroom:
               </span>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {/* WhatsApp Price Inquiry */}
-                <a
-                  href={`https://wa.me/${whatsappPhone}?text=${whatsappInquiryText}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm tracking-wide shadow-md shadow-emerald-900/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
-                >
-                  <MessageCircle className="w-5 h-5 fill-white shrink-0" />
-                  <span>Inquire on WhatsApp</span>
-                </a>
-
-                {/* Call Showroom Directly */}
+              <div className="pt-1">
                 {settings?.phone && (
                   <a
                     href={`tel:${settings.phone}`}
-                    className="py-3.5 px-4 rounded-2xl border-2 border-stone-800 hover:bg-stone-900 hover:text-white text-stone-900 font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-4 px-6 rounded-2xl bg-amber-800 hover:bg-amber-900 text-white font-bold text-sm tracking-wide shadow-md shadow-amber-950/20 transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-98"
                   >
-                    <Phone className="w-4 h-4 shrink-0 text-amber-700 group-hover:text-amber-300" />
-                    <span>Call: {settings.phone}</span>
+                    <Phone className="w-5 h-5 shrink-0" />
+                    <span>Call Showroom: {settings.phone}</span>
                   </a>
                 )}
               </div>

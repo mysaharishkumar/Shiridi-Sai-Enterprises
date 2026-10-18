@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, MessageCircle, Star } from 'lucide-react';
+import { Eye, MessageCircle, Star, Phone } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 
@@ -169,13 +169,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </Link>
 
             <a
-              href={`https://wa.me/${whatsappPhone}?text=${whatsappText}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-1.5 sm:py-2 px-1 sm:px-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] sm:text-xs font-semibold text-center transition-all flex items-center justify-center gap-1 shadow-xs"
+              href={`tel:${settings?.phone || '9876543210'}`}
+              className="w-full py-1.5 sm:py-2 px-1 sm:px-2 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-[11px] sm:text-xs font-semibold text-center transition-all flex items-center justify-center gap-1 shadow-xs"
+              title="Call showroom"
             >
-              <MessageCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-white shrink-0" />
-              <span>Inquire</span>
+              <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+              <span>Call</span>
             </a>
           </div>
         </div>

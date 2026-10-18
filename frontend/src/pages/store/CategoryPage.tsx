@@ -95,42 +95,8 @@ export const CategoryPage: React.FC = () => {
 
   return (
     <div className="bg-[#FCFBF9] min-h-screen">
-      {/* Clean Light Category Header (Replacing dark banner) */}
-      <div className="bg-white border-b border-stone-200/90 py-5 sm:py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumbs */}
-          <div className="flex items-center gap-2 text-xs text-stone-500 mb-2 font-medium">
-            <Link to="/" className="hover:text-amber-800 transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
-            <Link to="/products" className="hover:text-amber-800 transition-colors">
-              All Furniture
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
-            <span className="text-stone-900 font-semibold">{category?.name || slug}</span>
-          </div>
-
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 tracking-tight">
-                {category?.name || slug?.replace(/-/g, ' ').toUpperCase()}
-              </h1>
-              {category?.description && (
-                <p className="mt-1 text-stone-500 text-xs sm:text-sm max-w-2xl font-light">
-                  {category.description}
-                </p>
-              )}
-            </div>
-            <span className="px-3 py-1 rounded-full bg-amber-100/80 text-amber-900 text-xs font-bold self-start sm:self-auto border border-amber-200">
-              {total} Pieces Available
-            </span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content Area */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Mobile Filter Toggle & Sort Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 mb-6 border-b border-stone-200">
           <div className="w-full sm:w-auto flex items-center justify-between gap-3">

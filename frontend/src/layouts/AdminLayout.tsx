@@ -43,21 +43,33 @@ export const AdminLayout: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-            className="p-1.5 rounded-lg text-stone-400 hover:text-white"
+            className="p-1.5 rounded-lg text-stone-400 hover:text-white cursor-pointer"
+            aria-label="Toggle menu"
           >
             {mobileSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
           <Logo admin className="brightness-125" />
         </div>
 
-        <Link
-          to="/"
-          target="_blank"
-          className="p-2 text-stone-400 hover:text-white"
-          title="View Storefront"
-        >
-          <ExternalLink className="w-5 h-5" />
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/"
+            target="_blank"
+            className="p-2 text-stone-400 hover:text-white"
+            title="View Storefront"
+          >
+            <ExternalLink className="w-4 h-4" />
+          </Link>
+
+          <button
+            onClick={handleLogout}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm transition-colors cursor-pointer"
+            title="Logout from Admin"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Logout</span>
+          </button>
+        </div>
       </div>
 
       {/* Admin Sidebar */}
@@ -124,17 +136,62 @@ export const AdminLayout: React.FC = () => {
 
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 transition-colors text-left cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-sm transition-all text-center cursor-pointer active:scale-98"
+            title="Logout from Admin Dashboard"
           >
             <LogOut className="w-4 h-4" />
-            <span>Sign Out</span>
+            <span>Logout</span>
           </button>
         </div>
       </aside>
 
       {/* Main Admin Content Body */}
-      <main className="flex-1 min-w-0 bg-[#F5F5F4] overflow-y-auto">
-        <Outlet />
+      <main className="flex-1 min-w-0 bg-[#F5F5F4] overflow-y-auto flex flex-col min-h-screen">
+        {/* Universal Admin Top Header with prominent Logout button */}
+        <header className="bg-white border-b border-stone-200/90 px-6 sm:px-8 py-3.5 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-900 bg-amber-100/70 border border-amber-300/80 px-2.5 py-1 rounded-full">
+              Admin Portal
+            </span>
+            <span className="hidden sm:inline text-xs text-stone-400">•</span>
+            <span className="hidden sm:inline text-xs font-semibold text-stone-700">
+              Shiridi Sai Enterprises Management
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link
+              to="/"
+              target="_blank"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 hover:bg-stone-50 text-xs font-semibold text-stone-700 transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-amber-700" />
+              <span>View Storefront</span>
+            </Link>
+
+            {/* Admin User Badge */}
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-stone-100 border border-stone-200 text-stone-700 text-xs font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="font-bold text-stone-900 truncate max-w-[140px]">{user?.name}</span>
+            </div>
+
+            {/* Prominent Header Logout Button */}
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md shadow-rose-900/20 transition-all cursor-pointer active:scale-95"
+              title="Logout from Admin Dashboard"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Logout</span>
+            </button>
+          </div>
+        </header>
+
+        {/* Page Content View */}
+        <div className="flex-1">
+          <Outlet />
+        </div>
       </main>
     </div>
   );

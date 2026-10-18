@@ -128,13 +128,13 @@ export const HomePage: React.FC = () => {
 
         {/* Product Cards Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="animate-pulse bg-stone-100 rounded-2xl h-80 border border-stone-200" />
+              <div key={i} className="animate-pulse bg-stone-100 rounded-2xl h-64 sm:h-80 border border-stone-200" />
             ))}
           </div>
         ) : displayedProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
             {displayedProducts.map((prod) => (
               <ProductCard key={prod.id} product={prod} />
             ))}

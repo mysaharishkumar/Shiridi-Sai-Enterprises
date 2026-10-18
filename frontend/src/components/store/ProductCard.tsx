@@ -75,15 +75,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       </Link>
 
       {/* Product Information */}
-      <div className="p-4 flex flex-col flex-1 justify-between gap-3">
+      <div className="p-2.5 sm:p-4 flex flex-col flex-1 justify-between gap-2 sm:gap-3">
         <div>
           {/* Category Tag & Rating */}
-          <div className="flex items-center justify-between text-[11px] text-stone-500 mb-1">
-            <span className="font-semibold text-amber-800 uppercase tracking-wider">
+          <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-stone-500 mb-1">
+            <span className="font-semibold text-amber-800 uppercase tracking-wider truncate max-w-[90px] sm:max-w-none">
               {product.category_name || 'Furniture'}
             </span>
-            <div className="flex items-center gap-1 text-amber-600 font-semibold">
-              <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+            <div className="flex items-center gap-0.5 sm:gap-1 text-amber-600 font-semibold shrink-0">
+              <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-amber-500 text-amber-500" />
               <span>{product.rating || 4.8}</span>
             </div>
           </div>
@@ -91,23 +91,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {/* Product Title */}
           <Link
             to={`/product/${product.slug}`}
-            className="block font-medium text-sm text-stone-900 group-hover:text-amber-800 transition-colors line-clamp-2 leading-snug"
+            className="block font-medium text-xs sm:text-sm text-stone-900 group-hover:text-amber-800 transition-colors line-clamp-2 leading-snug"
           >
             {product.name}
           </Link>
 
           {/* Material & Timber snippet */}
           {product.material && (
-            <p className="text-[11px] text-stone-500 line-clamp-1 mt-1 font-sans">
+            <p className="text-[10px] sm:text-[11px] text-stone-500 line-clamp-1 mt-0.5 sm:mt-1 font-sans">
               {product.material} {product.finish ? `• ${product.finish}` : ''}
             </p>
           )}
 
           {/* Color Indicators with Click to Preview Image */}
           {product.colors && product.colors.length > 0 && (
-            <div className="flex items-center gap-2 mt-2.5">
-              <span className="text-[10px] text-stone-400 font-medium">Finishes:</span>
-              <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 mt-2">
+              <span className="text-[9px] sm:text-[10px] text-stone-400 font-medium hidden sm:inline">Finishes:</span>
+              <div className="flex items-center gap-1">
                 {product.colors.map((c, i) => (
                   <button
                     key={i}
@@ -118,7 +118,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     }}
                     title={`${c.name}${c.image_url ? ' (Click to view image)' : ''}`}
                     style={{ backgroundColor: c.hex_code || '#78350F' }}
-                    className={`w-3.5 h-3.5 rounded-full border transition-transform cursor-pointer ${
+                    className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border transition-transform cursor-pointer ${
                       activeColorIndex === i
                         ? 'scale-125 ring-2 ring-amber-700 border-white'
                         : 'border-stone-300 hover:scale-110'
@@ -131,49 +131,50 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         {/* Pricing Display */}
-        <div className="pt-2 border-t border-stone-100 flex flex-col gap-2.5">
-          <div className="flex items-baseline justify-between">
-            <div className="flex items-baseline gap-2">
-              <span className="text-lg font-bold text-stone-900 font-sans">
+        <div className="pt-2 border-t border-stone-100 flex flex-col gap-2">
+          <div className="flex items-baseline justify-between gap-1 flex-wrap">
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-sm sm:text-lg font-bold text-stone-900 font-sans">
                 ₹{product.selling_price.toLocaleString('en-IN')}
               </span>
               {product.original_price && product.original_price > product.selling_price && (
-                <span className="text-xs text-stone-400 line-through">
+                <span className="text-[10px] sm:text-xs text-stone-400 line-through">
                   ₹{product.original_price.toLocaleString('en-IN')}
                 </span>
               )}
             </div>
 
             {/* Stock indicator badge */}
-            <div>
+            <div className="hidden sm:block">
               {isOutOfStock ? (
-                <span className="text-[10px] font-semibold text-stone-500 bg-stone-100 px-2 py-0.5 rounded-md">
+                <span className="text-[9px] sm:text-[10px] font-semibold text-stone-500 bg-stone-100 px-1.5 py-0.5 rounded-md">
                   Made to Order
                 </span>
               ) : (
-                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                  Showroom Available
+                <span className="text-[9px] sm:text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-md">
+                  In Stock
                 </span>
               )}
             </div>
           </div>
 
           {/* Action Buttons: View Details & WhatsApp Price Inquiry */}
-          <div className="grid grid-cols-2 gap-2 mt-0.5">
+          <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mt-0.5">
             <Link
               to={`/product/${product.slug}`}
-              className="w-full py-2 px-2.5 rounded-xl border border-stone-300 hover:border-amber-600 text-stone-800 hover:text-amber-900 hover:bg-amber-50/50 text-xs font-semibold text-center transition-colors flex items-center justify-center gap-1"
+              className="w-full py-1.5 sm:py-2 px-1 sm:px-2.5 rounded-xl border border-stone-300 hover:border-amber-600 text-stone-800 hover:text-amber-900 hover:bg-amber-50/50 text-[11px] sm:text-xs font-semibold text-center transition-colors flex items-center justify-center gap-1"
             >
-              <span>View Details</span>
+              <span className="sm:hidden">Details</span>
+              <span className="hidden sm:inline">View Details</span>
             </Link>
 
             <a
               href={`https://wa.me/${whatsappPhone}?text=${whatsappText}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-2 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold text-center transition-all flex items-center justify-center gap-1.5 shadow-xs"
+              className="w-full py-1.5 sm:py-2 px-1 sm:px-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] sm:text-xs font-semibold text-center transition-all flex items-center justify-center gap-1 shadow-xs"
             >
-              <MessageCircle className="w-3.5 h-3.5 fill-white" />
+              <MessageCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-white shrink-0" />
               <span>Inquire</span>
             </a>
           </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Save, Upload, Sparkles, Truck, ShieldCheck, Phone, Mail, MapPin } from 'lucide-react';
+import { Settings, Save, Upload, Sparkles, ShieldCheck, Phone, Mail, MapPin } from 'lucide-react';
 import { SiteSettings } from '../../types';
 import { adminApi } from '../../api/client';
 import { useStore } from '../../context/StoreContext';
@@ -196,90 +196,11 @@ export const AdminSettingsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* 3. Shipping & Payment Charges */}
+        {/* 3. Policies & Customer Information */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
           <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-100 flex items-center gap-2">
-            <Truck className="w-4 h-4 text-amber-800" />
-            3. Delivery Charges & Payment Rules
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-            <div>
-              <label className="block font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Standard Delivery Charge (₹)
-              </label>
-              <input
-                type="number"
-                value={settings.standard_delivery_fee}
-                onChange={(e) =>
-                  setSettings({ ...settings, standard_delivery_fee: Number(e.target.value) })
-                }
-                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 font-mono font-bold"
-              />
-            </div>
-
-            <div>
-              <label className="block font-bold text-stone-700 uppercase tracking-wider mb-1">
-                Free Delivery Threshold (₹)
-              </label>
-              <input
-                type="number"
-                value={settings.free_delivery_threshold}
-                onChange={(e) =>
-                  setSettings({ ...settings, free_delivery_threshold: Number(e.target.value) })
-                }
-                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 font-mono font-bold"
-              />
-            </div>
-
-            <div className="flex items-center pt-5">
-              <label className="flex items-center gap-2 cursor-pointer font-bold text-stone-800">
-                <input
-                  type="checkbox"
-                  checked={settings.cod_enabled}
-                  onChange={(e) => setSettings({ ...settings, cod_enabled: e.target.checked })}
-                  className="w-4 h-4 text-amber-700 rounded"
-                />
-                <span>Enable Cash on Delivery (COD)</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* 4. Top Announcement Bar */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-stone-100">
-            <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider">
-              4. Top Announcement Bar
-            </h2>
-            <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-stone-800">
-              <input
-                type="checkbox"
-                checked={settings.announcement_enabled}
-                onChange={(e) =>
-                  setSettings({ ...settings, announcement_enabled: e.target.checked })
-                }
-                className="w-4 h-4 text-amber-700 rounded"
-              />
-              <span>Display Top Bar</span>
-            </label>
-          </div>
-
-          <div>
-            <textarea
-              rows={2}
-              value={settings.announcement_text}
-              onChange={(e) => setSettings({ ...settings, announcement_text: e.target.value })}
-              placeholder="e.g. Grand Festive Sale: Enjoy up to 40% OFF on Solid Teak Furniture!"
-              className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white"
-            />
-          </div>
-        </div>
-
-        {/* 5. Policies & Customer Information */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
-          <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-100">
-            5. Policies & Store Content
+            <Sparkles className="w-4 h-4 text-amber-800" />
+            3. Policies & Store Content
           </h2>
 
           <div className="space-y-4 text-xs">

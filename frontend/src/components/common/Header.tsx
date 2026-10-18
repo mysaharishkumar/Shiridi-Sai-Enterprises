@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
-  Search, Phone, MessageCircle, Menu, X, Sparkles, MapPin, ShieldCheck
+  Search, Phone, MessageCircle, Menu, X, Sparkles, MapPin, ShieldCheck, ArrowLeft
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { useAuth } from '../../context/AuthContext';
@@ -91,7 +91,26 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Prominent Search Bar (Desktop) */}
-          <div ref={searchRef} className="hidden lg:flex flex-1 max-w-xl mx-4 relative">
+          <div ref={searchRef} className="hidden lg:flex flex-1 max-w-xl mx-4 items-center gap-2 relative">
+            {location.pathname !== '/' && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.history.length > 1) {
+                    window.history.back();
+                  } else {
+                    navigate('/');
+                  }
+                }}
+                className="shrink-0 inline-flex items-center gap-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 border border-stone-200 rounded-full text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-xs"
+                title="Go back"
+                aria-label="Back"
+              >
+                <ArrowLeft className="w-3.5 h-3.5 text-stone-700" />
+                <span>Back</span>
+              </button>
+            )}
+
             <form onSubmit={handleSearchSubmit} className="w-full relative">
               <input
                 type="text"
@@ -160,52 +179,73 @@ export const Header: React.FC = () => {
             )}
           </div>
 
-          {/* Right Header Actions: ONLY Call Store and WhatsApp Inquiry */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Call Store */}
+          {/* Right Header Actions: Call and WhatsApp (Compact & responsive) */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            {/* Call */}
             {settings?.phone && (
               <a
                 href={`tel:${settings.phone}`}
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-stone-200 text-stone-800 hover:bg-stone-50 text-xs font-semibold transition-all shadow-xs"
-                title="Call showroom directly"
+                className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl border border-stone-200 text-stone-800 hover:bg-stone-50 text-xs font-semibold transition-all shadow-xs"
+                title="Call showroom"
               >
                 <Phone className="w-3.5 h-3.5 text-amber-700" />
-                <span>Call Store</span>
+                <span>Call</span>
               </a>
             )}
 
-            {/* Direct WhatsApp Price Inquiry Button */}
+            {/* WhatsApp */}
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-all active:scale-95"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition-all active:scale-95"
+              title="Chat on WhatsApp"
             >
-              <MessageCircle className="w-4 h-4 fill-white" />
-              <span className="hidden sm:inline">WhatsApp Inquiry</span>
-              <span className="sm:hidden">WhatsApp</span>
+              <MessageCircle className="w-3.5 h-3.5 fill-white" />
+              <span>WhatsApp</span>
             </a>
           </div>
         </div>
 
-        {/* Mobile Search Input */}
+        {/* Mobile Search Input Row with Back Button on Left */}
         <div className="lg:hidden pb-3">
-          <form onSubmit={handleSearchSubmit} className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search furniture & check prices..."
-              className="w-full pl-10 pr-20 py-2 bg-stone-100 text-stone-900 rounded-full text-xs border border-stone-200 focus:outline-hidden focus:border-amber-600 focus:bg-white"
-            />
-            <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <button
-              type="submit"
-              className="absolute right-1 top-1/2 -translate-y-1/2 px-3 py-1 bg-amber-800 text-white text-[11px] font-semibold rounded-full"
-            >
-              Search
-            </button>
-          </form>
+          <div className="flex items-center gap-2">
+            {location.pathname !== '/' && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.history.length > 1) {
+                    window.history.back();
+                  } else {
+                    navigate('/');
+                  }
+                }}
+                className="shrink-0 inline-flex items-center gap-1 px-3 py-2 bg-amber-800 hover:bg-amber-900 text-white rounded-full text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+                title="Go back"
+                aria-label="Back"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back</span>
+              </button>
+            )}
+
+            <form onSubmit={handleSearchSubmit} className="relative flex-1">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search furniture & check prices..."
+                className="w-full pl-9 pr-16 py-2 bg-stone-100 text-stone-900 rounded-full text-xs border border-stone-200 focus:outline-hidden focus:border-amber-600 focus:bg-white"
+              />
+              <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <button
+                type="submit"
+                className="absolute right-1 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-amber-800 text-white text-[10px] font-semibold rounded-full"
+              >
+                Search
+              </button>
+            </form>
+          </div>
         </div>
       </div>
 

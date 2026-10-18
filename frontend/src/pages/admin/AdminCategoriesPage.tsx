@@ -216,7 +216,7 @@ export const AdminCategoriesPage: React.FC = () => {
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 hover:text-amber-900 mb-2 transition-colors cursor-pointer group"
               >
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                <span>← Back to All Categories</span>
+                <span>Back to All Categories</span>
               </button>
 
               <div className="flex items-center gap-3">

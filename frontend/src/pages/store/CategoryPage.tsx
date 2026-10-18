@@ -95,74 +95,36 @@ export const CategoryPage: React.FC = () => {
 
   return (
     <div className="bg-[#FCFBF9] min-h-screen">
-      {/* Category Hero Banner */}
-      <div className="relative bg-stone-900 text-white py-12 sm:py-16 overflow-hidden">
-        {category?.image_url && (
-          <div className="absolute inset-0 z-0">
-            <img
-              src={category.image_url}
-              alt={category.name}
-              className="w-full h-full object-cover object-center opacity-30"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-950/80 to-stone-950/40" />
-          </div>
-        )}
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Amazon-style Prominent Back Button & Navigation Bar */}
-          <div className="flex items-center justify-between gap-4 mb-4">
-            <div className="flex items-center gap-2.5">
-              <button
-                type="button"
-                onClick={() => {
-                  if (window.history.length > 1) {
-                    window.history.back();
-                  } else {
-                    window.location.href = '/';
-                  }
-                }}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95 border border-white/25"
-                title="Back to Previous Page"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>← Back</span>
-              </button>
-
-              <Link
-                to="/"
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-stone-200 hover:text-white text-xs font-medium transition-colors"
-              >
-                <span>Home</span>
-              </Link>
-            </div>
-
-            <div className="flex items-center gap-2 text-xs text-amber-200/80 font-medium">
-              <Link to="/products" className="hover:text-white transition-colors">
-                All Furniture
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-white font-semibold">{category?.name || slug}</span>
-            </div>
+      {/* Clean Light Category Header (Replacing dark banner) */}
+      <div className="bg-white border-b border-stone-200/90 py-5 sm:py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumbs */}
+          <div className="flex items-center gap-2 text-xs text-stone-500 mb-2 font-medium">
+            <Link to="/" className="hover:text-amber-800 transition-colors">
+              Home
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <Link to="/products" className="hover:text-amber-800 transition-colors">
+              All Furniture
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <span className="text-stone-900 font-semibold">{category?.name || slug}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-serif text-white tracking-tight">
-            {category?.name || slug?.replace(/-/g, ' ').toUpperCase()}
-          </h1>
-
-          {category?.description && (
-            <p className="mt-3 text-stone-300 text-xs sm:text-sm max-w-2xl font-light leading-relaxed">
-              {category.description}
-            </p>
-          )}
-
-          <div className="mt-4 flex items-center gap-4 text-xs text-amber-400 font-semibold">
-            <span>{total} Handcrafted Products</span>
-            {category?.subcategories && category.subcategories.length > 0 && (
-              <>
-                <span>•</span>
-                <span>{category.subcategories.length} Specialized Subcategories</span>
-              </>
-            )}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 tracking-tight">
+                {category?.name || slug?.replace(/-/g, ' ').toUpperCase()}
+              </h1>
+              {category?.description && (
+                <p className="mt-1 text-stone-500 text-xs sm:text-sm max-w-2xl font-light">
+                  {category.description}
+                </p>
+              )}
+            </div>
+            <span className="px-3 py-1 rounded-full bg-amber-100/80 text-amber-900 text-xs font-bold self-start sm:self-auto border border-amber-200">
+              {total} Pieces Available
+            </span>
           </div>
         </div>
       </div>
@@ -355,14 +317,14 @@ export const CategoryPage: React.FC = () => {
           {/* Product Grid */}
           <main className="lg:col-span-3">
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="animate-pulse bg-stone-100 rounded-2xl h-80 border border-stone-200" />
+                  <div key={i} className="animate-pulse bg-stone-100 rounded-2xl h-64 sm:h-80 border border-stone-200" />
                 ))}
               </div>
             ) : products.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                   {products.map((p) => (
                     <ProductCard key={p.id} product={p} />
                   ))}

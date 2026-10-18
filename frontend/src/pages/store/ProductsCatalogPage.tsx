@@ -104,7 +104,7 @@ export const ProductsCatalogPage: React.FC = () => {
               title="Back to Previous Page"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>← Back</span>
+              <span>Back</span>
             </button>
 
             <Link
@@ -302,14 +302,14 @@ export const ProductsCatalogPage: React.FC = () => {
           {/* Product Cards */}
           <main className="lg:col-span-3">
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="animate-pulse bg-stone-100 rounded-2xl h-80 border border-stone-200" />
+                  <div key={i} className="animate-pulse bg-stone-100 rounded-2xl h-64 sm:h-80 border border-stone-200" />
                 ))}
               </div>
             ) : products.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                   {products.map((p) => (
                     <ProductCard key={p.id} product={p} />
                   ))}

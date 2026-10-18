@@ -226,7 +226,7 @@ export const ProductDetailPage: React.FC = () => {
               title="Back to Previous Page"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>← Back</span>
+              <span>Back</span>
             </button>
 
             {product.category_name && (

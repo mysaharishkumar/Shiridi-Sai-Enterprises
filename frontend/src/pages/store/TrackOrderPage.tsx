@@ -86,7 +86,7 @@ export const TrackOrderPage: React.FC = () => {
     <div className="bg-[#FCFBF9] min-h-screen py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center space-y-3">
-          <span className="text-xs font-bold text-amber-800 uppercase tracking-widest">
+          <span className="text-xs font-bold text-stone-700 uppercase tracking-widest">
             Order Status Tracking
           </span>
           <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 tracking-tight">
@@ -110,7 +110,7 @@ export const TrackOrderPage: React.FC = () => {
                 value={orderNumber}
                 onChange={(e) => setOrderNumber(e.target.value)}
                 placeholder="SSE-2026-XXXXX"
-                className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs font-mono font-bold focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs font-mono font-bold focus:bg-white focus:border-stone-500 focus:outline-hidden"
               />
             </div>
 
@@ -123,7 +123,7 @@ export const TrackOrderPage: React.FC = () => {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="10-digit mobile"
-                className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-500 focus:outline-hidden"
               />
             </div>
 
@@ -131,7 +131,7 @@ export const TrackOrderPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 px-6 rounded-xl bg-amber-800 hover:bg-amber-900 active:scale-98 text-white font-bold text-xs tracking-wider uppercase transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full py-3.5 px-6 rounded-xl bg-stone-800 hover:bg-stone-900 active:scale-98 text-white font-bold text-xs tracking-wider uppercase transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {loading ? (
                   <span className="animate-pulse">Locating...</span>
@@ -171,7 +171,7 @@ export const TrackOrderPage: React.FC = () => {
                       ? 'bg-rose-100 text-rose-800'
                       : order.order_status === 'delivered'
                       ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-amber-100 text-amber-900'
+                      : 'bg-stone-200 text-stone-800'
                   }`}
                 >
                   {order.order_status.replace('_', ' ')}
@@ -208,9 +208,9 @@ export const TrackOrderPage: React.FC = () => {
                           <div
                             className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 transition-all ${
                               isComplete
-                                ? 'bg-amber-800 text-white shadow-md shadow-amber-900/20'
+                                ? 'bg-stone-800 text-white shadow-md shadow-stone-900/20'
                                 : 'bg-stone-200 text-stone-500'
-                            } ${isCurrent ? 'ring-4 ring-amber-600/20' : ''}`}
+                            } ${isCurrent ? 'ring-4 ring-stone-400/20' : ''}`}
                           >
                             {isComplete ? <CheckCircle className="w-4 h-4" /> : idx + 1}
                           </div>
@@ -238,14 +238,14 @@ export const TrackOrderPage: React.FC = () => {
 
             {/* Courier & Tracking Details */}
             {(order.tracking_number || order.courier_partner) && (
-              <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-200 flex flex-wrap items-center justify-between gap-4 text-xs">
+              <div className="p-4 bg-stone-100 rounded-2xl border border-stone-200 flex flex-wrap items-center justify-between gap-4 text-xs">
                 <div>
                   <span className="text-stone-500">Logistics Partner: </span>
                   <strong className="text-stone-900">{order.courier_partner || 'Dedicated White-Glove Van'}</strong>
                 </div>
                 <div>
                   <span className="text-stone-500">Tracking Reference: </span>
-                  <strong className="font-mono text-amber-900">{order.tracking_number}</strong>
+                  <strong className="font-mono text-stone-900">{order.tracking_number}</strong>
                 </div>
                 {order.estimated_delivery_date && (
                   <div>

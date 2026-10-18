@@ -30,7 +30,7 @@ export const OrdersPage: React.FC = () => {
           </div>
           <Link
             to="/account/profile"
-            className="text-xs font-semibold text-amber-800 hover:underline"
+            className="text-xs font-semibold text-stone-800 hover:underline"
           >
             Manage Addresses →
           </Link>
@@ -67,7 +67,7 @@ export const OrdersPage: React.FC = () => {
                           ? 'bg-emerald-100 text-emerald-800'
                           : order.order_status === 'cancelled'
                           ? 'bg-rose-100 text-rose-800'
-                          : 'bg-amber-100 text-amber-900'
+                          : 'bg-stone-200 text-stone-800'
                       }`}
                     >
                       {order.order_status.replace('_', ' ')}
@@ -103,7 +103,7 @@ export const OrdersPage: React.FC = () => {
                 <div className="pt-3 border-t border-stone-100 flex items-center justify-between">
                   <div className="text-xs">
                     <span className="text-stone-500">Order Total (COD): </span>
-                    <strong className="text-amber-900 font-serif font-black text-base ml-1">
+                    <strong className="text-stone-900 font-serif font-black text-base ml-1">
                       ₹{order.final_total.toLocaleString('en-IN')}
                     </strong>
                   </div>
@@ -130,7 +130,7 @@ export const OrdersPage: React.FC = () => {
             </p>
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-amber-800 text-white font-semibold text-xs tracking-wider uppercase shadow-sm"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-stone-800 hover:bg-stone-900 text-white font-semibold text-xs tracking-wider uppercase shadow-sm transition-colors"
             >
               Browse Collections
             </Link>

@@ -63,7 +63,7 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="p-5 bg-white rounded-3xl border border-stone-200 shadow-xs space-y-2">
           <div className="flex items-center justify-between text-stone-500">
             <span className="text-xs font-bold uppercase tracking-wider">Total Orders</span>
-            <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-stone-200 text-stone-800 flex items-center justify-center">
               <ShoppingCart className="w-4 h-4" />
             </div>
           </div>
@@ -71,7 +71,7 @@ export const AdminDashboardPage: React.FC = () => {
             {kpis?.total_orders ?? '—'}
           </div>
           <p className="text-[11px] text-stone-500 font-medium">
-            Pending: <strong className="text-amber-800">{kpis?.pending_orders ?? 0}</strong> • Active: {kpis?.processing_orders ?? 0}
+            Pending: <strong className="text-stone-800">{kpis?.pending_orders ?? 0}</strong> • Active: {kpis?.processing_orders ?? 0}
           </p>
         </div>
 
@@ -126,21 +126,21 @@ export const AdminDashboardPage: React.FC = () => {
 
       {/* Inventory & Stock Health Alerts Banner */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-between">
+        <div className="p-4 rounded-2xl bg-stone-100 border border-stone-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-700" />
+            <AlertTriangle className="w-5 h-5 text-stone-700" />
             <div>
-              <h4 className="font-bold text-xs text-amber-950 uppercase tracking-wider">
+              <h4 className="font-bold text-xs text-stone-900 uppercase tracking-wider">
                 Low Stock Threshold (≤ 5 units)
               </h4>
-              <p className="text-xs text-amber-800 font-medium">
+              <p className="text-xs text-stone-700 font-medium">
                 {kpis?.low_stock_count ?? 0} products need workshop replenishment
               </p>
             </div>
           </div>
           <Link
             to="/admin/products?status=low_stock"
-            className="text-xs font-bold text-amber-900 hover:underline"
+            className="text-xs font-bold text-stone-800 hover:underline"
           >
             Review Items →
           </Link>
@@ -177,7 +177,7 @@ export const AdminDashboardPage: React.FC = () => {
             </h2>
             <Link
               to="/admin/orders"
-              className="text-xs font-bold text-amber-800 hover:text-amber-900 hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-stone-800 hover:text-stone-950 hover:underline flex items-center gap-1"
             >
               <span>View All Orders</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -214,7 +214,7 @@ export const AdminDashboardPage: React.FC = () => {
                               ? 'bg-emerald-100 text-emerald-800'
                               : ord.order_status === 'cancelled'
                               ? 'bg-rose-100 text-rose-800'
-                              : 'bg-amber-100 text-amber-900'
+                              : 'bg-stone-200 text-stone-800'
                           }`}
                         >
                           {ord.order_status?.replace('_', ' ')}
@@ -229,7 +229,7 @@ export const AdminDashboardPage: React.FC = () => {
                       <td className="py-3 text-right">
                         <Link
                           to={`/admin/orders`}
-                          className="p-1.5 inline-flex text-stone-500 hover:text-amber-800 rounded-lg hover:bg-stone-100"
+                          className="p-1.5 inline-flex text-stone-500 hover:text-stone-900 rounded-lg hover:bg-stone-100"
                         >
                           <Eye className="w-4 h-4" />
                         </Link>
@@ -249,7 +249,7 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Low Stock Alerts Widget */}
           <div className="bg-white rounded-3xl border border-stone-200 shadow-xs p-6 space-y-4">
             <h3 className="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-700" />
+              <AlertTriangle className="w-4 h-4 text-stone-700" />
               Low Stock Warnings
             </h3>
 
@@ -282,7 +282,7 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Recent Audit Log */}
           <div className="bg-white rounded-3xl border border-stone-200 shadow-xs p-6 space-y-4">
             <h3 className="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-2">
-              <Clock className="w-4 h-4 text-amber-700" />
+              <Clock className="w-4 h-4 text-stone-700" />
               Administrative Audit Logs
             </h3>
 
@@ -309,7 +309,7 @@ export const AdminDashboardPage: React.FC = () => {
 
             <Link
               to="/admin/audit-logs"
-              className="block pt-2 text-center text-xs font-semibold text-amber-800 hover:underline"
+              className="block pt-2 text-center text-xs font-semibold text-stone-800 hover:underline"
             >
               View Full Audit Trail →
             </Link>

@@ -62,7 +62,7 @@ export const LoginPage: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="customer@example.com"
-                  className="w-full pl-10 pr-3 py-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                  className="w-full pl-10 pr-3 py-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                 />
                 <Mail className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               </div>
@@ -79,7 +79,7 @@ export const LoginPage: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-3 py-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                  className="w-full pl-10 pr-3 py-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                 />
                 <Lock className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               </div>
@@ -88,7 +88,7 @@ export const LoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-amber-800 hover:bg-amber-900 active:scale-98 text-white font-bold text-xs tracking-wider uppercase shadow-md shadow-amber-950/20 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full py-3.5 rounded-xl bg-stone-800 hover:bg-stone-900 active:scale-98 text-white font-bold text-xs tracking-wider uppercase shadow-md shadow-stone-950/20 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
               {loading ? <span className="animate-pulse">Authenticating...</span> : <span>Sign In</span>}
             </button>
@@ -107,7 +107,7 @@ export const LoginPage: React.FC = () => {
 
           <div className="text-center text-xs text-stone-500 pt-2">
             Don't have an account yet?{' '}
-            <Link to="/register" className="font-bold text-amber-800 hover:underline">
+            <Link to="/register" className="font-bold text-stone-800 hover:underline">
               Create an account
             </Link>
           </div>

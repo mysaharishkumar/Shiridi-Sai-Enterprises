@@ -56,7 +56,7 @@ export const AdminAuditLogsPage: React.FC = () => {
       return 'bg-rose-50 text-rose-700 border-rose-200';
     }
     if (action.includes('status')) {
-      return 'bg-amber-50 text-amber-700 border-amber-200';
+      return 'bg-stone-200 text-stone-800 border-stone-300';
     }
     return 'bg-stone-100 text-stone-700 border-stone-200';
   };
@@ -67,7 +67,7 @@ export const AdminAuditLogsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-serif font-bold text-stone-900 flex items-center gap-2">
-            <History className="w-6 h-6 text-amber-600" />
+            <History className="w-6 h-6 text-stone-700" />
             Security & Audit Activity Logs
           </h1>
           <p className="text-stone-500 text-sm mt-1">
@@ -79,7 +79,7 @@ export const AdminAuditLogsPage: React.FC = () => {
           disabled={loading}
           className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-stone-700 bg-white border border-stone-200 rounded-lg hover:bg-stone-50 shadow-sm"
         >
-          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-amber-600' : ''}`} />
+          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-stone-700' : ''}`} />
           Refresh
         </button>
       </div>
@@ -94,7 +94,7 @@ export const AdminAuditLogsPage: React.FC = () => {
               placeholder="Filter by admin email..."
               value={adminEmailFilter}
               onChange={(e) => setAdminEmailFilter(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+              className="w-full pl-9 pr-4 py-2 border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-stone-400 focus:border-stone-400"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -105,7 +105,7 @@ export const AdminAuditLogsPage: React.FC = () => {
                 setResourceFilter(e.target.value);
                 setPage(1);
               }}
-              className="border border-stone-200 rounded-lg px-3 py-2 text-sm bg-white text-stone-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="border border-stone-200 rounded-lg px-3 py-2 text-sm bg-white text-stone-700 focus:outline-none focus:ring-2 focus:ring-stone-400"
             >
               <option value="">All Resource Types</option>
               <option value="product">Products</option>
@@ -148,7 +148,7 @@ export const AdminAuditLogsPage: React.FC = () => {
                 <tr>
                   <td colSpan={6} className="text-center py-12 text-stone-400">
                     <div className="flex flex-col items-center justify-center gap-2">
-                      <RefreshCw className="w-6 h-6 animate-spin text-amber-600" />
+                      <RefreshCw className="w-6 h-6 animate-spin text-stone-700" />
                       <span>Loading audit trail...</span>
                     </div>
                   </td>
@@ -178,7 +178,7 @@ export const AdminAuditLogsPage: React.FC = () => {
                     </td>
                     <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-1.5 text-stone-900 font-medium text-xs">
-                        <UserCheck className="w-3.5 h-3.5 text-amber-600" />
+                        <UserCheck className="w-3.5 h-3.5 text-stone-700" />
                         <span>{log.admin_email || 'System / Auto'}</span>
                       </div>
                     </td>

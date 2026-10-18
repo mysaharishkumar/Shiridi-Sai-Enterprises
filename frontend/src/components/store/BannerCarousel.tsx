@@ -72,8 +72,8 @@ export const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners }) => {
           <div className="max-w-xl text-left animate-in fade-in slide-in-from-left-6 duration-500 key={current.id}">
             {/* Promotional Badge */}
             {current.badge_text && (
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold tracking-wider uppercase mb-4 backdrop-blur-xs">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-800/80 border border-stone-600/50 text-stone-200 text-xs font-semibold tracking-wider uppercase mb-4 backdrop-blur-xs">
+                <Sparkles className="w-3.5 h-3.5 text-stone-300" />
                 <span>{current.badge_text}</span>
               </div>
             )}
@@ -94,7 +94,7 @@ export const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners }) => {
             <div>
               <Link
                 to={current.link_url || '/products'}
-                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-amber-700 hover:bg-amber-600 active:scale-95 text-white font-semibold text-sm tracking-wide shadow-lg shadow-amber-950/50 transition-all group/btn"
+                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-stone-800 hover:bg-stone-700 active:scale-95 text-white font-semibold text-sm tracking-wide shadow-lg border border-stone-600/50 transition-all group/btn"
               >
                 <span>{current.cta_text || 'Shop Collection'}</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
@@ -135,7 +135,7 @@ export const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners }) => {
                 aria-label={`Slide ${idx + 1}`}
                 className={`transition-all duration-300 rounded-full h-2 ${
                   currentIndex === idx
-                    ? 'w-8 bg-amber-400 shadow-md'
+                    ? 'w-8 bg-white shadow-md'
                     : 'w-2 bg-white/50 hover:bg-white/80'
                 }`}
               />

@@ -138,7 +138,7 @@ export const AdminBannersPage: React.FC = () => {
 
         <button
           onClick={handleOpenCreate}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs tracking-wide shadow-md transition-all active:scale-95 self-start sm:self-auto cursor-pointer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-900 text-white font-bold text-xs tracking-wide shadow-md transition-all active:scale-95 self-start sm:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Add Promotional Banner</span>
@@ -165,7 +165,7 @@ export const AdminBannersPage: React.FC = () => {
                     Order #{b.display_order}
                   </span>
                   {b.badge_text && (
-                    <span className="px-2 py-0.5 rounded-md bg-amber-500/90 text-stone-950 font-bold text-[10px]">
+                    <span className="px-2 py-0.5 rounded-md bg-stone-700 text-white font-bold text-[10px]">
                       {b.badge_text}
                     </span>
                   )}
@@ -318,7 +318,7 @@ export const AdminBannersPage: React.FC = () => {
                     placeholder="Banner Image URL"
                     className="flex-1 p-2 bg-stone-50 rounded-xl border border-stone-200"
                   />
-                  <label className="px-3 py-2 rounded-xl bg-amber-800 text-white font-semibold cursor-pointer hover:bg-amber-900 inline-flex items-center gap-1">
+                  <label className="px-3 py-2 rounded-xl bg-stone-800 text-white font-semibold cursor-pointer hover:bg-stone-900 inline-flex items-center gap-1">
                     <Upload className="w-3.5 h-3.5" />
                     <span>Upload</span>
                     <input
@@ -363,7 +363,7 @@ export const AdminBannersPage: React.FC = () => {
                       onChange={(e) =>
                         setBannerForm({ ...bannerForm, is_active: e.target.checked })
                       }
-                      className="w-4 h-4 text-amber-700 rounded"
+                      className="w-4 h-4 text-stone-800 rounded"
                     />
                     <span>Active on Homepage</span>
                   </label>
@@ -381,7 +381,7 @@ export const AdminBannersPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white font-bold"
+                  className="px-6 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-900 text-white font-bold"
                 >
                   {saving ? 'Saving...' : 'Save Banner'}
                 </button>

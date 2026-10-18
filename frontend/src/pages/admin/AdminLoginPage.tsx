@@ -46,7 +46,7 @@ export const AdminLoginPage: React.FC = () => {
         <div className="flex justify-center brightness-125">
           <Logo admin />
         </div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/70 text-amber-400 border border-amber-800/60 text-xs font-semibold uppercase tracking-wider">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-800/70 text-stone-300 border border-stone-700 text-xs font-semibold uppercase tracking-wider">
           <ShieldCheck className="w-3.5 h-3.5" />
           <span>Restricted Admin Portal</span>
         </div>
@@ -71,7 +71,7 @@ export const AdminLoginPage: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@shiridisaienterprises.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-stone-950/80 border border-stone-700 rounded-xl text-xs text-white placeholder-stone-600 focus:outline-hidden focus:border-amber-500"
+                  className="w-full pl-10 pr-4 py-2.5 bg-stone-950/80 border border-stone-700 rounded-xl text-xs text-white placeholder-stone-600 focus:outline-hidden focus:border-stone-400"
                 />
               </div>
             </div>
@@ -88,7 +88,7 @@ export const AdminLoginPage: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 bg-stone-950/80 border border-stone-700 rounded-xl text-xs text-white placeholder-stone-600 focus:outline-hidden focus:border-amber-500"
+                  className="w-full pl-10 pr-4 py-2.5 bg-stone-950/80 border border-stone-700 rounded-xl text-xs text-white placeholder-stone-600 focus:outline-hidden focus:border-stone-400"
                 />
               </div>
             </div>
@@ -96,7 +96,7 @@ export const AdminLoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 rounded-xl bg-amber-800 hover:bg-amber-700 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-98 cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
+              className="w-full py-3 px-4 rounded-xl bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-98 cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 mt-2 border border-stone-700"
             >
               {loading ? (
                 <span className="animate-pulse">Authenticating...</span>
@@ -114,7 +114,7 @@ export const AdminLoginPage: React.FC = () => {
             <button
               type="button"
               onClick={fillSuperAdmin}
-              className="text-[11px] text-amber-400/80 hover:text-amber-300 font-medium underline underline-offset-2 transition-colors cursor-pointer"
+              className="text-[11px] text-stone-300 hover:text-white font-medium underline underline-offset-2 transition-colors cursor-pointer"
             >
               Auto-fill Store Owner Credentials
             </button>
@@ -124,7 +124,7 @@ export const AdminLoginPage: React.FC = () => {
         <div className="text-center mt-6">
           <Link
             to="/"
-            className="text-xs text-stone-500 hover:text-amber-400 transition-colors"
+            className="text-xs text-stone-500 hover:text-stone-300 transition-colors"
           >
             ← Return to Public Storefront
           </Link>

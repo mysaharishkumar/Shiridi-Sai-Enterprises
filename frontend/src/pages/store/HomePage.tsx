@@ -73,7 +73,7 @@ export const HomePage: React.FC = () => {
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
-            <span className="text-xs font-bold text-amber-700 uppercase tracking-widest">
+            <span className="text-xs font-bold text-stone-600 uppercase tracking-widest">
               Signature Creations
             </span>
             <h2 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 tracking-tight mt-1">
@@ -87,7 +87,7 @@ export const HomePage: React.FC = () => {
               onClick={() => setActiveTab('featured')}
               className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === 'featured'
-                  ? 'bg-amber-800 text-white shadow-sm'
+                  ? 'bg-stone-800 text-white shadow-sm'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -97,7 +97,7 @@ export const HomePage: React.FC = () => {
               onClick={() => setActiveTab('bestsellers')}
               className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === 'bestsellers'
-                  ? 'bg-amber-800 text-white shadow-sm'
+                  ? 'bg-stone-800 text-white shadow-sm'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -107,7 +107,7 @@ export const HomePage: React.FC = () => {
               onClick={() => setActiveTab('new')}
               className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === 'new'
-                  ? 'bg-amber-800 text-white shadow-sm'
+                  ? 'bg-stone-800 text-white shadow-sm'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -117,7 +117,7 @@ export const HomePage: React.FC = () => {
               onClick={() => setActiveTab('offers')}
               className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === 'offers'
-                  ? 'bg-amber-800 text-white shadow-sm'
+                  ? 'bg-stone-800 text-white shadow-sm'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -151,21 +151,21 @@ export const HomePage: React.FC = () => {
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95"
           >
             <span>Explore All Furniture</span>
-            <ArrowRight className="w-4 h-4 text-amber-400" />
+            <ArrowRight className="w-4 h-4 text-stone-400" />
           </Link>
         </div>
       </section>
 
       {/* 4. Brand Story & Craftsmanship Spotlight */}
-      <section className="py-20 bg-gradient-to-br from-amber-950 via-stone-950 to-stone-900 text-white overflow-hidden relative">
+      <section className="py-20 bg-gradient-to-br from-stone-900 via-stone-950 to-stone-900 text-white overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <span className="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-400" />
+              <span className="text-xs font-bold text-stone-300 uppercase tracking-widest flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-stone-400" />
                 The Shiridi Sai Hallmark
               </span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-serif leading-tight text-amber-50">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-serif leading-tight text-white">
                 Heirloom Woodcraft Designed for Modern Comfort
               </h2>
               <p className="text-stone-300 text-sm sm:text-base leading-relaxed font-light">
@@ -177,28 +177,28 @@ export const HomePage: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 text-stone-300 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-sm text-white">Mortise & Tenon Joinery</h4>
                     <p className="text-xs text-stone-400 mt-0.5">Heavy-duty structural joints that never loosen or creak.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 text-stone-300 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-sm text-white">Termite Resistant</h4>
                     <p className="text-xs text-stone-400 mt-0.5">Dual-layer deep pressure anti-borer and termite treatment.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 text-stone-300 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-sm text-white">Custom Color Variants</h4>
                     <p className="text-xs text-stone-400 mt-0.5">Match wood polish and upholstery to your interior décor.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 text-stone-300 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-sm text-white">Transparent Pricing</h4>
                     <p className="text-xs text-stone-400 mt-0.5">Direct workshop pricing with clear M.R.P. and discount savings.</p>
@@ -209,15 +209,15 @@ export const HomePage: React.FC = () => {
               <div className="pt-4 flex flex-wrap items-center gap-4">
                 <Link
                   to="/products"
-                  className="px-6 py-3 rounded-full bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs tracking-wider uppercase transition-colors"
+                  className="px-6 py-3 rounded-full bg-stone-100 hover:bg-white text-stone-900 font-semibold text-xs tracking-wider uppercase transition-colors"
                 >
                   Explore Collections
                 </Link>
                 <a
                   href={`tel:${settings?.phone}`}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-stone-600 hover:border-amber-400 text-stone-200 hover:text-white text-xs font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-stone-600 hover:border-stone-400 text-stone-200 hover:text-white text-xs font-semibold transition-colors"
                 >
-                  <PhoneCall className="w-4 h-4 text-amber-400" />
+                  <PhoneCall className="w-4 h-4 text-stone-300" />
                   <span>Call Furniture Expert</span>
                 </a>
               </div>
@@ -235,7 +235,7 @@ export const HomePage: React.FC = () => {
 
               {/* Floating Stat Badge */}
               <div className="absolute -bottom-6 -left-6 bg-white text-stone-900 p-5 rounded-2xl shadow-2xl border border-stone-200 hidden sm:flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-bold text-xl font-serif">
+                <div className="w-12 h-12 rounded-xl bg-stone-100 text-stone-900 flex items-center justify-center font-bold text-xl font-serif">
                   10+
                 </div>
                 <div>

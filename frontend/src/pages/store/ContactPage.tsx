@@ -26,7 +26,7 @@ export const ContactPage: React.FC = () => {
     <div className="bg-[#FCFBF9] min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <span className="text-xs font-bold text-amber-800 uppercase tracking-widest">
+          <span className="text-xs font-bold text-stone-700 uppercase tracking-widest">
             Shiridi Sai Enterprises Support
           </span>
           <h1 className="text-3xl sm:text-4xl font-bold font-serif text-stone-900 tracking-tight">
@@ -47,7 +47,7 @@ export const ContactPage: React.FC = () => {
 
               <div className="space-y-4 text-xs">
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-amber-800 shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-stone-900 mb-0.5">Showroom & Workshop</strong>
                     <span className="text-stone-600 leading-relaxed">{settings?.address}</span>
@@ -55,27 +55,27 @@ export const ContactPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-amber-800 shrink-0 mt-0.5" />
+                  <Phone className="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-stone-900 mb-0.5">Direct Helpline</strong>
-                    <a href={`tel:${settings?.phone}`} className="text-stone-600 hover:text-amber-800 font-medium">
+                    <a href={`tel:${settings?.phone}`} className="text-stone-600 hover:text-stone-900 font-medium">
                       {settings?.phone}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-amber-800 shrink-0 mt-0.5" />
+                  <Mail className="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-stone-900 mb-0.5">Email Support</strong>
-                    <a href={`mailto:${settings?.email}`} className="text-stone-600 hover:text-amber-800">
+                    <a href={`mailto:${settings?.email}`} className="text-stone-600 hover:text-stone-900">
                       {settings?.email}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-amber-800 shrink-0 mt-0.5" />
+                  <Clock className="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-stone-900 mb-0.5">Working Hours</strong>
                     <span className="text-stone-600">Monday – Sunday: 9:30 AM to 9:00 PM IST</span>
@@ -191,7 +191,7 @@ export const ContactPage: React.FC = () => {
 
                   <button
                     type="submit"
-                    className="px-8 py-3.5 rounded-full bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs tracking-wider uppercase transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                    className="px-8 py-3.5 rounded-full bg-stone-800 hover:bg-stone-900 text-white font-bold text-xs tracking-wider uppercase transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Send className="w-4 h-4" />
                     <span>Send Inquiry</span>

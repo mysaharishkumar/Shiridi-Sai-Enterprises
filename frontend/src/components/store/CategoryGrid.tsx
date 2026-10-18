@@ -17,7 +17,7 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({ categories, limit })
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-stone-200">
           <div>
-            <span className="text-xs font-bold text-amber-700 uppercase tracking-widest">
+            <span className="text-xs font-bold text-stone-600 uppercase tracking-widest">
               Curated Collections
             </span>
             <h2 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 tracking-tight mt-1">
@@ -35,7 +35,7 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({ categories, limit })
             <Link
               key={cat.id}
               to={`/category/${cat.slug}`}
-              className="group relative flex flex-col rounded-2xl overflow-hidden bg-white border border-stone-200/90 shadow-xs hover:shadow-xl hover:border-amber-400/50 transition-all duration-300 transform hover:-translate-y-1"
+              className="group relative flex flex-col rounded-2xl overflow-hidden bg-white border border-stone-200/90 shadow-xs hover:shadow-xl hover:border-stone-400 transition-all duration-300 transform hover:-translate-y-1"
             >
               {/* Image Container with Consistent Aspect Ratio */}
               <div className="relative aspect-4/3 w-full overflow-hidden bg-stone-50 flex items-center justify-center p-2">
@@ -51,10 +51,10 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({ categories, limit })
 
               {/* Title & Product Count */}
               <div className="p-3 text-center flex flex-col items-center justify-between flex-1">
-                <h3 className="font-semibold text-xs sm:text-sm text-stone-900 group-hover:text-amber-800 transition-colors line-clamp-1">
+                <h3 className="font-semibold text-xs sm:text-sm text-stone-900 group-hover:text-stone-900 transition-colors line-clamp-1">
                   {cat.name}
                 </h3>
-                <span className="text-[11px] text-stone-500 mt-0.5 group-hover:text-amber-700">
+                <span className="text-[11px] text-stone-500 mt-0.5 group-hover:text-stone-700">
                   {cat.product_count !== undefined ? `${cat.product_count} Items` : 'Browse →'}
                 </span>
               </div>

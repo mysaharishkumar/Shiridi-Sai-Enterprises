@@ -17,7 +17,7 @@ export const CartPage: React.FC = () => {
   if (isCartEmpty && !isLoading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-        <div className="w-24 h-24 rounded-full bg-amber-50 text-amber-800 flex items-center justify-center mx-auto mb-6 shadow-inner">
+        <div className="w-24 h-24 rounded-full bg-stone-100 text-stone-800 flex items-center justify-center mx-auto mb-6 shadow-inner">
           <ShoppingBag className="w-10 h-10" />
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 mb-3">
@@ -28,7 +28,7 @@ export const CartPage: React.FC = () => {
         </p>
         <Link
           to="/products"
-          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-amber-800 hover:bg-amber-900 text-white font-semibold text-xs tracking-wider uppercase shadow-md transition-all active:scale-95"
+          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-stone-800 hover:bg-stone-900 text-white font-semibold text-xs tracking-wider uppercase shadow-md transition-all active:scale-95"
         >
           <span>Browse Furniture Collections</span>
           <ArrowRight className="w-4 h-4" />
@@ -68,11 +68,11 @@ export const CartPage: React.FC = () => {
         <div className="mb-8 p-4 bg-white rounded-2xl border border-stone-200 shadow-xs">
           <div className="flex items-center justify-between text-xs font-semibold mb-2">
             <span className="flex items-center gap-1.5 text-stone-800">
-              <Truck className="w-4 h-4 text-amber-800" />
+              <Truck className="w-4 h-4 text-stone-700" />
               {cart.free_delivery_remaining > 0 ? (
                 <>
                   Add{' '}
-                  <strong className="text-amber-800 font-bold">
+                  <strong className="text-stone-800 font-bold">
                     ₹{cart.free_delivery_remaining.toLocaleString('en-IN')}
                   </strong>{' '}
                   more to get Free Doorstep Delivery!
@@ -90,7 +90,7 @@ export const CartPage: React.FC = () => {
           <div className="w-full bg-stone-100 rounded-full h-2 overflow-hidden">
             <div
               className={`h-full transition-all duration-500 rounded-full ${
-                freeDeliveryProgress >= 100 ? 'bg-emerald-600' : 'bg-amber-600'
+                freeDeliveryProgress >= 100 ? 'bg-emerald-600' : 'bg-stone-800'
               }`}
               style={{ width: `${freeDeliveryProgress}%` }}
             />
@@ -118,7 +118,7 @@ export const CartPage: React.FC = () => {
                   <div className="space-y-1">
                     <Link
                       to={`/product/${item.product_slug}`}
-                      className="font-semibold text-sm sm:text-base text-stone-900 hover:text-amber-800 transition-colors line-clamp-1"
+                      className="font-semibold text-sm sm:text-base text-stone-900 hover:text-stone-700 transition-colors line-clamp-1"
                     >
                       {item.product_name}
                     </Link>
@@ -128,7 +128,7 @@ export const CartPage: React.FC = () => {
                     {item.sku && (
                       <p className="text-[11px] text-stone-400">SKU: {item.sku}</p>
                     )}
-                    <p className="text-xs font-bold text-amber-800 pt-1">
+                    <p className="text-xs font-bold text-stone-800 pt-1">
                       ₹{item.unit_price.toLocaleString('en-IN')} each
                     </p>
                   </div>
@@ -175,7 +175,7 @@ export const CartPage: React.FC = () => {
             <div className="pt-4 flex justify-between items-center text-xs">
               <Link
                 to="/products"
-                className="inline-flex items-center gap-1.5 font-semibold text-amber-800 hover:text-amber-900"
+                className="inline-flex items-center gap-1.5 font-semibold text-stone-800 hover:text-stone-900"
               >
                 <ArrowLeft className="w-4 h-4" /> Continue Browsing Collections
               </Link>
@@ -214,7 +214,7 @@ export const CartPage: React.FC = () => {
 
                 <div className="pt-3 border-t border-stone-100 flex justify-between items-baseline">
                   <span className="text-sm font-bold text-stone-900">Total Payable (COD)</span>
-                  <span className="text-xl font-black text-amber-900 font-serif">
+                  <span className="text-xl font-black text-stone-900 font-serif">
                     ₹{cart.final_total.toLocaleString('en-IN')}
                   </span>
                 </div>
@@ -223,7 +223,7 @@ export const CartPage: React.FC = () => {
               {/* Checkout Button */}
               <button
                 onClick={() => navigate('/checkout')}
-                className="w-full py-4 rounded-2xl bg-amber-800 hover:bg-amber-900 active:scale-98 text-white font-bold text-sm tracking-wide shadow-lg shadow-amber-950/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-4 rounded-2xl bg-stone-800 hover:bg-stone-900 active:scale-98 text-white font-bold text-sm tracking-wide shadow-lg shadow-stone-950/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Proceed to Checkout</span>
                 <ArrowRight className="w-4 h-4" />
@@ -235,7 +235,7 @@ export const CartPage: React.FC = () => {
                   <span>100% Secure Checkout with Cash on Delivery</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Truck className="w-4 h-4 text-amber-700 shrink-0" />
+                  <Truck className="w-4 h-4 text-stone-700 shrink-0" />
                   <span>Doorstep delivery & certified furniture installation</span>
                 </div>
               </div>

@@ -129,7 +129,7 @@ export const CheckoutPage: React.FC = () => {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
         <p className="text-stone-500 mb-4">Your cart is empty.</p>
-        <Link to="/products" className="text-amber-800 font-bold hover:underline">
+        <Link to="/products" className="text-stone-800 font-bold hover:underline">
           Return to Shopping →
         </Link>
       </div>
@@ -141,7 +141,7 @@ export const CheckoutPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-stone-500 mb-6 font-medium">
-          <Link to="/cart" className="hover:text-amber-800 transition-colors flex items-center gap-1">
+          <Link to="/cart" className="hover:text-stone-800 transition-colors flex items-center gap-1">
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Cart
           </Link>
           <span>/</span>
@@ -168,7 +168,7 @@ export const CheckoutPage: React.FC = () => {
                       onClick={() => handleSelectSavedAddress(idx)}
                       className={`p-3.5 rounded-2xl border text-xs cursor-pointer transition-all ${
                         selectedSavedAddrIndex === idx
-                          ? 'border-amber-800 bg-amber-50/70 text-amber-950 ring-2 ring-amber-700/20 shadow-xs'
+                          ? 'border-stone-800 bg-stone-100/70 text-stone-950 ring-2 ring-stone-700/20 shadow-xs'
                           : 'border-stone-200 hover:bg-stone-50'
                       }`}
                     >
@@ -187,7 +187,7 @@ export const CheckoutPage: React.FC = () => {
             {/* Address Input Fields */}
             <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-6">
               <h2 className="text-lg font-bold font-serif text-stone-900 pb-3 border-b border-stone-100 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-amber-800" />
+                <MapPin className="w-5 h-5 text-stone-800" />
                 Shipping & Contact Information
               </h2>
 
@@ -203,7 +203,7 @@ export const CheckoutPage: React.FC = () => {
                     value={formData.customer_name}
                     onChange={handleChange}
                     placeholder="e.g. Ramesh Chandra"
-                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                   />
                 </div>
 
@@ -218,7 +218,7 @@ export const CheckoutPage: React.FC = () => {
                     value={formData.customer_phone}
                     onChange={handleChange}
                     placeholder="10-digit mobile number"
-                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                   />
                 </div>
 
@@ -233,7 +233,7 @@ export const CheckoutPage: React.FC = () => {
                     value={formData.customer_email}
                     onChange={handleChange}
                     placeholder="name@example.com"
-                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                   />
                 </div>
 
@@ -248,7 +248,7 @@ export const CheckoutPage: React.FC = () => {
                     value={formData.street_address}
                     onChange={handleChange}
                     placeholder="House/Flat number, Apartment name, Road or Colony"
-                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                   />
                 </div>
 
@@ -262,7 +262,7 @@ export const CheckoutPage: React.FC = () => {
                     value={formData.landmark}
                     onChange={handleChange}
                     placeholder="Near temple, metro station, park..."
-                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                   />
                 </div>
 
@@ -278,7 +278,7 @@ export const CheckoutPage: React.FC = () => {
                     value={formData.pincode}
                     onChange={handleChange}
                     placeholder="6-digit postal code"
-                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                   />
                 </div>
 
@@ -292,7 +292,7 @@ export const CheckoutPage: React.FC = () => {
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                   />
                 </div>
 
@@ -304,7 +304,7 @@ export const CheckoutPage: React.FC = () => {
                     name="state"
                     value={formData.state}
                     onChange={handleChange}
-                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                   >
                     <option value="Telangana">Telangana</option>
                     <option value="Andhra Pradesh">Andhra Pradesh</option>
@@ -324,7 +324,7 @@ export const CheckoutPage: React.FC = () => {
                     value={formData.delivery_instructions}
                     onChange={handleChange}
                     placeholder="Elevator availability, preferred delivery time, gate security instructions..."
-                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-amber-700 focus:outline-hidden"
+                    className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:border-stone-700 focus:outline-hidden"
                   />
                 </div>
               </div>
@@ -333,12 +333,12 @@ export const CheckoutPage: React.FC = () => {
             {/* Payment Method Section: Cash on Delivery (COD) */}
             <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
               <h2 className="text-lg font-bold font-serif text-stone-900 pb-3 border-b border-stone-100 flex items-center gap-2">
-                <Banknote className="w-5 h-5 text-amber-800" />
+                <Banknote className="w-5 h-5 text-stone-800" />
                 Payment Method
               </h2>
 
-              <div className="p-4 rounded-2xl bg-amber-50/80 border-2 border-amber-700 flex items-start gap-4">
-                <div className="w-5 h-5 rounded-full bg-amber-800 text-white flex items-center justify-center shrink-0 mt-0.5">
+              <div className="p-4 rounded-2xl bg-stone-50 border-2 border-stone-700 flex items-start gap-4">
+                <div className="w-5 h-5 rounded-full bg-stone-800 text-white flex items-center justify-center shrink-0 mt-0.5">
                   <CheckCircle2 className="w-4 h-4" />
                 </div>
                 <div className="space-y-1">
@@ -409,7 +409,7 @@ export const CheckoutPage: React.FC = () => {
 
                 <div className="pt-3 border-t border-stone-100 flex justify-between items-baseline">
                   <span className="text-sm font-bold text-stone-900">Final Total (COD)</span>
-                  <span className="text-2xl font-black text-amber-900 font-serif">
+                  <span className="text-2xl font-black text-stone-900 font-serif">
                     ₹{cart.final_total.toLocaleString('en-IN')}
                   </span>
                 </div>
@@ -419,7 +419,7 @@ export const CheckoutPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-4 rounded-2xl bg-amber-800 hover:bg-amber-900 active:scale-98 text-white font-bold text-sm tracking-wide shadow-xl shadow-amber-950/20 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full py-4 rounded-2xl bg-stone-800 hover:bg-stone-900 active:scale-98 text-white font-bold text-sm tracking-wide shadow-xl shadow-stone-950/20 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {submitting ? (
                   <span className="animate-pulse">Placing Your Order...</span>
@@ -430,7 +430,7 @@ export const CheckoutPage: React.FC = () => {
 
               <div className="text-[11px] text-stone-500 text-center leading-relaxed">
                 By clicking Confirm, you agree to our{' '}
-                <Link to="/policies/terms" className="underline text-stone-700 hover:text-amber-800">
+                <Link to="/policies/terms" className="underline text-stone-700 hover:text-stone-900">
                   Terms of Service
                 </Link>{' '}
                 and 7-Day Replacement Policy.

@@ -42,7 +42,7 @@ export const OrderConfirmationPage: React.FC = () => {
         <p className="text-stone-500 text-xs">
           We could not locate the details for this order number.
         </p>
-        <Link to="/" className="text-amber-800 font-semibold text-xs hover:underline">
+        <Link to="/" className="text-stone-800 font-semibold text-xs hover:underline">
           Return to Home →
         </Link>
       </div>
@@ -58,7 +58,7 @@ export const OrderConfirmationPage: React.FC = () => {
             <CheckCircle className="w-10 h-10" />
           </div>
 
-          <span className="text-xs font-bold text-amber-800 uppercase tracking-widest">
+          <span className="text-xs font-bold text-stone-700 uppercase tracking-widest">
             Order Placed Successfully
           </span>
 
@@ -73,7 +73,7 @@ export const OrderConfirmationPage: React.FC = () => {
 
           <div className="inline-flex items-center gap-3 p-3 bg-stone-50 rounded-2xl border border-stone-200 text-xs text-stone-700 mt-2">
             <span>Order Number:</span>
-            <strong className="font-mono text-amber-900 text-sm font-black tracking-wider">
+            <strong className="font-mono text-stone-900 text-sm font-black tracking-wider">
               {order.order_number}
             </strong>
           </div>
@@ -89,7 +89,7 @@ export const OrderConfirmationPage: React.FC = () => {
 
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-amber-800 hover:bg-amber-900 text-white font-semibold text-xs tracking-wider uppercase transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-stone-800 hover:bg-stone-900 text-white font-semibold text-xs tracking-wider uppercase transition-colors shadow-sm"
             >
               <span>Continue Shopping</span>
               <ArrowRight className="w-4 h-4" />
@@ -103,7 +103,7 @@ export const OrderConfirmationPage: React.FC = () => {
           <div className="md:col-span-2 space-y-6">
             <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-6">
               <h2 className="text-base font-bold font-serif text-stone-900 pb-3 border-b border-stone-100 flex items-center gap-2">
-                <Package className="w-4 h-4 text-amber-800" />
+                <Package className="w-4 h-4 text-stone-700" />
                 Ordered Furniture Pieces
               </h2>
 
@@ -157,7 +157,7 @@ export const OrderConfirmationPage: React.FC = () => {
                 </div>
                 <div className="pt-3 border-t border-stone-100 flex justify-between items-baseline">
                   <span className="font-bold text-sm text-stone-900">Total Payable at Delivery</span>
-                  <span className="text-xl font-black text-amber-900 font-serif">
+                  <span className="text-xl font-black text-stone-900 font-serif">
                     ₹{order.final_total.toLocaleString('en-IN')}
                   </span>
                 </div>
@@ -170,7 +170,7 @@ export const OrderConfirmationPage: React.FC = () => {
             {/* Delivery Address Card */}
             <div className="bg-white p-6 rounded-3xl border border-stone-200 shadow-xs space-y-4">
               <h3 className="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-amber-800" />
+                <MapPin className="w-4 h-4 text-stone-700" />
                 Delivery Address
               </h3>
 
@@ -196,15 +196,15 @@ export const OrderConfirmationPage: React.FC = () => {
             {/* Order Status Tracking Card */}
             <div className="bg-white p-6 rounded-3xl border border-stone-200 shadow-xs space-y-4">
               <h3 className="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-2">
-                <Truck className="w-4 h-4 text-amber-800" />
+                <Truck className="w-4 h-4 text-stone-700" />
                 Order Status
               </h3>
 
-              <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-center">
-                <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block">
+              <div className="p-3 rounded-2xl bg-stone-100 border border-stone-200 text-center">
+                <span className="text-[10px] font-bold text-stone-700 uppercase tracking-wider block">
                   Current Status
                 </span>
-                <span className="text-sm font-black text-amber-950 capitalize block mt-0.5">
+                <span className="text-sm font-black text-stone-900 capitalize block mt-0.5">
                   {order.order_status.replace('_', ' ')}
                 </span>
               </div>
@@ -213,7 +213,7 @@ export const OrderConfirmationPage: React.FC = () => {
                 <div className="space-y-3 pt-2">
                   {order.status_history.map((h, i) => (
                     <div key={i} className="flex items-start gap-2.5 text-xs">
-                      <div className="w-2 h-2 rounded-full bg-amber-700 mt-1.5 shrink-0" />
+                      <div className="w-2 h-2 rounded-full bg-stone-700 mt-1.5 shrink-0" />
                       <div>
                         <span className="font-bold text-stone-900 capitalize block">
                           {h.status.replace('_', ' ')}

@@ -22,7 +22,7 @@ import { AdminProductFormPage } from '../pages/admin/AdminProductFormPage';
 const NotFoundPage: React.FC = () => {
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 py-16">
-      <span className="text-6xl font-bold font-serif text-amber-900/30">404</span>
+      <span className="text-6xl font-bold font-serif text-stone-900/30">404</span>
       <h1 className="text-2xl font-bold font-serif text-stone-900 mt-2">Page Not Found</h1>
       <p className="text-stone-500 text-sm max-w-md mt-2 mb-8">
         The page or furniture piece you are looking for may have been moved, renamed, or is currently unavailable.
@@ -30,7 +30,7 @@ const NotFoundPage: React.FC = () => {
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Link
           to="/"
-          className="px-6 py-2.5 rounded-full bg-amber-800 text-white text-xs font-semibold uppercase tracking-wider hover:bg-amber-900 transition-colors shadow-sm"
+          className="px-6 py-2.5 rounded-full bg-stone-800 text-white text-xs font-semibold uppercase tracking-wider hover:bg-stone-900 transition-colors shadow-sm"
         >
           Return to Storefront
         </Link>

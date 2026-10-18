@@ -127,13 +127,13 @@ export const ProductsCatalogPage: React.FC = () => {
             <div className="bg-white rounded-2xl border border-stone-200 p-5 space-y-6">
               <div className="flex items-center justify-between pb-3 border-b border-stone-100">
                 <div className="flex items-center gap-2">
-                  <SlidersHorizontal className="w-4 h-4 text-amber-800" />
+                  <SlidersHorizontal className="w-4 h-4 text-stone-700" />
                   <h3 className="font-bold text-sm text-stone-900 font-serif">Filters</h3>
                 </div>
                 {(localSearch || selectedCategory || minPrice || maxPrice || selectedColor || inStockOnly) && (
                   <button
                     onClick={handleResetFilters}
-                    className="text-[11px] font-semibold text-amber-800 hover:underline"
+                    className="text-[11px] font-semibold text-stone-800 hover:underline"
                   >
                     Reset
                   </button>
@@ -154,7 +154,7 @@ export const ProductsCatalogPage: React.FC = () => {
                       setPage(1);
                     }}
                     placeholder="Search furniture..."
-                    className="w-full pl-8 pr-3 py-2 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden focus:border-amber-600 focus:bg-white"
+                    className="w-full pl-8 pr-3 py-2 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden focus:border-stone-500 focus:bg-white"
                   />
                   <Search className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                 </div>
@@ -171,7 +171,7 @@ export const ProductsCatalogPage: React.FC = () => {
                     setSelectedCategory(e.target.value);
                     setPage(1);
                   }}
-                  className="w-full p-2 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden focus:border-amber-600"
+                  className="w-full p-2 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden focus:border-stone-500"
                 >
                   <option value="">All Categories</option>
                   {categories.map((c) => (
@@ -226,7 +226,7 @@ export const ProductsCatalogPage: React.FC = () => {
                       }}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                         selectedColor === col
-                          ? 'bg-amber-800 text-white shadow-xs'
+                          ? 'bg-stone-800 text-white shadow-xs'
                           : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
                       }`}
                     >
@@ -246,7 +246,7 @@ export const ProductsCatalogPage: React.FC = () => {
                       setInStockOnly(e.target.checked);
                       setPage(1);
                     }}
-                    className="w-4 h-4 rounded text-amber-700 focus:ring-amber-500 border-stone-300"
+                    className="w-4 h-4 rounded text-stone-800 focus:ring-stone-500 border-stone-300"
                   />
                   <span>In Stock Only</span>
                 </label>
@@ -295,7 +295,7 @@ export const ProductsCatalogPage: React.FC = () => {
                         onClick={() => setPage(pNum)}
                         className={`w-9 h-9 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                           page === pNum
-                            ? 'bg-amber-800 text-white shadow-md'
+                            ? 'bg-stone-800 text-white shadow-md'
                             : 'bg-white border border-stone-200 text-stone-700 hover:bg-stone-50'
                         }`}
                       >
@@ -315,7 +315,7 @@ export const ProductsCatalogPage: React.FC = () => {
               </>
             ) : (
               <div className="p-12 text-center bg-white rounded-3xl border border-stone-200 space-y-4">
-                <div className="w-16 h-16 rounded-full bg-amber-50 text-amber-700 flex items-center justify-center mx-auto">
+                <div className="w-16 h-16 rounded-full bg-stone-100 text-stone-700 flex items-center justify-center mx-auto">
                   <Search className="w-8 h-8" />
                 </div>
                 <h3 className="text-lg font-bold text-stone-900 font-serif">
@@ -326,7 +326,7 @@ export const ProductsCatalogPage: React.FC = () => {
                 </p>
                 <button
                   onClick={handleResetFilters}
-                  className="px-6 py-2.5 rounded-full bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold shadow-sm"
+                  className="px-6 py-2.5 rounded-full bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold shadow-sm"
                 >
                   Clear All Filters
                 </button>

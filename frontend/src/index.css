@@ -2,11 +2,11 @@
 
 @layer base {
   :root {
-    --primary: #78350f; /* Warm Teak Brown */
-    --primary-hover: #92400e;
-    --primary-dark: #451a03;
-    --accent-gold: #b45309;
-    --accent-gold-light: #fef3c7;
+    --primary: #292524; /* Deep Charcoal Gray */
+    --primary-hover: #1c1917;
+    --primary-dark: #0c0a09;
+    --accent-gold: #57534e;
+    --accent-gold-light: #f5f5f4;
     --charcoal: #1c1917;
     --charcoal-light: #44403c;
     --warm-bg: #fcfbf9;

@@ -94,7 +94,7 @@ export const AdminProductsPage: React.FC = () => {
 
         <Link
           to="/admin/products/new"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs tracking-wide shadow-md transition-all active:scale-95 self-start sm:self-auto cursor-pointer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-900 text-white font-bold text-xs tracking-wide shadow-md transition-all active:scale-95 self-start sm:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Product</span>
@@ -195,7 +195,7 @@ export const AdminProductsPage: React.FC = () => {
                             </span>
                             <div className="flex items-center gap-2 mt-0.5">
                               {p.is_featured && (
-                                <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.2 rounded">
+                                <span className="text-[10px] font-bold text-stone-800 bg-stone-100 px-1.5 py-0.2 rounded">
                                   Featured
                                 </span>
                               )}
@@ -239,7 +239,7 @@ export const AdminProductsPage: React.FC = () => {
                             0 Out
                           </span>
                         ) : isLow ? (
-                          <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px]">
+                          <span className="px-2 py-0.5 rounded-full bg-stone-200 text-stone-800 font-bold text-[10px]">
                             {p.total_stock} Low
                           </span>
                         ) : (
@@ -278,7 +278,7 @@ export const AdminProductsPage: React.FC = () => {
 
                           <button
                             onClick={() => handleDuplicate(p.id)}
-                            className="p-1.5 text-stone-400 hover:text-amber-800 hover:bg-amber-50 rounded-lg cursor-pointer"
+                            className="p-1.5 text-stone-400 hover:text-stone-800 hover:bg-stone-100 rounded-lg cursor-pointer"
                             title="Duplicate Product"
                           >
                             <Copy className="w-4 h-4" />

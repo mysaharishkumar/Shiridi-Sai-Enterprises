@@ -119,13 +119,13 @@ export const Header: React.FC = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => searchQuery.trim().length >= 2 && setShowSuggestions(true)}
                 placeholder="Search sofas, teak dining tables, beds, bhirva wardrobes, prices..."
-                className="w-full pl-11 pr-24 py-2.5 bg-stone-100/90 hover:bg-stone-100 focus:bg-white text-stone-900 placeholder-stone-500 rounded-full border border-stone-200 focus:border-amber-600 focus:ring-2 focus:ring-amber-600/20 text-sm transition-all outline-hidden shadow-inner"
+                className="w-full pl-11 pr-24 py-2.5 bg-stone-100/90 hover:bg-stone-100 focus:bg-white text-stone-900 placeholder-stone-500 rounded-full border border-stone-200 focus:border-stone-500 focus:ring-2 focus:ring-stone-400/20 text-sm transition-all outline-hidden shadow-inner"
               />
               <Search className="w-4 h-4 text-stone-400 absolute left-4 top-1/2 -translate-y-1/2" />
               
               <button
                 type="submit"
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-amber-800 hover:bg-amber-900 text-white rounded-full text-xs font-semibold tracking-wide transition-colors"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-stone-800 hover:bg-stone-900 text-white rounded-full text-xs font-semibold tracking-wide transition-colors cursor-pointer"
               >
                 Search
               </button>
@@ -141,7 +141,7 @@ export const Header: React.FC = () => {
                         key={item.id}
                         to={`/product/${item.slug}`}
                         onClick={() => setShowSuggestions(false)}
-                        className="flex items-center gap-3 p-3 hover:bg-amber-50/60 transition-colors group"
+                        className="flex items-center gap-3 p-3 hover:bg-stone-100/80 transition-colors group"
                       >
                         <img
                           src={item.image || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=100&q=80'}
@@ -149,13 +149,13 @@ export const Header: React.FC = () => {
                           className="w-12 h-12 object-cover rounded-lg border border-stone-200 shrink-0"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-stone-900 group-hover:text-amber-900 truncate">
+                          <p className="text-sm font-medium text-stone-900 group-hover:text-stone-700 truncate">
                             {item.name}
                           </p>
                           <p className="text-xs text-stone-500">{item.category}</p>
                         </div>
                         <div className="text-right">
-                          <span className="font-bold text-sm text-amber-800 whitespace-nowrap block">
+                          <span className="font-bold text-sm text-stone-900 whitespace-nowrap block">
                             ₹{item.price.toLocaleString('en-IN')}
                           </span>
                           <span className="text-[10px] text-emerald-700 font-semibold">Special Price</span>
@@ -171,7 +171,7 @@ export const Header: React.FC = () => {
                 <div className="p-2.5 bg-stone-50 text-center border-t border-stone-100">
                   <button
                     onClick={handleSearchSubmit}
-                    className="text-xs font-medium text-amber-800 hover:text-amber-900 hover:underline cursor-pointer"
+                    className="text-xs font-medium text-stone-700 hover:text-stone-900 hover:underline cursor-pointer"
                   >
                     View all matching results for "{searchQuery}" →
                   </button>
@@ -185,7 +185,7 @@ export const Header: React.FC = () => {
             {settings?.phone && (
               <a
                 href={`tel:${settings.phone}`}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
                 title="Call showroom directly"
               >
                 <Phone className="w-3.5 h-3.5" />
@@ -208,7 +208,7 @@ export const Header: React.FC = () => {
                     navigate('/');
                   }
                 }}
-                className="shrink-0 inline-flex items-center gap-1 px-3 py-2 bg-amber-800 hover:bg-amber-900 text-white rounded-full text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+                className="shrink-0 inline-flex items-center gap-1 px-3 py-2 bg-stone-800 hover:bg-stone-900 text-white rounded-full text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
                 title="Go back"
                 aria-label="Back"
               >
@@ -223,12 +223,12 @@ export const Header: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search furniture & check prices..."
-                className="w-full pl-9 pr-16 py-2 bg-stone-100 text-stone-900 rounded-full text-xs border border-stone-200 focus:outline-hidden focus:border-amber-600 focus:bg-white"
+                className="w-full pl-9 pr-16 py-2 bg-stone-100 text-stone-900 rounded-full text-xs border border-stone-200 focus:outline-hidden focus:border-stone-500 focus:bg-white"
               />
               <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <button
                 type="submit"
-                className="absolute right-1 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-amber-800 text-white text-[10px] font-semibold rounded-full"
+                className="absolute right-1 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-stone-800 hover:bg-stone-900 text-white text-[10px] font-semibold rounded-full cursor-pointer"
               >
                 Search
               </button>
@@ -244,13 +244,13 @@ export const Header: React.FC = () => {
             <div className="space-y-1 text-sm font-medium">
               <Link
                 to="/"
-                className="block px-3 py-2.5 rounded-lg text-stone-800 hover:bg-amber-50 hover:text-amber-900"
+                className="block px-3 py-2.5 rounded-lg text-stone-800 hover:bg-stone-100 hover:text-stone-900"
               >
                 Home
               </Link>
               <Link
                 to="/contact"
-                className="block px-3 py-2.5 rounded-lg text-stone-800 hover:bg-amber-50 hover:text-amber-900"
+                className="block px-3 py-2.5 rounded-lg text-stone-800 hover:bg-stone-100 hover:text-stone-900"
               >
                 Showroom Location & Contact
               </Link>
@@ -260,7 +260,7 @@ export const Header: React.FC = () => {
               {settings?.phone && (
                 <a
                   href={`tel:${settings.phone}`}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-amber-800 text-white font-bold text-xs"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-stone-800 hover:bg-stone-900 text-white font-bold text-xs"
                 >
                   <Phone className="w-4 h-4" />
                   <span>Call Showroom: {settings.phone}</span>

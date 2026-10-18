@@ -198,7 +198,7 @@ export const AdminOrdersPage: React.FC = () => {
                         className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                           ord.payment_status === 'collected'
                             ? 'bg-emerald-100 text-emerald-800'
-                            : 'bg-amber-100 text-amber-900'
+                            : 'bg-stone-200 text-stone-800'
                         }`}
                       >
                         {ord.payment_status}
@@ -212,7 +212,7 @@ export const AdminOrdersPage: React.FC = () => {
                             ? 'bg-emerald-100 text-emerald-800'
                             : ord.order_status === 'cancelled'
                             ? 'bg-rose-100 text-rose-800'
-                            : 'bg-amber-100 text-amber-900'
+                            : 'bg-stone-200 text-stone-800'
                         }`}
                       >
                         {ord.order_status?.replace('_', ' ')}
@@ -222,7 +222,7 @@ export const AdminOrdersPage: React.FC = () => {
                     <td className="py-3 px-4 text-right">
                       <button
                         onClick={() => handleOpenOrder(ord)}
-                        className="px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-amber-100 text-stone-700 hover:text-amber-900 font-semibold text-xs transition-colors cursor-pointer inline-flex items-center gap-1"
+                        className="px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 hover:text-stone-900 font-semibold text-xs transition-colors cursor-pointer inline-flex items-center gap-1"
                       >
                         <Eye className="w-3.5 h-3.5" />
                         <span>Manage</span>
@@ -303,7 +303,7 @@ export const AdminOrdersPage: React.FC = () => {
                   {selectedOrder.shipping_address?.city}, {selectedOrder.shipping_address?.state} - {selectedOrder.shipping_address?.pincode}
                 </p>
                 {selectedOrder.delivery_instructions && (
-                  <p className="text-amber-800 font-semibold mt-1">
+                  <p className="text-stone-700 font-semibold mt-1">
                     Notes: {selectedOrder.delivery_instructions}
                   </p>
                 )}
@@ -426,7 +426,7 @@ export const AdminOrdersPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={updating}
-                  className="px-6 py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white font-bold cursor-pointer disabled:opacity-50"
+                  className="px-6 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-900 text-white font-bold cursor-pointer disabled:opacity-50"
                 >
                   {updating ? 'Updating...' : 'Save Order Status'}
                 </button>

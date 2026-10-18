@@ -222,7 +222,7 @@ export const AdminCategoriesPage: React.FC = () => {
             <button
               type="button"
               onClick={handleBackToCategories}
-              className="shrink-0 inline-flex items-center gap-1 px-3 py-2 bg-amber-800 hover:bg-amber-900 text-white rounded-full text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+              className="shrink-0 inline-flex items-center gap-1 px-3 py-2 bg-stone-800 hover:bg-stone-900 text-white rounded-full text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
               title="Back to All Categories"
               aria-label="Back"
             >
@@ -236,12 +236,12 @@ export const AdminCategoriesPage: React.FC = () => {
                 value={productSearchFilter}
                 onChange={(e) => setProductSearchFilter(e.target.value)}
                 placeholder={`Search in ${selectedCategory.name}...`}
-                className="w-full pl-9 pr-16 py-2 bg-stone-100 hover:bg-stone-50 focus:bg-white text-stone-900 placeholder-stone-500 rounded-full text-xs border border-stone-200 focus:outline-hidden focus:border-amber-600 shadow-inner transition-colors"
+                className="w-full pl-9 pr-16 py-2 bg-stone-100 hover:bg-stone-50 focus:bg-white text-stone-900 placeholder-stone-500 rounded-full text-xs border border-stone-200 focus:outline-hidden focus:border-stone-500 shadow-inner transition-colors"
               />
               <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <button
                 type="button"
-                className="absolute right-1 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-amber-800 text-white text-[10px] font-semibold rounded-full shadow-xs"
+                className="absolute right-1 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-stone-800 hover:bg-stone-900 text-white text-[10px] font-semibold rounded-full shadow-xs cursor-pointer"
               >
                 Search
               </button>
@@ -254,7 +254,7 @@ export const AdminCategoriesPage: React.FC = () => {
               <h1 className="text-xl sm:text-2xl font-bold font-serif text-stone-900">
                 {selectedCategory.name}
               </h1>
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-xs font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-stone-200 text-stone-800 text-xs font-bold">
                 {categoryProducts.length} Items in Catalog
               </span>
             </div>
@@ -279,12 +279,12 @@ export const AdminCategoriesPage: React.FC = () => {
                 onClick={() =>
                   navigate(`/admin/products/new?category_id=${selectedCategory.id}`)
                 }
-                className="flex flex-col items-center justify-center p-3 sm:p-6 rounded-2xl border-2 border-dashed border-amber-300 hover:border-amber-600 bg-amber-50/30 hover:bg-amber-50/70 transition-all cursor-pointer min-h-[190px] sm:min-h-[280px] text-center group"
+                className="flex flex-col items-center justify-center p-3 sm:p-6 rounded-2xl border-2 border-dashed border-stone-300 hover:border-stone-500 bg-stone-50/50 hover:bg-stone-100/70 transition-all cursor-pointer min-h-[190px] sm:min-h-[280px] text-center group"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-amber-300 text-amber-800 flex items-center justify-center mb-2 sm:mb-3 shadow-xs group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-stone-300 text-stone-800 flex items-center justify-center mb-2 sm:mb-3 shadow-xs group-hover:scale-110 transition-transform">
                   <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h4 className="font-bold text-xs sm:text-sm text-stone-900 group-hover:text-amber-900">
+                <h4 className="font-bold text-xs sm:text-sm text-stone-900 group-hover:text-stone-700">
                   Add {selectedCategory.name.replace(/s$/, '')}
                 </h4>
                 <p className="text-[10px] sm:text-xs text-stone-500 mt-0.5 max-w-xs line-clamp-1">
@@ -406,7 +406,7 @@ export const AdminCategoriesPage: React.FC = () => {
                 onClick={() =>
                   navigate(`/admin/products/new?category_id=${selectedCategory.id}`)
                 }
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-amber-800 text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:bg-amber-900 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-stone-800 text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:bg-stone-900 transition-colors cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add First {selectedCategory.name} Piece</span>
@@ -430,7 +430,7 @@ export const AdminCategoriesPage: React.FC = () => {
                   navigate('/admin');
                 }
               }}
-              className="shrink-0 inline-flex items-center gap-1 px-3 py-2 bg-amber-800 hover:bg-amber-900 text-white rounded-full text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+              className="shrink-0 inline-flex items-center gap-1 px-3 py-2 bg-stone-800 hover:bg-stone-900 text-white rounded-full text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
               title="Go back"
               aria-label="Back"
             >
@@ -444,12 +444,12 @@ export const AdminCategoriesPage: React.FC = () => {
                 value={searchFilter}
                 onChange={(e) => setSearchFilter(e.target.value)}
                 placeholder="Search furniture categories & collections..."
-                className="w-full pl-9 pr-16 py-2 bg-stone-100 hover:bg-stone-50 focus:bg-white text-stone-900 placeholder-stone-500 rounded-full text-xs border border-stone-200 focus:outline-hidden focus:border-amber-600 shadow-inner transition-colors"
+                className="w-full pl-9 pr-16 py-2 bg-stone-100 hover:bg-stone-50 focus:bg-white text-stone-900 placeholder-stone-500 rounded-full text-xs border border-stone-200 focus:outline-hidden focus:border-stone-500 shadow-inner transition-colors"
               />
               <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <button
                 type="button"
-                className="absolute right-1 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-amber-800 text-white text-[10px] font-semibold rounded-full shadow-xs"
+                className="absolute right-1 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-stone-800 hover:bg-stone-900 text-white text-[10px] font-semibold rounded-full shadow-xs cursor-pointer"
               >
                 Search
               </button>
@@ -459,7 +459,7 @@ export const AdminCategoriesPage: React.FC = () => {
           {/* 2. "Categories & Furniture Collections" AFTER the search bar */}
           <div className="pb-1 pt-1">
             <h1 className="text-xl sm:text-2xl font-bold font-serif text-stone-900 flex items-center gap-2">
-              <FolderTree className="w-5 h-5 text-amber-700" />
+              <FolderTree className="w-5 h-5 text-stone-700" />
               <span>Categories & Furniture Collections</span>
             </h1>
             <p className="text-stone-500 text-xs mt-1">
@@ -472,12 +472,12 @@ export const AdminCategoriesPage: React.FC = () => {
             {/* Create New Category Card */}
             <div
               onClick={handleOpenCreate}
-              className="flex flex-col items-center justify-center p-3.5 sm:p-6 rounded-2xl border-2 border-dashed border-stone-300 hover:border-amber-600 bg-stone-50/50 hover:bg-amber-50/30 transition-all cursor-pointer min-h-[190px] sm:min-h-[260px] group text-center"
+              className="flex flex-col items-center justify-center p-3.5 sm:p-6 rounded-2xl border-2 border-dashed border-stone-300 hover:border-stone-500 bg-stone-50/50 hover:bg-stone-100 transition-all cursor-pointer min-h-[190px] sm:min-h-[260px] group text-center"
             >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-stone-200 flex items-center justify-center text-stone-400 group-hover:text-amber-800 group-hover:scale-110 shadow-xs transition-all mb-2 sm:mb-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-stone-200 flex items-center justify-center text-stone-400 group-hover:text-stone-800 group-hover:scale-110 shadow-xs transition-all mb-2 sm:mb-3">
                 <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <h3 className="font-bold text-xs sm:text-sm text-stone-900 group-hover:text-amber-900">
+              <h3 className="font-bold text-xs sm:text-sm text-stone-900 group-hover:text-stone-700">
                 Add Category
               </h3>
               <p className="text-[10px] sm:text-xs text-stone-400 mt-0.5 line-clamp-1">
@@ -489,7 +489,7 @@ export const AdminCategoriesPage: React.FC = () => {
               <div
                 key={cat.id}
                 onClick={() => handleSelectCategory(cat)}
-                className="group relative flex flex-col rounded-2xl bg-white border border-stone-200 shadow-xs hover:shadow-xl hover:border-amber-400 transition-all duration-300 overflow-hidden cursor-pointer"
+                className="group relative flex flex-col rounded-2xl bg-white border border-stone-200 shadow-xs hover:shadow-xl hover:border-stone-400 transition-all duration-300 overflow-hidden cursor-pointer"
               >
                 {/* Category Image (Complete size image without cropping) */}
                 <div className="relative aspect-4/3 w-full bg-stone-50 overflow-hidden flex items-center justify-center p-2">
@@ -522,7 +522,7 @@ export const AdminCategoriesPage: React.FC = () => {
                   <div className="absolute top-2 right-2 flex items-center gap-1 z-10">
                     <button
                       onClick={(e) => handleOpenEdit(cat, e)}
-                      className="p-1 sm:p-1.5 rounded-lg bg-white/90 text-stone-700 hover:text-amber-800 hover:bg-white shadow-xs transition-colors cursor-pointer"
+                      className="p-1 sm:p-1.5 rounded-lg bg-white/90 text-stone-700 hover:text-stone-900 hover:bg-white shadow-xs transition-colors cursor-pointer"
                       title="Edit Category Details"
                     >
                       <Edit className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
@@ -540,7 +540,7 @@ export const AdminCategoriesPage: React.FC = () => {
                 {/* Category Info */}
                 <div className="p-2.5 sm:p-4 flex flex-col flex-1 justify-between gap-2">
                   <div>
-                    <h3 className="font-bold text-xs sm:text-base text-stone-900 group-hover:text-amber-900 transition-colors line-clamp-1">
+                    <h3 className="font-bold text-xs sm:text-base text-stone-900 group-hover:text-stone-700 transition-colors line-clamp-1">
                       {cat.name}
                     </h3>
                     <p className="text-[10px] sm:text-xs text-stone-500 line-clamp-1 sm:line-clamp-2 mt-0.5 leading-snug">
@@ -556,13 +556,13 @@ export const AdminCategoriesPage: React.FC = () => {
                         e.stopPropagation();
                         navigate(`/admin/products/new?category_id=${cat.id}`);
                       }}
-                      className="w-full py-1.5 sm:py-2 px-2 rounded-lg sm:rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-[10px] sm:text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer active:scale-95"
+                      className="w-full py-1.5 sm:py-2 px-2 rounded-lg sm:rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-[10px] sm:text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer active:scale-95"
                     >
                       <PackagePlus className="w-3 h-3" />
                       <span className="truncate">+ Add Product</span>
                     </button>
 
-                    <div className="text-center text-[10px] sm:text-[11px] font-semibold text-amber-800 group-hover:underline truncate">
+                    <div className="text-center text-[10px] sm:text-[11px] font-semibold text-stone-700 group-hover:underline truncate">
                       View All ({cat.product_count ?? 0}) →
                     </div>
                   </div>
@@ -592,7 +592,7 @@ export const AdminCategoriesPage: React.FC = () => {
                   placeholder="e.g. Sofas, Dining Tables"
                   value={categoryForm.name}
                   onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
-                  className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden focus:border-amber-600"
+                  className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden focus:border-stone-500"
                 />
               </div>
 
@@ -683,14 +683,14 @@ export const AdminCategoriesPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-50"
+                  className="px-4 py-2 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-50 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-5 py-2 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold"
+                  className="px-5 py-2 rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold cursor-pointer"
                 >
                   {saving ? 'Saving...' : editingCategory ? 'Update Category' : 'Create Category'}
                 </button>

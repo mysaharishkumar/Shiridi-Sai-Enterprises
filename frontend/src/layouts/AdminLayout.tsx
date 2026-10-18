@@ -62,7 +62,7 @@ export const AdminLayout: React.FC = () => {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 hover:bg-stone-50 text-xs font-semibold text-stone-700 transition-colors"
             title="View Public Storefront"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-amber-700" />
+            <ExternalLink className="w-3.5 h-3.5 text-stone-600" />
             <span className="hidden sm:inline">View Store</span>
           </Link>
 
@@ -104,7 +104,7 @@ export const AdminLayout: React.FC = () => {
           <div className="p-6 space-y-6">
             {/* Header with Close button for mobile */}
             <div className="flex items-center justify-between lg:hidden pb-3 border-b border-stone-100">
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-900 bg-amber-100/70 border border-amber-300/80 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-bold uppercase tracking-wider text-stone-800 bg-stone-200 border border-stone-300 px-2.5 py-1 rounded-full">
                 Navigation Menu
               </span>
               <button
@@ -121,7 +121,7 @@ export const AdminLayout: React.FC = () => {
             <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 text-xs">
               <div className="font-bold text-stone-900 truncate">{user?.name}</div>
               <div className="text-[11px] text-stone-500 truncate">{user?.email}</div>
-              <span className="inline-block mt-2 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+              <span className="inline-block mt-2 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-stone-200 text-stone-800 border border-stone-300">
                 {user?.role?.replace('_', ' ')}
               </span>
             </div>
@@ -144,7 +144,7 @@ export const AdminLayout: React.FC = () => {
                     onClick={() => setMobileSidebarOpen(false)}
                     className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold transition-all ${
                       isActive
-                        ? 'bg-amber-800 text-white shadow-md shadow-amber-950/20'
+                        ? 'bg-stone-800 text-white shadow-md shadow-stone-900/20'
                         : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                     }`}
                   >
@@ -163,7 +163,7 @@ export const AdminLayout: React.FC = () => {
               target="_blank"
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100 border border-stone-200 transition-colors"
             >
-              <ExternalLink className="w-4 h-4 text-amber-700" />
+              <ExternalLink className="w-4 h-4 text-stone-600" />
               <span>Open Public Store</span>
             </Link>
           </div>

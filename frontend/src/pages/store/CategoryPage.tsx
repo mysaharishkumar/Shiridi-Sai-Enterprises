@@ -104,10 +104,10 @@ export const CategoryPage: React.FC = () => {
               onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
               className="lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-xl border border-stone-300 bg-white text-xs font-semibold text-stone-800 shadow-xs"
             >
-              <SlidersHorizontal className="w-4 h-4 text-amber-800" />
+              <SlidersHorizontal className="w-4 h-4 text-stone-700" />
               <span>Filters</span>
               {(selectedColor || minPrice || maxPrice || inStockOnly) && (
-                <span className="w-2 h-2 rounded-full bg-amber-600" />
+                <span className="w-2 h-2 rounded-full bg-stone-700" />
               )}
             </button>
 
@@ -129,7 +129,7 @@ export const CategoryPage: React.FC = () => {
                   setSortBy(e.target.value);
                   setPage(1);
                 }}
-                className="pl-3 pr-8 py-2 bg-white rounded-xl border border-stone-200 text-stone-800 font-semibold focus:outline-hidden focus:border-amber-600 text-xs shadow-xs"
+                className="pl-3 pr-8 py-2 bg-white rounded-xl border border-stone-200 text-stone-800 font-semibold focus:outline-hidden focus:border-stone-500 text-xs shadow-xs"
               >
                 <option value="newest">Newest Arrivals</option>
                 <option value="price_asc">Price: Low to High</option>
@@ -158,7 +158,7 @@ export const CategoryPage: React.FC = () => {
               {/* Header inside mobile drawer */}
               <div className="flex items-center justify-between pb-3 border-b border-stone-100">
                 <div className="flex items-center gap-2">
-                  <SlidersHorizontal className="w-4 h-4 text-amber-800" />
+                  <SlidersHorizontal className="w-4 h-4 text-stone-700" />
                   <h3 className="font-bold text-sm text-stone-900 font-serif">Refine Selection</h3>
                 </div>
                 {mobileFilterOpen && (
@@ -185,7 +185,7 @@ export const CategoryPage: React.FC = () => {
                       setPage(1);
                     }}
                     placeholder="e.g. 3-seater, marble top..."
-                    className="w-full pl-9 pr-3 py-2 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden focus:border-amber-600 focus:bg-white"
+                    className="w-full pl-9 pr-3 py-2 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden focus:border-stone-500 focus:bg-white"
                   />
                   <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   {searchInCat && (
@@ -213,7 +213,7 @@ export const CategoryPage: React.FC = () => {
                       setPage(1);
                     }}
                     placeholder="Min ₹"
-                    className="w-full p-2 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden focus:border-amber-600 focus:bg-white"
+                    className="w-full p-2 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden focus:border-stone-500 focus:bg-white"
                   />
                   <input
                     type="number"
@@ -223,7 +223,7 @@ export const CategoryPage: React.FC = () => {
                       setPage(1);
                     }}
                     placeholder="Max ₹"
-                    className="w-full p-2 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden focus:border-amber-600 focus:bg-white"
+                    className="w-full p-2 text-xs bg-stone-50 rounded-xl border border-stone-200 focus:outline-hidden focus:border-stone-500 focus:bg-white"
                   />
                 </div>
               </div>
@@ -243,7 +243,7 @@ export const CategoryPage: React.FC = () => {
                       }}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                         selectedColor === col
-                          ? 'bg-amber-800 text-white shadow-xs'
+                          ? 'bg-stone-800 text-white shadow-xs'
                           : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
                       }`}
                     >
@@ -263,7 +263,7 @@ export const CategoryPage: React.FC = () => {
                       setInStockOnly(e.target.checked);
                       setPage(1);
                     }}
-                    className="w-4 h-4 rounded text-amber-700 focus:ring-amber-500 border-stone-300"
+                    className="w-4 h-4 rounded text-stone-800 focus:ring-stone-500 border-stone-300"
                   />
                   <span>In Stock Only</span>
                 </label>
@@ -313,7 +313,7 @@ export const CategoryPage: React.FC = () => {
                         onClick={() => setPage(pNum)}
                         className={`w-9 h-9 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                           page === pNum
-                            ? 'bg-amber-800 text-white shadow-md'
+                            ? 'bg-stone-800 text-white shadow-md'
                             : 'bg-white border border-stone-200 text-stone-700 hover:bg-stone-50'
                         }`}
                       >
@@ -333,7 +333,7 @@ export const CategoryPage: React.FC = () => {
               </>
             ) : (
               <div className="p-12 text-center bg-white rounded-3xl border border-stone-200 space-y-4">
-                <div className="w-16 h-16 rounded-full bg-amber-50 text-amber-700 flex items-center justify-center mx-auto">
+                <div className="w-16 h-16 rounded-full bg-stone-100 text-stone-700 flex items-center justify-center mx-auto">
                   <Search className="w-8 h-8" />
                 </div>
                 <h3 className="text-lg font-bold text-stone-900 font-serif">
@@ -344,7 +344,7 @@ export const CategoryPage: React.FC = () => {
                 </p>
                 <button
                   onClick={handleResetFilters}
-                  className="px-6 py-2.5 rounded-full bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold shadow-sm"
+                  className="px-6 py-2.5 rounded-full bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold shadow-sm"
                 >
                   Clear All Filters
                 </button>

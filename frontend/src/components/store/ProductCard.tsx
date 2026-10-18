@@ -33,7 +33,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   );
 
   return (
-    <div className="group relative flex flex-col bg-white rounded-2xl border border-stone-200/90 shadow-xs hover:shadow-xl hover:border-amber-400/60 transition-all duration-300 overflow-hidden">
+    <div className="group relative flex flex-col bg-white rounded-2xl border border-stone-200/90 shadow-xs hover:shadow-xl hover:border-stone-400 transition-all duration-300 overflow-hidden">
       {/* Badges Overlay */}
       <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1.5 pointer-events-none">
         {product.discount_percentage ? (
@@ -43,7 +43,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         ) : null}
 
         {product.is_featured && (
-          <span className="px-2 py-0.5 rounded-full bg-amber-900 text-amber-100 font-semibold text-[10px] tracking-wide shadow-xs">
+          <span className="px-2 py-0.5 rounded-full bg-stone-800 text-stone-100 font-semibold text-[10px] tracking-wide shadow-xs">
             Featured
           </span>
         )}
@@ -79,10 +79,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div>
           {/* Category Tag & Rating */}
           <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-stone-500 mb-1">
-            <span className="font-semibold text-amber-800 uppercase tracking-wider truncate max-w-[90px] sm:max-w-none">
+            <span className="font-semibold text-stone-600 uppercase tracking-wider truncate max-w-[90px] sm:max-w-none">
               {product.category_name || 'Furniture'}
             </span>
-            <div className="flex items-center gap-0.5 sm:gap-1 text-amber-600 font-semibold shrink-0">
+            <div className="flex items-center gap-0.5 sm:gap-1 text-amber-500 font-semibold shrink-0">
               <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-amber-500 text-amber-500" />
               <span>{product.rating || 4.8}</span>
             </div>
@@ -91,7 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {/* Product Title */}
           <Link
             to={`/product/${product.slug}`}
-            className="block font-medium text-xs sm:text-sm text-stone-900 group-hover:text-amber-800 transition-colors line-clamp-2 leading-snug"
+            className="block font-medium text-xs sm:text-sm text-stone-900 group-hover:text-stone-700 transition-colors line-clamp-2 leading-snug"
           >
             {product.name}
           </Link>
@@ -120,7 +120,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     style={{ backgroundColor: c.hex_code || '#78350F' }}
                     className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border transition-transform cursor-pointer ${
                       activeColorIndex === i
-                        ? 'scale-125 ring-2 ring-amber-700 border-white'
+                        ? 'scale-125 ring-2 ring-stone-700 border-white'
                         : 'border-stone-300 hover:scale-110'
                     }`}
                   />
@@ -158,11 +158,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
           </div>
 
-          {/* Action Buttons: View Details & WhatsApp Price Inquiry */}
+          {/* Action Buttons: View Details & Call Showroom */}
           <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mt-0.5">
             <Link
               to={`/product/${product.slug}`}
-              className="w-full py-1.5 sm:py-2 px-1 sm:px-2.5 rounded-xl border border-stone-300 hover:border-amber-600 text-stone-800 hover:text-amber-900 hover:bg-amber-50/50 text-[11px] sm:text-xs font-semibold text-center transition-colors flex items-center justify-center gap-1"
+              className="w-full py-1.5 sm:py-2 px-1 sm:px-2.5 rounded-xl border border-stone-300 hover:border-stone-400 text-stone-800 hover:text-stone-900 hover:bg-stone-100 text-[11px] sm:text-xs font-semibold text-center transition-colors flex items-center justify-center gap-1"
             >
               <span className="sm:hidden">Details</span>
               <span className="hidden sm:inline">View Details</span>
@@ -170,7 +170,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
             <a
               href={`tel:${settings?.phone || '9876543210'}`}
-              className="w-full py-1.5 sm:py-2 px-1 sm:px-2 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-[11px] sm:text-xs font-semibold text-center transition-all flex items-center justify-center gap-1 shadow-xs"
+              className="w-full py-1.5 sm:py-2 px-1 sm:px-2 rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-[11px] sm:text-xs font-semibold text-center transition-all flex items-center justify-center gap-1 shadow-xs"
               title="Call showroom"
             >
               <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />

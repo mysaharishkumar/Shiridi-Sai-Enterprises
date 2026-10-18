@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 mb-12 border-b border-stone-800/80">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
           <div className="flex items-center gap-4 p-3 rounded-2xl bg-stone-800/40 border border-stone-800">
-            <div className="w-12 h-12 rounded-xl bg-amber-900/40 text-amber-400 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-stone-800 text-stone-300 border border-stone-700/60 flex items-center justify-center shrink-0">
               <Award className="w-6 h-6" />
             </div>
             <div>
@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4 p-3 rounded-2xl bg-stone-800/40 border border-stone-800">
-            <div className="w-12 h-12 rounded-xl bg-amber-900/40 text-amber-400 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-stone-800 text-stone-300 border border-stone-700/60 flex items-center justify-center shrink-0">
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
@@ -34,7 +34,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4 p-3 rounded-2xl bg-stone-800/40 border border-stone-800">
-            <div className="w-12 h-12 rounded-xl bg-amber-900/40 text-amber-400 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-stone-800 text-stone-300 border border-stone-700/60 flex items-center justify-center shrink-0">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
@@ -44,7 +44,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4 p-3 rounded-2xl bg-stone-800/40 border border-stone-800">
-            <div className="w-12 h-12 rounded-xl bg-amber-900/40 text-amber-400 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-stone-800 text-stone-300 border border-stone-700/60 flex items-center justify-center shrink-0">
               <Clock className="w-6 h-6" />
             </div>
             <div>
@@ -70,18 +70,18 @@ export const Footer: React.FC = () => {
 
             <div className="space-y-2.5 text-xs text-stone-300 pt-2">
               <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-stone-400 shrink-0 mt-0.5" />
                 <span>{settings?.address}</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-amber-400 shrink-0" />
-                <a href={`tel:${settings?.phone}`} className="hover:text-amber-300 transition-colors">
+                <Phone className="w-4 h-4 text-stone-400 shrink-0" />
+                <a href={`tel:${settings?.phone}`} className="hover:text-white transition-colors">
                   {settings?.phone}
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-amber-400 shrink-0" />
-                <a href={`mailto:${settings?.email}`} className="hover:text-amber-300 transition-colors">
+                <Mail className="w-4 h-4 text-stone-400 shrink-0" />
+                <a href={`mailto:${settings?.email}`} className="hover:text-white transition-colors">
                   {settings?.email}
                 </a>
               </div>
@@ -111,14 +111,14 @@ export const Footer: React.FC = () => {
                 <li key={cat.id}>
                   <Link
                     to={`/category/${cat.slug}`}
-                    className="hover:text-amber-300 transition-colors"
+                    className="hover:text-white transition-colors"
                   >
                     {cat.name}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link to="/products" className="text-amber-400 hover:text-amber-300 font-medium">
+                <Link to="/products" className="text-stone-300 hover:text-white font-medium">
                   View Full Catalog & Prices →
                 </Link>
               </li>
@@ -132,17 +132,17 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2 text-xs text-stone-400">
               <li>
-                <Link to="/contact" className="hover:text-amber-300 transition-colors">
+                <Link to="/contact" className="hover:text-white transition-colors">
                   Showroom Location & Contact
                 </Link>
               </li>
               <li>
-                <Link to="/policies/terms" className="hover:text-amber-300 transition-colors">
+                <Link to="/policies/terms" className="hover:text-white transition-colors">
                   Timber Quality & Warranty
                 </Link>
               </li>
               <li>
-                <Link to="/policies/privacy" className="hover:text-amber-300 transition-colors">
+                <Link to="/policies/privacy" className="hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
               </li>
@@ -151,7 +151,7 @@ export const Footer: React.FC = () => {
                   href={`https://wa.me/${settings?.whatsapp_number ? settings.whatsapp_number.replace(/[^0-9]/g, '') : '919876543210'}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-amber-300 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   Direct WhatsApp Price Quote
                 </a>
@@ -175,7 +175,7 @@ export const Footer: React.FC = () => {
             <div className="pt-4 border-t border-stone-800">
               <Link
                 to="/admin/login"
-                className="inline-flex items-center gap-1.5 text-xs text-stone-500 hover:text-amber-400 transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-stone-500 hover:text-stone-300 transition-colors"
               >
                 <Lock className="w-3.5 h-3.5" />
                 <span>Admin Login</span>

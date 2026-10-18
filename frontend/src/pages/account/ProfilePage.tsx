@@ -93,7 +93,7 @@ export const ProfilePage: React.FC = () => {
         {/* Profile Card */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-6">
           <h2 className="text-base font-bold font-serif text-stone-900 pb-3 border-b border-stone-100 flex items-center gap-2">
-            <User className="w-4 h-4 text-amber-800" />
+            <User className="w-4 h-4 text-stone-800" />
             Personal Details
           </h2>
 
@@ -139,7 +139,7 @@ export const ProfilePage: React.FC = () => {
               <button
                 type="submit"
                 disabled={savingProfile}
-                className="px-6 py-2.5 rounded-full bg-amber-800 hover:bg-amber-900 text-white font-semibold text-xs transition-colors cursor-pointer disabled:opacity-50"
+                className="px-6 py-2.5 rounded-full bg-stone-800 hover:bg-stone-900 text-white font-semibold text-xs transition-colors cursor-pointer disabled:opacity-50"
               >
                 {savingProfile ? 'Saving...' : 'Save Profile Changes'}
               </button>
@@ -151,12 +151,12 @@ export const ProfilePage: React.FC = () => {
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-stone-100">
             <h2 className="text-base font-bold font-serif text-stone-900 flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-amber-800" />
+              <MapPin className="w-4 h-4 text-stone-800" />
               Saved Delivery Addresses
             </h2>
             <button
               onClick={() => setShowAddAddress(!showAddAddress)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 text-amber-800 hover:bg-amber-100 text-xs font-bold transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-100 text-stone-800 hover:bg-stone-200 text-xs font-bold transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add New Address</span>
@@ -165,8 +165,8 @@ export const ProfilePage: React.FC = () => {
 
           {/* New Address Form Modal/Drawer */}
           {showAddAddress && (
-            <form onSubmit={handleAddAddress} className="p-5 rounded-2xl bg-amber-50/50 border border-amber-200/80 space-y-4 animate-in fade-in">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-amber-900">
+            <form onSubmit={handleAddAddress} className="p-5 rounded-2xl bg-stone-50 border border-stone-200 space-y-4 animate-in fade-in">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-stone-900">
                 New Address Details
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -253,7 +253,7 @@ export const ProfilePage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold"
+                  className="px-5 py-2 rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold"
                 >
                   Save Address
                 </button>

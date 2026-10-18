@@ -77,7 +77,7 @@ export const AdminSettingsPage: React.FC = () => {
         {/* 1. General Branding */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
           <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-100 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-800" />
+            <Sparkles className="w-4 h-4 text-stone-700" />
             1. Business Branding & Logo
           </h2>
 
@@ -119,7 +119,7 @@ export const AdminSettingsPage: React.FC = () => {
                   placeholder="Logo Image URL"
                   className="flex-1 p-2 bg-stone-50 rounded-xl border border-stone-200"
                 />
-                <label className="px-3 py-2 rounded-xl bg-amber-800 text-white font-semibold cursor-pointer hover:bg-amber-900 text-xs inline-flex items-center gap-1">
+                <label className="px-3 py-2 rounded-xl bg-stone-800 text-white font-semibold cursor-pointer hover:bg-stone-900 text-xs inline-flex items-center gap-1">
                   <Upload className="w-3.5 h-3.5" />
                   <span>Upload Logo</span>
                   <input
@@ -138,7 +138,7 @@ export const AdminSettingsPage: React.FC = () => {
         {/* 2. Contact Information */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
           <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-100 flex items-center gap-2">
-            <Phone className="w-4 h-4 text-amber-800" />
+            <Phone className="w-4 h-4 text-stone-700" />
             2. Contact & Showroom Address
           </h2>
 
@@ -199,7 +199,7 @@ export const AdminSettingsPage: React.FC = () => {
         {/* 3. Policies & Customer Information */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4">
           <h2 className="text-sm font-bold font-serif text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-100 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-800" />
+            <Sparkles className="w-4 h-4 text-stone-700" />
             3. Policies & Store Content
           </h2>
 
@@ -261,7 +261,7 @@ export const AdminSettingsPage: React.FC = () => {
           <button
             type="submit"
             disabled={saving}
-            className="px-8 py-3.5 rounded-2xl bg-amber-800 hover:bg-amber-900 active:scale-98 text-white font-bold text-xs tracking-wider uppercase shadow-lg shadow-amber-950/20 cursor-pointer disabled:opacity-50 flex items-center gap-2"
+            className="px-8 py-3.5 rounded-2xl bg-stone-800 hover:bg-stone-900 active:scale-98 text-white font-bold text-xs tracking-wider uppercase shadow-lg shadow-stone-950/20 cursor-pointer disabled:opacity-50 flex items-center gap-2"
           >
             <Save className="w-4 h-4" />
             <span>{saving ? 'Updating Store Settings...' : 'Save All Settings'}</span>

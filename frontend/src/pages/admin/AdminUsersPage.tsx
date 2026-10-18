@@ -170,7 +170,7 @@ export const AdminUsersPage: React.FC = () => {
                           <option value="order_manager">Order Manager</option>
                         </select>
                       ) : (
-                        <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-900 font-bold text-[10px] uppercase tracking-wider">
+                        <span className="px-2 py-0.5 rounded-full bg-stone-200 text-stone-800 font-bold text-[10px] uppercase tracking-wider">
                           {u.role.replace('_', ' ')}
                         </span>
                       )}

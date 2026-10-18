@@ -83,7 +83,7 @@ export const ProductDetailPage: React.FC = () => {
         </p>
         <Link
           to="/products"
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-amber-800 text-white font-semibold text-xs"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-stone-800 hover:bg-stone-900 text-white font-semibold text-xs"
         >
           <ArrowLeft className="w-4 h-4" /> Back to All Furniture
         </Link>
@@ -230,7 +230,7 @@ export const ProductDetailPage: React.FC = () => {
               {/* Magnified Zoom Lens */}
               {zoomActive && (
                 <div
-                  className="hidden md:block absolute inset-0 pointer-events-none z-20 rounded-2xl overflow-hidden border-2 border-amber-500/80 shadow-2xl bg-white"
+                  className="hidden md:block absolute inset-0 pointer-events-none z-20 rounded-2xl overflow-hidden border-2 border-stone-500 shadow-2xl bg-white"
                   style={{
                     backgroundImage: `url(${currentImage})`,
                     backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
@@ -250,7 +250,7 @@ export const ProductDetailPage: React.FC = () => {
                 className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 hover:bg-white text-stone-800 text-xs font-semibold shadow-md border border-stone-200 backdrop-blur-xs transition-transform active:scale-95 cursor-pointer"
                 title="View Complete Full-Size Image"
               >
-                <Maximize2 className="w-3.5 h-3.5 text-amber-800" />
+                <Maximize2 className="w-3.5 h-3.5 text-stone-700" />
                 <span className="hidden sm:inline">View Full Size</span>
               </button>
 
@@ -281,7 +281,7 @@ export const ProductDetailPage: React.FC = () => {
               <div className="flex items-center justify-between text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
                 <span>Photo Gallery ({galleryItems.length} {galleryItems.length === 1 ? 'view' : 'views'}):</span>
                 {activeColorObj && ((activeColorObj.images && activeColorObj.images.length > 0) || activeColorObj.image_url) && (
-                  <span className="text-amber-800 font-bold lowercase first-letter:uppercase">
+                  <span className="text-stone-700 font-bold lowercase first-letter:uppercase">
                     {(activeColorObj.images?.length || 1)} photos in {activeColorObj.name}
                   </span>
                 )}
@@ -301,7 +301,7 @@ export const ProductDetailPage: React.FC = () => {
                     title={item.label || `Photo ${idx + 1}`}
                     className={`relative w-20 h-16 rounded-xl overflow-hidden border-2 bg-stone-50 transition-all shrink-0 cursor-pointer flex items-center justify-center p-1 ${
                       selectedImageIndex === idx
-                        ? 'border-amber-700 shadow-sm scale-102 ring-2 ring-amber-600/20'
+                        ? 'border-stone-800 shadow-sm scale-102 ring-2 ring-stone-400/30'
                         : 'border-stone-200 opacity-70 hover:opacity-100'
                     }`}
                   >
@@ -322,12 +322,12 @@ export const ProductDetailPage: React.FC = () => {
             <div className="space-y-4">
               {/* Category, Rating & SKU */}
               <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                <span className="font-bold text-amber-800 uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200/60">
+                <span className="font-bold text-stone-700 uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-stone-100 border border-stone-200">
                   {product.category_name || 'Furniture Collection'}
                 </span>
 
                 <div className="flex items-center gap-3 text-stone-500">
-                  <div className="flex items-center gap-1 text-amber-600 font-bold">
+                  <div className="flex items-center gap-1 text-amber-500 font-bold">
                     <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
                     <span>{product.rating || 4.8}</span>
                     <span className="text-stone-400 font-normal">({product.review_count || 24} ratings)</span>
@@ -374,7 +374,7 @@ export const ProductDetailPage: React.FC = () => {
               {/* Information About Product */}
               <div>
                 <h3 className="text-xs font-bold text-stone-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                  <Info className="w-3.5 h-3.5 text-amber-800" />
+                  <Info className="w-3.5 h-3.5 text-stone-700" />
                   About This Furniture Piece
                 </h3>
                 <p className="text-stone-600 text-xs sm:text-sm leading-relaxed font-normal whitespace-pre-line">
@@ -388,7 +388,7 @@ export const ProductDetailPage: React.FC = () => {
                   <div className="flex items-center justify-between text-xs mb-2">
                     <span className="font-bold text-stone-800 uppercase tracking-wider">
                       Select Finish / Color:{' '}
-                      <span className="text-amber-800 font-bold">{selectedColor}</span>
+                      <span className="text-stone-900 font-bold">{selectedColor}</span>
                     </span>
                     {activeColorObj && ((activeColorObj.images && activeColorObj.images.length > 0) || activeColorObj.image_url) && (
                       <span className="text-[11px] text-emerald-700 font-medium">
@@ -409,7 +409,7 @@ export const ProductDetailPage: React.FC = () => {
                           onClick={() => handleSelectColor(c.name)}
                           className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                             isSelected
-                              ? 'border-amber-700 bg-amber-50/80 text-amber-950 shadow-xs ring-2 ring-amber-600/30'
+                              ? 'border-stone-800 bg-stone-100 text-stone-900 shadow-xs ring-2 ring-stone-400/30'
                               : 'border-stone-200 text-stone-700 hover:bg-stone-50'
                           }`}
                         >
@@ -452,13 +452,13 @@ export const ProductDetailPage: React.FC = () => {
                         onClick={() => setSelectedVariantId(v.variant_id)}
                         className={`p-2.5 rounded-xl border text-left text-xs transition-all cursor-pointer ${
                           selectedVariantId === v.variant_id
-                            ? 'border-amber-700 bg-amber-50/80 text-amber-950 font-bold shadow-xs'
+                            ? 'border-stone-800 bg-stone-100 text-stone-900 font-bold shadow-xs'
                             : 'border-stone-200 text-stone-700 hover:bg-stone-50'
                         }`}
                       >
                         <div className="truncate">{v.dimensions || v.color || v.sku}</div>
                         {v.price_override && (
-                          <div className="text-amber-800 font-bold mt-0.5">
+                          <div className="text-stone-800 font-bold mt-0.5">
                             ₹{v.price_override.toLocaleString('en-IN')}
                           </div>
                         )}
@@ -479,7 +479,7 @@ export const ProductDetailPage: React.FC = () => {
                 {settings?.phone && (
                   <a
                     href={`tel:${settings.phone}`}
-                    className="w-full py-4 px-6 rounded-2xl bg-amber-800 hover:bg-amber-900 text-white font-bold text-sm tracking-wide shadow-md shadow-amber-950/20 transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-98"
+                    className="w-full py-4 px-6 rounded-2xl bg-stone-800 hover:bg-stone-900 text-white font-bold text-sm tracking-wide shadow-md shadow-stone-950/20 transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-98"
                   >
                     <Phone className="w-5 h-5 shrink-0" />
                     <span>Call Showroom: {settings.phone}</span>
@@ -489,7 +489,7 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Showroom Visit Card */}
               <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200 flex items-start gap-3 text-xs text-stone-700">
-                <MapPin className="w-5 h-5 text-amber-800 shrink-0 mt-0.5" />
+                <MapPin className="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <p className="font-bold text-stone-900">
                     Visit Shiridi Sai Enterprises Showroom:
@@ -497,7 +497,7 @@ export const ProductDetailPage: React.FC = () => {
                   <p className="text-stone-600 leading-relaxed">
                     {settings?.address || 'Showroom Address: Hyderabad, Telangana.'}
                   </p>
-                  <p className="text-[11px] text-amber-800 font-semibold flex items-center gap-1.5 pt-0.5">
+                  <p className="text-[11px] text-stone-700 font-semibold flex items-center gap-1.5 pt-0.5">
                     <Clock className="w-3.5 h-3.5" /> Open Mon-Sat 10 AM - 9 PM • Sunday 10:30 AM - 8 PM
                   </p>
                 </div>
@@ -507,17 +507,17 @@ export const ProductDetailPage: React.FC = () => {
             {/* Quality & Craft Badges */}
             <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-100 text-center">
               <div className="p-2">
-                <Sparkles className="w-4 h-4 text-amber-700 mx-auto mb-1" />
+                <Sparkles className="w-4 h-4 text-stone-700 mx-auto mb-1" />
                 <span className="text-[11px] font-semibold text-stone-900 block">Solid Wood</span>
                 <span className="text-[10px] text-stone-500">Heirloom Timber</span>
               </div>
               <div className="p-2">
-                <ShieldCheck className="w-4 h-4 text-amber-700 mx-auto mb-1" />
+                <ShieldCheck className="w-4 h-4 text-stone-700 mx-auto mb-1" />
                 <span className="text-[11px] font-semibold text-stone-900 block">5 - 10 Yr</span>
                 <span className="text-[10px] text-stone-500">Borer Warranty</span>
               </div>
               <div className="p-2">
-                <CheckCircle2 className="w-4 h-4 text-amber-700 mx-auto mb-1" />
+                <CheckCircle2 className="w-4 h-4 text-stone-700 mx-auto mb-1" />
                 <span className="text-[11px] font-semibold text-stone-900 block">Custom Sizes</span>
                 <span className="text-[10px] text-stone-500">Made To Measure</span>
               </div>
@@ -528,14 +528,14 @@ export const ProductDetailPage: React.FC = () => {
         {/* Specifications & Detailed Product Information Box */}
         <div className="mt-12 bg-white rounded-3xl border border-stone-200/90 p-6 sm:p-8 lg:p-10 shadow-xs">
           <h2 className="text-xl font-bold font-serif text-stone-900 pb-4 border-b border-stone-200 mb-6 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-amber-700" />
+            <Sparkles className="w-5 h-5 text-stone-700" />
             Detailed Product Information & Specifications
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Left Specs Table */}
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-stone-700 mb-3">
                 Material & Timber Attributes
               </h3>
               <dl className="divide-y divide-stone-100 border border-stone-200 rounded-2xl overflow-hidden text-xs">
@@ -577,7 +577,7 @@ export const ProductDetailPage: React.FC = () => {
 
             {/* Right: Key Features & Information */}
             <div className="space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-stone-700 mb-3">
                 Craftsmanship & Highlights
               </h3>
 
@@ -585,7 +585,7 @@ export const ProductDetailPage: React.FC = () => {
                 <ul className="space-y-2 text-xs text-stone-700">
                   {product.features.map((feat, idx) => (
                     <li key={idx} className="flex items-start gap-2.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-600 mt-1.5 shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-stone-600 mt-1.5 shrink-0" />
                       <span className="leading-relaxed">{feat}</span>
                     </li>
                   ))}
@@ -597,7 +597,7 @@ export const ProductDetailPage: React.FC = () => {
               )}
 
               {/* Extra Customization Notice */}
-              <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 text-xs text-amber-950 space-y-1 mt-4">
+              <div className="p-4 rounded-2xl bg-stone-100 border border-stone-200 text-xs text-stone-900 space-y-1 mt-4">
                 <span className="font-bold block">Need a Custom Size or Different Polish?</span>
                 <p className="text-stone-700 leading-relaxed">
                   Shiridi Sai Enterprises provides custom furniture making. Bring your room measurements or inspiration designs to our showroom or contact us on WhatsApp.
@@ -612,14 +612,14 @@ export const ProductDetailPage: React.FC = () => {
           <div className="mt-16">
             <div className="flex items-end justify-between mb-8 pb-4 border-b border-stone-200">
               <div>
-                <span className="text-xs font-bold text-amber-700 uppercase tracking-widest">
+                <span className="text-xs font-bold text-stone-600 uppercase tracking-widest">
                   Explore More
                 </span>
                 <h2 className="text-2xl font-bold font-serif text-stone-900 tracking-tight mt-1">
                   Similar Furniture Designs
                 </h2>
               </div>
-              <Link to="/products" className="text-xs font-bold text-amber-800 hover:underline">
+              <Link to="/products" className="text-xs font-bold text-stone-800 hover:underline">
                 View All →
               </Link>
             </div>

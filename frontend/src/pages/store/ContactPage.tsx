@@ -1,45 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, MessageCircle, Clock, Send, CheckCircle2, ExternalLink, Loader2 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
 import { storeApi } from '../../api/client';
 
 export const ContactPage: React.FC = () => {
-  const { settings } = useStore();
+  const { settings, categories, refreshCategories } = useStore();
   const { success, error: toastError } = useToast();
 
   const [form, setForm] = useState({
     name: '',
     phone: '',
-    email: '',
-    subject: '',
     message: ''
   });
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submittedData, setSubmittedData] = useState<{
     name: string;
     phone: string;
-    email: string;
     subject: string;
     message: string;
   } | null>(null);
 
+  // Ensure latest categories from admin are loaded
+  useEffect(() => {
+    refreshCategories?.().catch(() => {});
+  }, []);
+
+  const toggleCategory = (catName: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(catName) ? prev.filter((c) => c !== catName) : [...prev, catName]
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    const subjectStr = selectedCategories.length > 0
+      ? selectedCategories.join(', ')
+      : 'General Furniture Inquiry';
+
     try {
       await storeApi.submitInquiry({
         name: form.name.trim(),
         phone: form.phone.trim(),
-        email: form.email.trim(),
-        subject: form.subject.trim(),
+        email: '',
+        subject: subjectStr,
         message: form.message.trim()
       });
-      setSubmittedData({ ...form });
+      setSubmittedData({
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        subject: subjectStr,
+        message: form.message.trim()
+      });
       success('Thank you! Your inquiry has been sent to our store team.');
       setSubmitted(true);
-      setForm({ name: '', phone: '', email: '', subject: '', message: '' });
+      setForm({ name: '', phone: '', message: '' });
+      setSelectedCategories([]);
     } catch (err: any) {
       toastError(err.message || 'Failed to send inquiry. Please try WhatsApp or calling us directly.');
     } finally {
@@ -158,8 +177,8 @@ export const ContactPage: React.FC = () => {
                   <div className="pt-4 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-center gap-3">
                     {submittedData && (
                       <a
-                        href={`https://wa.me/${(settings?.whatsapp_number || '9849012345').replace(/[^0-9]/g, '').startsWith('91') ? (settings?.whatsapp_number || '9849012345').replace(/[^0-9]/g, '') : `91${(settings?.whatsapp_number || '9849012345').replace(/[^0-9]/g, '')}`}?text=${encodeURIComponent(
-                          `*New Inquiry - Shiridi Sai Furnitures*\n\n*Name:* ${submittedData.name}\n*Phone:* ${submittedData.phone}\n*Email:* ${submittedData.email}\n*Subject:* ${submittedData.subject || 'Furniture Inquiry'}\n*Message:*\n${submittedData.message}`
+                        href={`https://wa.me/${(settings?.whatsapp_number || settings?.phone || '917799323335').replace(/[^0-9]/g, '').startsWith('91') ? (settings?.whatsapp_number || settings?.phone || '917799323335').replace(/[^0-9]/g, '') : `91${(settings?.whatsapp_number || settings?.phone || '917799323335').replace(/[^0-9]/g, '')}`}?text=${encodeURIComponent(
+                          `*New Inquiry - Shiridi Sai Furnitures*\n\n*Name:* ${submittedData.name}\n*Phone:* ${submittedData.phone}\n*Subject / Categories:* ${submittedData.subject || 'All Furniture'}\n*Message:*\n${submittedData.message}`
                         )}`}
                         target="_blank"
                         rel="noreferrer"
@@ -211,31 +230,65 @@ export const ContactPage: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* Multi-Select Furniture Categories Loaded Dynamically */}
                   <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      placeholder="name@example.com"
-                      className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden"
-                    />
-                  </div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                        Subject / Furniture Category
+                      </label>
+                      {selectedCategories.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedCategories([])}
+                          className="text-[11px] text-stone-500 hover:text-stone-800 underline cursor-pointer"
+                        >
+                          Clear Selection ({selectedCategories.length})
+                        </button>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                      Subject / Furniture Category
-                    </label>
-                    <input
-                      type="text"
-                      value={form.subject}
-                      onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                      placeholder="e.g. Custom 6-Seater Dining Table inquiry"
-                      className="w-full p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden"
-                    />
+                    <div className="flex flex-wrap gap-2">
+                      {categories && categories.length > 0 ? (
+                        categories
+                          .filter((c) => c.is_active !== false)
+                          .map((cat) => {
+                            const isSelected = selectedCategories.includes(cat.name);
+                            return (
+                              <button
+                                key={cat.id || cat.slug}
+                                type="button"
+                                onClick={() => toggleCategory(cat.name)}
+                                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-stone-800 text-white shadow-xs border border-stone-800 ring-2 ring-stone-400/30'
+                                    : 'bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200'
+                                }`}
+                              >
+                                <span
+                                  className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[10px] ${
+                                    isSelected ? 'bg-white text-stone-900 font-extrabold' : 'border border-stone-300'
+                                  }`}
+                                >
+                                  {isSelected ? '✓' : ''}
+                                </span>
+                                <span>{cat.name}</span>
+                              </button>
+                            );
+                          })
+                      ) : (
+                        <div className="text-xs text-stone-400 py-1 italic">Loading furniture categories...</div>
+                      )}
+                    </div>
+
+                    {selectedCategories.length > 0 ? (
+                      <p className="text-[11px] text-stone-600 mt-2 font-medium">
+                        Selected: <strong className="text-stone-900">{selectedCategories.join(', ')}</strong>
+                      </p>
+                    ) : (
+                      <p className="text-[11px] text-stone-400 mt-1.5">
+                        Tap any category to select. You can select multiple categories.
+                      </p>
+                    )}
                   </div>
 
                   <div>

@@ -233,13 +233,15 @@ export const ProductDetailPage: React.FC = () => {
     setZoomPosition({ x, y });
   };
 
-  const whatsappPhone = settings?.whatsapp_number
-    ? settings.whatsapp_number.replace(/[^0-9]/g, '')
-    : '919876543210';
+  const rawAdminPhone = settings?.whatsapp_number || settings?.phone || '917799323335';
+  const cleanPhone = rawAdminPhone.replace(/[^0-9]/g, '');
+  const fullWhatsappPhone = cleanPhone.startsWith('91') ? cleanPhone : `91${cleanPhone}`;
 
+  const productUrl = `${window.location.origin}/product/${product.slug}`;
   const whatsappInquiryText = encodeURIComponent(
-    `Hello Shiridi Sai Enterprises, I am inquiring about "${product.name}".\n\n- Offer Price: ₹${currentPrice.toLocaleString('en-IN')}\n- Selected Finish: ${selectedColor || 'Standard'}\n- Product Link: ${window.location.href}\n\nPlease share availability, customization options, and showroom viewing details.`
+    `Hi Shiridi Sai Furnitures, I am interested in this product:\n\n*${product.name}*\nShowroom Offer Price: ₹${currentPrice.toLocaleString('en-IN')}\nSelected Finish: ${selectedColor || 'Standard'}\nProduct Link: ${productUrl}\n\nPlease share availability and showroom viewing details.`
   );
+  const productWhatsappUrl = `https://wa.me/${fullWhatsappPhone}?text=${whatsappInquiryText}`;
 
   return (
     <div className="bg-[#FCFBF9] min-h-screen py-6 sm:py-8">
@@ -534,7 +536,7 @@ export const ProductDetailPage: React.FC = () => {
                 Interested in this piece? Inquire directly with our showroom:
               </span>
 
-              <div className="pt-1">
+              <div className="pt-1 space-y-2.5">
                 {settings?.phone && (
                   <a
                     href={`tel:${settings.phone}`}
@@ -544,6 +546,18 @@ export const ProductDetailPage: React.FC = () => {
                     <span>Call Showroom: {settings.phone}</span>
                   </a>
                 )}
+
+                {/* WhatsApp button directly after Call Showroom */}
+                <a
+                  href={productWhatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm tracking-wide shadow-md shadow-emerald-950/20 transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-98"
+                  title="Inquire directly on WhatsApp with product link"
+                >
+                  <MessageCircle className="w-5 h-5 shrink-0" />
+                  <span>Inquire on WhatsApp</span>
+                </a>
               </div>
 
               {/* Showroom Visit Card */}

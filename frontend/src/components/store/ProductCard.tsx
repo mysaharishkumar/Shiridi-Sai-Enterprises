@@ -59,13 +59,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     }
   };
 
-  const whatsappPhone = settings?.whatsapp_number
-    ? settings.whatsapp_number.replace(/[^0-9]/g, '')
-    : '919876543210';
+  const rawAdminPhone = settings?.whatsapp_number || settings?.phone || '917799323335';
+  const cleanPhone = rawAdminPhone.replace(/[^0-9]/g, '');
+  const fullWhatsappPhone = cleanPhone.startsWith('91') ? cleanPhone : `91${cleanPhone}`;
 
+  const productUrl = `${window.location.origin}/product/${product.slug}`;
   const whatsappText = encodeURIComponent(
-    `Hi Shiridi Sai Enterprises, I want to know about "${product.name}" (Showroom Offer Price: ₹${product.selling_price.toLocaleString('en-IN')}). Is it currently available at your showroom?`
+    `Hi Shiridi Sai Furnitures, I am interested in this product:\n\n*${product.name}*\nShowroom Offer Price: ₹${product.selling_price.toLocaleString('en-IN')}\nProduct Link: ${productUrl}\n\nPlease share details and availability.`
   );
+  const cardWhatsappUrl = `https://wa.me/${fullWhatsappPhone}?text=${whatsappText}`;
 
   return (
     <div className="group relative flex flex-col bg-white rounded-2xl border border-stone-200/90 shadow-xs hover:shadow-xl hover:border-stone-400 transition-all duration-300 overflow-hidden">
@@ -204,24 +206,37 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
           </div>
 
-          {/* Action Buttons: View Details & Call Showroom */}
-          <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mt-0.5">
+          {/* Action Buttons: View Details, Call, and WhatsApp with Product Link */}
+          <div className="space-y-1.5 mt-0.5">
             <Link
               to={`/product/${product.slug}`}
-              className="w-full py-1.5 sm:py-2 px-1 sm:px-2.5 rounded-xl border border-stone-300 hover:border-stone-400 text-stone-800 hover:text-stone-900 hover:bg-stone-100 text-[11px] sm:text-xs font-semibold text-center transition-colors flex items-center justify-center gap-1"
+              className="w-full py-1.5 sm:py-2 px-2 rounded-xl border border-stone-200 hover:border-stone-400 text-stone-800 hover:text-stone-900 hover:bg-stone-50 text-[11px] sm:text-xs font-semibold text-center transition-colors flex items-center justify-center gap-1.5"
             >
-              <span className="sm:hidden">Details</span>
-              <span className="hidden sm:inline">View Details</span>
+              <Eye className="w-3.5 h-3.5 text-stone-500" />
+              <span>View Details</span>
             </Link>
 
-            <a
-              href={`tel:${settings?.phone || '9876543210'}`}
-              className="w-full py-1.5 sm:py-2 px-1 sm:px-2 rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-[11px] sm:text-xs font-semibold text-center transition-all flex items-center justify-center gap-1 shadow-xs"
-              title="Call showroom"
-            >
-              <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
-              <span>Call</span>
-            </a>
+            <div className="grid grid-cols-2 gap-1.5">
+              <a
+                href={`tel:${settings?.phone || '7799323335'}`}
+                className="py-1.5 sm:py-2 px-1 sm:px-2 rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-[11px] sm:text-xs font-semibold text-center transition-all flex items-center justify-center gap-1 shadow-xs cursor-pointer active:scale-95"
+                title="Call showroom directly"
+              >
+                <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                <span>Call</span>
+              </a>
+
+              <a
+                href={cardWhatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="py-1.5 sm:py-2 px-1 sm:px-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] sm:text-xs font-semibold text-center transition-all flex items-center justify-center gap-1 shadow-xs cursor-pointer active:scale-95"
+                title="Inquire on WhatsApp with product link"
+              >
+                <MessageCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                <span>WhatsApp</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

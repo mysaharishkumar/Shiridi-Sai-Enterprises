@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI):
     try:
         db = db_manager.db
         if db is not None:
-            admin_exists = await db.users.find_one({"email": "admin@shiridisaienterprises.com"})
+            admin_exists = await db.users.find_one({"email": "shiridisaifurnitures1991@gmail.com"})
             if not admin_exists:
                 print("Running initial database seeding for Shiridi Sai Enterprises...")
                 await seed_database()

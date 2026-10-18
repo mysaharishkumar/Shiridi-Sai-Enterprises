@@ -36,8 +36,8 @@ export const AdminLoginPage: React.FC = () => {
   };
 
   const fillSuperAdmin = () => {
-    setEmail('admin@shiridisaienterprises.com');
-    setPassword('Admin@123456');
+    setEmail('shiridisaifurnitures1991@gmail.com');
+    setPassword('Saikiran@123');
   };
 
   return (

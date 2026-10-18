@@ -247,6 +247,7 @@ export interface SiteSettings {
   email: string;
   whatsapp_number: string;
   address: string;
+  google_maps_url?: string;
   currency_symbol: string;
   currency_code: string;
   standard_delivery_fee: number;

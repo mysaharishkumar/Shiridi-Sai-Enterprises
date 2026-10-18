@@ -44,15 +44,15 @@ export const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners }) => {
     >
       {/* Aspect Ratio Container: 2.5:1 on desktop, 16:9 on tablet, 4:3 on mobile */}
       <div className="relative min-h-[360px] sm:min-h-[440px] md:min-h-[500px] lg:min-h-[560px] flex items-center">
-        {/* Background Image with Fallback */}
-        <div className="absolute inset-0 z-0">
+        {/* Background Image with Fallback wrapped in Link */}
+        <Link to={current.link_url || '/products'} className="absolute inset-0 z-0 block cursor-pointer">
           <picture>
             {current.mobile_image_url && (
               <source media="(max-width: 640px)" srcSet={current.mobile_image_url} />
             )}
             <img
               src={current.image_url}
-              alt={current.title}
+              alt={current.title || 'Promotional Banner'}
               onError={(e) => {
                 // Fallback image if remote url fails
                 (e.target as HTMLImageElement).src =
@@ -62,46 +62,52 @@ export const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners }) => {
             />
           </picture>
 
-          {/* Luxury Warm Wood & Obsidian Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-stone-950/90 via-stone-950/60 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-stone-950/20" />
-        </div>
+          {/* Gradients only if text overlay is present */}
+          {(current.subtitle || (current.title && !current.title.startsWith('Offer Banner') && current.title !== 'Promotional Offer')) && (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-r from-stone-950/90 via-stone-950/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-stone-950/20" />
+            </>
+          )}
+        </Link>
 
-        {/* Content Container */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full py-12">
-          <div className="max-w-xl text-left animate-in fade-in slide-in-from-left-6 duration-500 key={current.id}">
-            {/* Promotional Badge */}
-            {current.badge_text && (
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-800/80 border border-stone-600/50 text-stone-200 text-xs font-semibold tracking-wider uppercase mb-4 backdrop-blur-xs">
-                <Sparkles className="w-3.5 h-3.5 text-stone-300" />
-                <span>{current.badge_text}</span>
+        {/* Content Container (only rendered if text content exists) */}
+        {(current.subtitle || (current.title && !current.title.startsWith('Offer Banner') && current.title !== 'Promotional Offer')) && (
+          <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full py-12 pointer-events-none">
+            <div className="max-w-xl text-left animate-in fade-in slide-in-from-left-6 duration-500 pointer-events-auto">
+              {/* Promotional Badge */}
+              {current.badge_text && (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-800/80 border border-stone-600/50 text-stone-200 text-xs font-semibold tracking-wider uppercase mb-4 backdrop-blur-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-stone-300" />
+                  <span>{current.badge_text}</span>
+                </div>
+              )}
+
+              {/* Banner Title */}
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold font-serif text-white tracking-tight leading-tight mb-4 drop-shadow-md">
+                {current.title}
+              </h1>
+
+              {/* Subtitle / Offer Details */}
+              {current.subtitle && (
+                <p className="text-sm sm:text-base md:text-lg text-stone-200 font-light leading-relaxed mb-8 drop-shadow-xs max-w-lg">
+                  {current.subtitle}
+                </p>
+              )}
+
+              {/* CTA Button */}
+              <div>
+                <Link
+                  to={current.link_url || '/products'}
+                  className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-stone-800 hover:bg-stone-700 active:scale-95 text-white font-semibold text-sm tracking-wide shadow-lg border border-stone-600/50 transition-all group/btn"
+                >
+                  <span>{current.cta_text || 'Shop Collection'}</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                </Link>
               </div>
-            )}
-
-            {/* Banner Title */}
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold font-serif text-white tracking-tight leading-tight mb-4 drop-shadow-md">
-              {current.title}
-            </h1>
-
-            {/* Subtitle / Offer Details */}
-            {current.subtitle && (
-              <p className="text-sm sm:text-base md:text-lg text-stone-200 font-light leading-relaxed mb-8 drop-shadow-xs max-w-lg">
-                {current.subtitle}
-              </p>
-            )}
-
-            {/* CTA Button */}
-            <div>
-              <Link
-                to={current.link_url || '/products'}
-                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-stone-800 hover:bg-stone-700 active:scale-95 text-white font-semibold text-sm tracking-wide shadow-lg border border-stone-600/50 transition-all group/btn"
-              >
-                <span>{current.cta_text || 'Shop Collection'}</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-              </Link>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Previous Button */}
         {activeBanners.length > 1 && (

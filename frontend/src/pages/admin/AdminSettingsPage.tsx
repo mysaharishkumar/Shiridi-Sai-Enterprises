@@ -193,6 +193,19 @@ export const AdminSettingsPage: React.FC = () => {
                 className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 focus:bg-white"
               />
             </div>
+
+            <div className="sm:col-span-2">
+              <label className="block font-bold text-stone-700 uppercase tracking-wider mb-1">
+                Google Maps Location URL (Showroom Directions)
+              </label>
+              <input
+                type="url"
+                value={settings.google_maps_url || ''}
+                onChange={(e) => setSettings({ ...settings, google_maps_url: e.target.value })}
+                placeholder="https://maps.app.goo.gl/..."
+                className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 focus:bg-white font-mono"
+              />
+            </div>
           </div>
         </div>
 

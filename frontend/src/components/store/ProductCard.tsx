@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, MessageCircle, Star, Phone } from 'lucide-react';
+import { Eye, MessageCircle, Star, Phone, Share2 } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
+import { useToast } from '../../context/ToastContext';
 
 interface ProductCardProps {
   product: Product;
@@ -10,6 +11,7 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { settings } = useStore();
+  const { success: toastSuccess } = useToast();
   const [activeColorIndex, setActiveColorIndex] = useState<number>(0);
 
   // Pick color-specific image if selected, otherwise fallback to primary
@@ -24,6 +26,39 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const isOutOfStock = !product.in_stock || product.total_stock <= 0;
 
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const productUrl = `${window.location.origin}/product/${product.slug}`;
+    const shareData = {
+      title: `${product.name} | Shiridi Sai Enterprises`,
+      text: `Take a look at ${product.name} at Shiridi Sai Enterprises:`,
+      url: productUrl,
+    };
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err: any) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(productUrl);
+      toastSuccess('Product link copied to clipboard!');
+    } catch {
+      const input = document.createElement('input');
+      input.value = productUrl;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      toastSuccess('Product link copied to clipboard!');
+    }
+  };
+
   const whatsappPhone = settings?.whatsapp_number
     ? settings.whatsapp_number.replace(/[^0-9]/g, '')
     : '919876543210';
@@ -34,6 +69,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <div className="group relative flex flex-col bg-white rounded-2xl border border-stone-200/90 shadow-xs hover:shadow-xl hover:border-stone-400 transition-all duration-300 overflow-hidden">
+      {/* Share Button (Top Right) */}
+      <button
+        type="button"
+        onClick={handleShare}
+        aria-label={`Share ${product.name}`}
+        title="Share this product"
+        className="absolute top-2.5 right-2.5 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 hover:bg-white text-stone-700 hover:text-stone-900 shadow-sm border border-stone-200/80 flex items-center justify-center transition-all opacity-85 hover:opacity-100 active:scale-90 cursor-pointer"
+      >
+        <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+      </button>
+
       {/* Badges Overlay */}
       <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1.5 pointer-events-none">
         {product.discount_percentage ? (

@@ -14,6 +14,7 @@ class SiteSettingsBase(BaseModel):
     email: str = "contact@shiridisaienterprises.com"
     whatsapp_number: str = "+91 98490 12345"
     address: str = "Shop No. 12 & 13, Sai Complex, Main Furniture Road, Hyderabad, Telangana 500072"
+    google_maps_url: str = "https://maps.app.goo.gl/BAFvRkWfaPYMjKHP9?g_st=aw"
     currency_symbol: str = "₹"
     currency_code: str = "INR"
     standard_delivery_fee: float = 499.0
@@ -40,6 +41,7 @@ class SiteSettingsUpdate(BaseModel):
     email: Optional[str] = None
     whatsapp_number: Optional[str] = None
     address: Optional[str] = None
+    google_maps_url: Optional[str] = None
     currency_symbol: Optional[str] = None
     currency_code: Optional[str] = None
     standard_delivery_fee: Optional[float] = None

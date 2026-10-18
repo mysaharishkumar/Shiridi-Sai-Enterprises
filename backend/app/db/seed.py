@@ -664,6 +664,7 @@ DEFAULT_SETTINGS = {
     "email": "contact@shiridisaienterprises.com",
     "whatsapp_number": "+91 98490 12345",
     "address": "Shop No. 12 & 13, Sai Complex, Main Furniture Road, Hyderabad, Telangana 500072",
+    "google_maps_url": "https://maps.app.goo.gl/BAFvRkWfaPYMjKHP9?g_st=aw",
     "currency_symbol": "₹",
     "currency_code": "INR",
     "standard_delivery_fee": 499.0,
@@ -703,13 +704,13 @@ async def seed_database():
         print("[INFO] Site settings already exist.")
 
     # 2. Users (Admin + Customer)
-    admin_user = await db.users.find_one({"email": "admin@shiridisaienterprises.com"})
+    admin_user = await db.users.find_one({"email": "shiridisaifurnitures1991@gmail.com"})
     if not admin_user:
         admin_doc = {
-            "name": "Super Admin",
-            "email": "admin@shiridisaienterprises.com",
+            "name": "Saikiran Admin",
+            "email": "shiridisaifurnitures1991@gmail.com",
             "phone": "+91 98490 12345",
-            "hashed_password": get_password_hash("Admin@123456"),
+            "hashed_password": get_password_hash("Saikiran@123"),
             "role": "super_admin",
             "is_active": True,
             "addresses": [],
@@ -717,7 +718,7 @@ async def seed_database():
             "updated_at": now
         }
         await db.users.insert_one(admin_doc)
-        print("[OK] Admin user created: admin@shiridisaienterprises.com (Admin@123456)")
+        print("[OK] Admin user created: shiridisaifurnitures1991@gmail.com (Saikiran@123)")
     else:
         print("[INFO] Admin user already exists.")
 

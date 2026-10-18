@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, MessageCircle, Clock, Send, CheckCircle2 } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle, Clock, Send, CheckCircle2, ExternalLink } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
 
@@ -50,7 +50,16 @@ export const ContactPage: React.FC = () => {
                   <MapPin className="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-stone-900 mb-0.5">Showroom & Workshop</strong>
-                    <span className="text-stone-600 leading-relaxed">{settings?.address}</span>
+                    <span className="text-stone-600 leading-relaxed block">{settings?.address}</span>
+                    <a
+                      href={settings?.google_maps_url || "https://maps.app.goo.gl/BAFvRkWfaPYMjKHP9?g_st=aw"}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 text-[11px] font-bold transition-colors"
+                    >
+                      <span>Open in Google Maps</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
                   </div>
                 </div>
 

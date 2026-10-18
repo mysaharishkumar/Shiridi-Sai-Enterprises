@@ -3,16 +3,18 @@ import { useParams, Link } from 'react-router-dom';
 import {
   Star, ShieldCheck, Check, ChevronRight, ArrowLeft,
   Phone, MessageCircle, MapPin, Sparkles, Clock, Info, CheckCircle2,
-  Maximize2, X
+  Maximize2, X, Share2, ExternalLink
 } from 'lucide-react';
 import { Product } from '../../types';
 import { storeApi } from '../../api/client';
 import { useStore } from '../../context/StoreContext';
+import { useToast } from '../../context/ToastContext';
 import { ProductCard } from '../../components/store/ProductCard';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { settings } = useStore();
+  const { success: toastSuccess } = useToast();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -57,6 +59,38 @@ export const ProductDetailPage: React.FC = () => {
     loadProduct();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [slug]);
+
+  const handleShareProduct = async () => {
+    if (!product) return;
+    const shareUrl = window.location.href;
+    const shareData = {
+      title: `${product.name} | Shiridi Sai Enterprises`,
+      text: `Take a look at ${product.name} at Shiridi Sai Enterprises:`,
+      url: shareUrl,
+    };
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err: any) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toastSuccess('Product link copied to clipboard!');
+    } catch {
+      const input = document.createElement('input');
+      input.value = shareUrl;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      toastSuccess('Product link copied to clipboard!');
+    }
+  };
 
   if (loading) {
     return (
@@ -254,6 +288,20 @@ export const ProductDetailPage: React.FC = () => {
                 <span className="hidden sm:inline">View Full Size</span>
               </button>
 
+              {/* Share Product Floating Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleShareProduct();
+                }}
+                className="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 hover:bg-white text-stone-800 text-xs font-semibold shadow-md border border-stone-200 backdrop-blur-xs transition-transform active:scale-95 cursor-pointer"
+                title="Share this product"
+              >
+                <Share2 className="w-3.5 h-3.5 text-stone-700" />
+                <span>Share</span>
+              </button>
+
               {/* Badges */}
               <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5 pointer-events-none">
                 {discountPct > 0 && (
@@ -336,10 +384,21 @@ export const ProductDetailPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Title */}
-              <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 tracking-tight leading-snug">
-                {product.name}
-              </h1>
+              {/* Title & Share Button */}
+              <div className="flex items-start justify-between gap-3">
+                <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 tracking-tight leading-snug">
+                  {product.name}
+                </h1>
+                <button
+                  type="button"
+                  onClick={handleShareProduct}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 active:scale-95 text-stone-800 text-xs font-bold border border-stone-300 shadow-xs transition-all cursor-pointer shrink-0 mt-0.5"
+                  title="Share only this product"
+                >
+                  <Share2 className="w-3.5 h-3.5 text-stone-700" />
+                  <span>Share</span>
+                </button>
+              </div>
 
               {/* Transparent Price Discovery Box */}
               <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200 space-y-2">
@@ -490,10 +549,21 @@ export const ProductDetailPage: React.FC = () => {
               {/* Showroom Visit Card */}
               <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200 flex items-start gap-3 text-xs text-stone-700">
                 <MapPin className="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
-                <div className="space-y-1">
-                  <p className="font-bold text-stone-900">
-                    Visit Shiridi Sai Enterprises Showroom:
-                  </p>
+                <div className="space-y-1.5 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="font-bold text-stone-900">
+                      Visit Shiridi Sai Enterprises Showroom:
+                    </p>
+                    <a
+                      href={settings?.google_maps_url || "https://maps.app.goo.gl/BAFvRkWfaPYMjKHP9?g_st=aw"}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-800 text-[11px] font-bold transition-colors shrink-0 shadow-2xs"
+                    >
+                      <span>Get Directions</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
                   <p className="text-stone-600 leading-relaxed">
                     {settings?.address || 'Showroom Address: Hyderabad, Telangana.'}
                   </p>

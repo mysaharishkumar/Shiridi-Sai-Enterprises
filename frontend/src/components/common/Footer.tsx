@@ -71,7 +71,18 @@ export const Footer: React.FC = () => {
             <div className="space-y-2.5 text-xs text-stone-300 pt-2">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-stone-400 shrink-0 mt-0.5" />
-                <span>{settings?.address}</span>
+                <a
+                  href={settings?.google_maps_url || "https://maps.app.goo.gl/BAFvRkWfaPYMjKHP9?g_st=aw"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-white transition-colors"
+                  title="Open showroom location in Google Maps"
+                >
+                  <span>{settings?.address || 'Shop No. 12 & 13, Sai Complex, Main Furniture Road, Hyderabad, Telangana 500072'}</span>
+                  <span className="block text-[11px] text-stone-400 hover:text-stone-200 underline underline-offset-2 mt-0.5 font-medium">
+                    📍 View on Google Maps →
+                  </span>
+                </a>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-stone-400 shrink-0" />

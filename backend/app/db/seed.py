@@ -659,7 +659,7 @@ PRODUCTS = [
 DEFAULT_SETTINGS = {
     "store_name": "Shiridi Sai Enterprises",
     "tagline": "Exquisite Craftsmanship & Timeless Home Luxury",
-    "logo_url": "",
+    "logo_url": "/logo.jpg",
     "phone": "+91 98490 12345",
     "email": "contact@shiridisaienterprises.com",
     "whatsapp_number": "+91 98490 12345",

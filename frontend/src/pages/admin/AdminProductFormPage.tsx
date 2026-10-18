@@ -666,12 +666,12 @@ export const AdminProductFormPage: React.FC = () => {
                         {colorImages.map((imgUrl, imgIdx) => (
                           <div
                             key={imgIdx}
-                            className="relative aspect-square rounded-xl overflow-hidden border border-stone-200 bg-stone-100 group shadow-xs"
+                            className="relative aspect-square rounded-xl overflow-hidden border border-stone-200 bg-stone-50 group shadow-xs flex items-center justify-center p-1"
                           >
                             <img
                               src={imgUrl}
                               alt={`${color.name} ${imgIdx + 1}`}
-                              className="w-full h-full object-cover"
+                              className="max-h-full max-w-full w-auto h-auto object-contain"
                             />
                             {imgIdx === 0 && (
                               <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-stone-900/80 text-white text-[9px] font-bold">
@@ -740,11 +740,11 @@ export const AdminProductFormPage: React.FC = () => {
             {images.map((img, i) => (
               <div
                 key={i}
-                className={`relative aspect-4/3 rounded-2xl overflow-hidden border-2 bg-stone-100 group ${
+                className={`relative aspect-4/3 rounded-2xl overflow-hidden border-2 bg-stone-50 group flex items-center justify-center p-2 ${
                   img.is_primary ? 'border-amber-700 ring-2 ring-amber-600/30' : 'border-stone-200'
                 }`}
               >
-                <img src={img.url} alt="" className="w-full h-full object-cover" />
+                <img src={img.url} alt="" className="max-h-full max-w-full w-auto h-auto object-contain mx-auto" />
 
                 {/* Primary Badge */}
                 {img.is_primary && (

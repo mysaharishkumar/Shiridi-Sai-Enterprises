@@ -55,15 +55,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )}
       </div>
 
-      {/* Product Image Container */}
+      {/* Product Image Container (Displays complete size uploaded image without cropping) */}
       <Link
         to={`/product/${product.slug}`}
-        className="relative block aspect-4/3 w-full overflow-hidden bg-stone-100"
+        className="relative block aspect-4/3 w-full overflow-hidden bg-stone-50 flex items-center justify-center p-2"
       >
         <img
           src={primaryImage}
           alt={product.name}
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+          className="max-h-full max-w-full w-auto h-auto object-contain mx-auto group-hover:scale-105 transition-transform duration-500 ease-out"
         />
 
         {/* Quick View Overlay Button */}

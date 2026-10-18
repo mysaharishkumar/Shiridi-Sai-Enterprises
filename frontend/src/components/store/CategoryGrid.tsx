@@ -38,16 +38,15 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({ categories, limit })
               className="group relative flex flex-col rounded-2xl overflow-hidden bg-white border border-stone-200/90 shadow-xs hover:shadow-xl hover:border-amber-400/50 transition-all duration-300 transform hover:-translate-y-1"
             >
               {/* Image Container with Consistent Aspect Ratio */}
-              <div className="relative aspect-4/3 w-full overflow-hidden bg-stone-100">
+              <div className="relative aspect-4/3 w-full overflow-hidden bg-stone-50 flex items-center justify-center p-2">
                 <img
                   src={
                     cat.image_url ||
                     'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80'
                   }
                   alt={cat.name}
-                  className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500 ease-out"
+                  className="max-h-full max-w-full w-auto h-auto object-contain mx-auto group-hover:scale-108 transition-transform duration-500 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-stone-950/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
               </div>
 
               {/* Title & Product Count */}

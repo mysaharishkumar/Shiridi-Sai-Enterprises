@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   Star, ShieldCheck, Check, ChevronRight, ArrowLeft,
-  Phone, MessageCircle, MapPin, Sparkles, Clock, Info, CheckCircle2
+  Phone, MessageCircle, MapPin, Sparkles, Clock, Info, CheckCircle2,
+  Maximize2, X
 } from 'lucide-react';
 import { Product } from '../../types';
 import { storeApi } from '../../api/client';
@@ -21,6 +22,7 @@ export const ProductDetailPage: React.FC = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [zoomActive, setZoomActive] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   // Selection state
   const [selectedColor, setSelectedColor] = useState<string>('');
@@ -212,9 +214,9 @@ export const ProductDetailPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 bg-white p-6 sm:p-8 lg:p-10 rounded-3xl border border-stone-200/90 shadow-xs">
           {/* Left Column: Image Gallery with Magnifier */}
           <div className="space-y-4">
-            {/* Main Image Container */}
+            {/* Main Image Container (Complete full-size image without cropping) */}
             <div
-              className="relative aspect-4/3 w-full rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 cursor-crosshair group shadow-inner"
+              className="relative min-h-[300px] sm:min-h-[420px] max-h-[550px] aspect-4/3 w-full rounded-2xl overflow-hidden bg-stone-50 border border-stone-200 flex items-center justify-center p-3 cursor-crosshair group shadow-inner"
               onMouseEnter={() => setZoomActive(true)}
               onMouseLeave={() => setZoomActive(false)}
               onMouseMove={handleMouseMove}
@@ -222,21 +224,35 @@ export const ProductDetailPage: React.FC = () => {
               <img
                 src={currentImage}
                 alt={currentGalleryItem?.label || product.name}
-                className="w-full h-full object-cover object-center transition-all duration-300"
+                className="max-h-full max-w-full w-auto h-auto object-contain mx-auto transition-all duration-300"
               />
 
               {/* Magnified Zoom Lens */}
               {zoomActive && (
                 <div
-                  className="hidden md:block absolute inset-0 pointer-events-none z-20 rounded-2xl overflow-hidden border-2 border-amber-500/80 shadow-2xl"
+                  className="hidden md:block absolute inset-0 pointer-events-none z-20 rounded-2xl overflow-hidden border-2 border-amber-500/80 shadow-2xl bg-white"
                   style={{
                     backgroundImage: `url(${currentImage})`,
                     backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                    backgroundSize: '240%',
+                    backgroundSize: '220%',
                     backgroundRepeat: 'no-repeat',
                   }}
                 />
               )}
+
+              {/* View Complete Full-Size Photo Modal Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxOpen(true);
+                }}
+                className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 hover:bg-white text-stone-800 text-xs font-semibold shadow-md border border-stone-200 backdrop-blur-xs transition-transform active:scale-95 cursor-pointer"
+                title="View Complete Full-Size Image"
+              >
+                <Maximize2 className="w-3.5 h-3.5 text-amber-800" />
+                <span className="hidden sm:inline">View Full Size</span>
+              </button>
 
               {/* Badges */}
               <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5 pointer-events-none">
@@ -283,13 +299,13 @@ export const ProductDetailPage: React.FC = () => {
                       }
                     }}
                     title={item.label || `Photo ${idx + 1}`}
-                    className={`relative w-20 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
+                    className={`relative w-20 h-16 rounded-xl overflow-hidden border-2 bg-stone-50 transition-all shrink-0 cursor-pointer flex items-center justify-center p-1 ${
                       selectedImageIndex === idx
                         ? 'border-amber-700 shadow-sm scale-102 ring-2 ring-amber-600/20'
                         : 'border-stone-200 opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={item.url} alt="" className="w-full h-full object-cover" />
+                    <img src={item.url} alt="" className="max-h-full max-w-full w-auto h-auto object-contain" />
                     {item.colorName && (
                       <span className="absolute bottom-0 inset-x-0 bg-stone-900/80 text-white text-[9px] text-center font-medium py-0.5 truncate px-1">
                         {item.colorName}
@@ -612,6 +628,40 @@ export const ProductDetailPage: React.FC = () => {
               {relatedProducts.slice(0, 4).map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Lightbox for Complete Full Size Uploaded Image */}
+        {lightboxOpen && (
+          <div
+            className="fixed inset-0 z-50 bg-stone-950/90 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8 animate-in fade-in"
+            onClick={() => setLightboxOpen(false)}
+          >
+            <div
+              className="relative max-w-5xl max-h-[92vh] w-full bg-white rounded-3xl p-4 sm:p-6 shadow-2xl flex flex-col items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-full flex items-center justify-between pb-3 border-b border-stone-200">
+                <span className="text-xs sm:text-sm font-bold text-stone-900 truncate pr-2">
+                  {currentGalleryItem?.label || product.name} — Complete Uploaded Photo
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setLightboxOpen(false)}
+                  className="p-1.5 rounded-full hover:bg-stone-100 text-stone-600 cursor-pointer"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-2 sm:p-4 flex-1 overflow-auto flex items-center justify-center w-full max-h-[78vh]">
+                <img
+                  src={currentImage}
+                  alt={product.name}
+                  className="max-h-[75vh] w-auto max-w-full object-contain rounded-xl shadow-xs"
+                />
+              </div>
             </div>
           </div>
         )}

@@ -187,7 +187,7 @@ export const AdminProductsPage: React.FC = () => {
                           <img
                             src={img}
                             alt=""
-                            className="w-12 h-12 object-cover rounded-xl border border-stone-200 shrink-0"
+                            className="w-12 h-12 object-contain p-0.5 rounded-xl border border-stone-200 shrink-0 bg-stone-50"
                           />
                           <div className="min-w-0">
                             <span className="font-bold text-stone-900 block truncate max-w-xs sm:max-w-md">

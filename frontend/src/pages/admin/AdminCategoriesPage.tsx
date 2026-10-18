@@ -217,8 +217,8 @@ export const AdminCategoriesPage: React.FC = () => {
       {/* ============================================================== */}
       {selectedCategory ? (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
-          {/* Top Bar: Back button & Search Bar (Same like Customer Interface) */}
-          <div className="flex items-center gap-2 max-w-xl">
+          {/* Top Bar: Back button & Search Bar (STAYS FIXED AT TOP-16 ALONG WITH HEADER) */}
+          <div className="sticky top-16 z-30 bg-white/95 backdrop-blur-md py-3 -mx-3.5 px-3.5 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 border-b border-stone-200 shadow-xs flex items-center gap-2">
             <button
               type="button"
               onClick={handleBackToCategories}
@@ -230,7 +230,7 @@ export const AdminCategoriesPage: React.FC = () => {
               <span>Back</span>
             </button>
 
-            <div className="relative flex-1">
+            <div className="relative flex-1 max-w-xl">
               <input
                 type="text"
                 value={productSearchFilter}
@@ -306,12 +306,12 @@ export const AdminCategoriesPage: React.FC = () => {
                     key={prod.id}
                     className="flex flex-col bg-white rounded-2xl border border-stone-200/90 shadow-xs hover:shadow-lg transition-all duration-300 overflow-hidden"
                   >
-                    {/* Image Container */}
-                    <div className="relative aspect-4/3 w-full bg-stone-100 overflow-hidden">
+                    {/* Image Container (Complete size image without cropping) */}
+                    <div className="relative aspect-4/3 w-full bg-stone-50 overflow-hidden flex items-center justify-center p-2">
                       <img
                         src={primaryImage}
                         alt={prod.name}
-                        className="w-full h-full object-cover"
+                        className="max-h-full max-w-full w-auto h-auto object-contain mx-auto"
                       />
 
                       {/* Discount Badge */}
@@ -419,9 +419,26 @@ export const AdminCategoriesPage: React.FC = () => {
         /* VIEW 2: VISUAL CATEGORY CARDS (Click any card to view products) */
         /* ============================================================== */
         <div className="space-y-6">
-          {/* 1. Search Bar FIRST (Same like Customer Interface) */}
-          <div className="flex items-center gap-2 max-w-xl">
-            <div className="relative flex-1">
+          {/* 1. Sticky Top Bar: Back button & Search Bar (STAYS FIXED AT TOP-16 ALONG WITH HEADER) */}
+          <div className="sticky top-16 z-30 bg-white/95 backdrop-blur-md py-3 -mx-3.5 px-3.5 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 border-b border-stone-200 shadow-xs flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (window.history.length > 1) {
+                  window.history.back();
+                } else {
+                  navigate('/admin');
+                }
+              }}
+              className="shrink-0 inline-flex items-center gap-1 px-3 py-2 bg-amber-800 hover:bg-amber-900 text-white rounded-full text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+              title="Go back"
+              aria-label="Back"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back</span>
+            </button>
+
+            <div className="relative flex-1 max-w-xl">
               <input
                 type="text"
                 value={searchFilter}
@@ -440,7 +457,7 @@ export const AdminCategoriesPage: React.FC = () => {
           </div>
 
           {/* 2. "Categories & Furniture Collections" AFTER the search bar */}
-          <div className="pb-1">
+          <div className="pb-1 pt-1">
             <h1 className="text-xl sm:text-2xl font-bold font-serif text-stone-900 flex items-center gap-2">
               <FolderTree className="w-5 h-5 text-amber-700" />
               <span>Categories & Furniture Collections</span>
@@ -474,15 +491,15 @@ export const AdminCategoriesPage: React.FC = () => {
                 onClick={() => handleSelectCategory(cat)}
                 className="group relative flex flex-col rounded-2xl bg-white border border-stone-200 shadow-xs hover:shadow-xl hover:border-amber-400 transition-all duration-300 overflow-hidden cursor-pointer"
               >
-                {/* Category Image */}
-                <div className="relative aspect-4/3 w-full bg-stone-100 overflow-hidden">
+                {/* Category Image (Complete size image without cropping) */}
+                <div className="relative aspect-4/3 w-full bg-stone-50 overflow-hidden flex items-center justify-center p-2">
                   <img
                     src={
                       cat.image_url ||
                       'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80'
                     }
                     alt={cat.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="max-h-full max-w-full w-auto h-auto object-contain mx-auto group-hover:scale-105 transition-transform duration-500"
                   />
 
                   {/* Status & Count Badges */}

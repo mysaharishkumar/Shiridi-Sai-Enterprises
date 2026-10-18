@@ -39,7 +39,7 @@ export const AdminLayout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F5F4] text-stone-900 font-sans">
       {/* Universal Sticky Top Header (STAYS FIXED AT TOP WHEN SCROLLING - EXACTLY LIKE CUSTOMER PAGE) */}
-      <header className="sticky top-0 z-40 bg-white border-b border-stone-200 px-4 sm:px-8 py-3 flex items-center justify-between shadow-xs">
+      <header className="sticky top-0 z-40 bg-white border-b border-stone-200 px-4 sm:px-8 h-16 flex items-center justify-between shadow-xs">
         <div className="flex items-center gap-3">
           {/* Mobile Hamburger Menu Toggle */}
           <button

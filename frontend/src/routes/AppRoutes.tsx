@@ -17,6 +17,7 @@ import { AdminCategoriesPage } from '../pages/admin/AdminCategoriesPage';
 import { AdminBannersPage } from '../pages/admin/AdminBannersPage';
 import { AdminSettingsPage } from '../pages/admin/AdminSettingsPage';
 import { AdminProductFormPage } from '../pages/admin/AdminProductFormPage';
+import { AdminInquiriesPage } from '../pages/admin/AdminInquiriesPage';
 
 // 404 Component
 const NotFoundPage: React.FC = () => {
@@ -61,6 +62,9 @@ export const AppRoutes: React.FC = () => {
       </Route>
       <Route path="/admin/banners" element={<AdminLayout />}>
         <Route index element={<AdminBannersPage />} />
+      </Route>
+      <Route path="/admin/inquiries" element={<AdminLayout />}>
+        <Route index element={<AdminInquiriesPage />} />
       </Route>
       <Route path="/admin/settings" element={<AdminLayout />}>
         <Route index element={<AdminSettingsPage />} />

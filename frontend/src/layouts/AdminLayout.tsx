@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import {
-  FolderTree, Image, Settings, LogOut, ExternalLink, Menu, X
+  FolderTree, Image, Settings, LogOut, ExternalLink, Menu, X, MessageSquare
 } from 'lucide-react';
 import { Logo } from '../components/common/Logo';
 import { useAuth } from '../context/AuthContext';
+import { adminApi } from '../api/client';
 
 export const AdminLayout: React.FC = () => {
   const { user, isAuthenticated, isAdmin, isLoading, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (isAuthenticated && isAdmin) {
+      adminApi.getInquiries()
+        .then((data) => {
+          const unread = data.filter((i) => i.status === 'new').length;
+          setUnreadCount(unread);
+        })
+        .catch(() => {});
+    }
+  }, [location.pathname, isAuthenticated, isAdmin]);
 
   if (isLoading) {
     return (
@@ -24,10 +37,11 @@ export const AdminLayout: React.FC = () => {
     return <Navigate to="/admin/login" replace state={{ from: location }} />;
   }
 
-  // ONLY the 3 navigation items requested by user: Categories, Offers, Store Settings
+  // Navigation items: Categories, Offers, Customer Messages, Store Settings
   const navItems = [
     { label: 'Categories', path: '/admin/categories', icon: FolderTree },
     { label: 'Offers', path: '/admin/banners', icon: Image },
+    { label: 'Customer Messages', path: '/admin/inquiries', icon: MessageSquare, badge: unreadCount },
     { label: 'Store Settings', path: '/admin/settings', icon: Settings }
   ];
 
@@ -56,6 +70,21 @@ export const AdminLayout: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Customer Messages Quick Link in Header */}
+          <Link
+            to="/admin/inquiries"
+            className="relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 hover:bg-stone-50 text-xs font-semibold text-stone-700 transition-colors"
+            title="Customer Inquiries & Messages"
+          >
+            <MessageSquare className="w-3.5 h-3.5 text-stone-600" />
+            <span className="hidden sm:inline">Messages</span>
+            {unreadCount > 0 && (
+              <span className="inline-flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-rose-600 text-white text-[9px] font-extrabold shadow-xs">
+                {unreadCount}
+              </span>
+            )}
+          </Link>
+
           <Link
             to="/"
             target="_blank"
@@ -126,7 +155,7 @@ export const AdminLayout: React.FC = () => {
               </span>
             </div>
 
-            {/* Navigation Links (ONLY Categories, Offers, Store Settings) */}
+            {/* Navigation Links */}
             <nav className="space-y-1.5">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -142,14 +171,21 @@ export const AdminLayout: React.FC = () => {
                     key={item.path}
                     to={item.path}
                     onClick={() => setMobileSidebarOpen(false)}
-                    className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold transition-all ${
+                    className={`flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-semibold transition-all ${
                       isActive
                         ? 'bg-stone-800 text-white shadow-md shadow-stone-900/20'
                         : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                     }`}
                   >
-                    <Icon className="w-4 h-4 shrink-0" />
-                    <span>{item.label}</span>
+                    <div className="flex items-center gap-3">
+                      <Icon className="w-4 h-4 shrink-0" />
+                      <span>{item.label}</span>
+                    </div>
+                    {Boolean(item.badge && item.badge > 0) && (
+                      <span className="px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-extrabold animate-pulse shadow-xs">
+                        {item.badge}
+                      </span>
+                    )}
                   </Link>
                 );
               })}

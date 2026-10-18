@@ -17,6 +17,7 @@ from app.api.routes.cart import router as cart_router
 from app.api.routes.orders import router as orders_router
 from app.api.routes.settings import router as settings_router
 from app.api.routes.uploads import router as uploads_router
+from app.api.routes.inquiries import router as inquiries_router
 
 # Admin routes
 from app.api.routes.admin.admin_products import router as admin_products_router
@@ -89,6 +90,7 @@ app.include_router(cart_router, prefix=api_v1)
 app.include_router(orders_router, prefix=api_v1)
 app.include_router(settings_router, prefix=api_v1)
 app.include_router(uploads_router, prefix=api_v1)
+app.include_router(inquiries_router, prefix=api_v1)
 
 # Register Admin Routers
 app.include_router(admin_products_router, prefix=api_v1)

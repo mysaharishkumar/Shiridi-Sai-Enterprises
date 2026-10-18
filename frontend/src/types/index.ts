@@ -264,6 +264,17 @@ export interface SiteSettings {
   updated_at?: string;
 }
 
+export interface CustomerInquiry {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  subject?: string;
+  message: string;
+  status: 'new' | 'contacted' | 'resolved';
+  created_at: string;
+}
+
 export interface AuditLog {
   id: string;
   admin_id?: string;

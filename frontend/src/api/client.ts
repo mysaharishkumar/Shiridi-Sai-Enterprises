@@ -1,6 +1,7 @@
 import {
   AuthResponse, Banner, Cart, Category, Order, 
-  Product, SiteSettings, User, AuditLog, AdminKPIs, OrderStatus, PaymentStatus
+  Product, SiteSettings, User, AuditLog, AdminKPIs, OrderStatus, PaymentStatus,
+  CustomerInquiry
 } from '../types';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
@@ -94,6 +95,11 @@ export const storeApi = {
   getSearchSuggestions: (q: string) => request<Array<{ id: string; name: string; slug: string; price: number; category: string; image?: string }>>(
     `/products/search/suggestions?q=${encodeURIComponent(q)}`
   ),
+  submitInquiry: (data: { name: string; phone: string; email?: string; subject?: string; message: string }) =>
+    request<{ success: boolean; message: string; inquiry_id: string }>('/inquiries', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
 };
 
 // Auth API
@@ -250,5 +256,17 @@ export const adminApi = {
       method: 'POST',
       body: formData
     });
-  }
+  },
+
+  // Customer Inquiries
+  getInquiries: () => request<CustomerInquiry[]>('/admin/inquiries'),
+  updateInquiryStatus: (id: string, status: string) =>
+    request<{ success: boolean; status: string }>(`/admin/inquiries/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    }),
+  deleteInquiry: (id: string) =>
+    request<{ success: boolean; message: string }>(`/admin/inquiries/${id}`, {
+      method: 'DELETE'
+    })
 };

@@ -9,7 +9,7 @@ class BannerBase(BaseModel):
     image_url: str
     mobile_image_url: Optional[str] = None
     cta_text: Optional[str] = None
-    link_url: Optional[str] = "/products"
+    link_url: Optional[str] = ""
     display_order: int = 0
     is_active: bool = True
     start_date: Optional[datetime] = None

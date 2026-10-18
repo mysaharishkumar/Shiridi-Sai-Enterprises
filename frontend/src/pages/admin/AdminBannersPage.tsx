@@ -16,7 +16,7 @@ export const AdminBannersPage: React.FC = () => {
   const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
   const [bannerForm, setBannerForm] = useState({
     image_url: '',
-    link_url: '/category/sofas',
+    link_url: '',
     display_order: 1,
     is_active: true
   });
@@ -43,7 +43,7 @@ export const AdminBannersPage: React.FC = () => {
     setEditingBanner(null);
     setBannerForm({
       image_url: '',
-      link_url: '/category/sofas',
+      link_url: '',
       display_order: banners.length + 1,
       is_active: true
     });
@@ -54,7 +54,7 @@ export const AdminBannersPage: React.FC = () => {
     setEditingBanner(b);
     setBannerForm({
       image_url: b.image_url,
-      link_url: b.link_url || '/products',
+      link_url: b.link_url || '',
       display_order: b.display_order,
       is_active: b.is_active ?? true
     });
@@ -185,10 +185,14 @@ export const AdminBannersPage: React.FC = () => {
               <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
                 <div className="flex items-center gap-2 text-xs text-stone-600">
                   <ExternalLink className="w-4 h-4 text-stone-400 shrink-0" />
-                  <span className="font-semibold text-stone-700">Target Link URL:</span>
-                  <span className="text-stone-900 font-mono font-medium truncate">
-                    {b.link_url || '/products'}
-                  </span>
+                  <span className="font-semibold text-stone-700">Target Link:</span>
+                  {b.link_url && b.link_url.trim() ? (
+                    <span className="text-stone-900 font-mono font-medium truncate">
+                      {b.link_url}
+                    </span>
+                  ) : (
+                    <span className="text-stone-400 italic">None (Display only, no link)</span>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between pt-3 border-t border-stone-100 text-xs">
@@ -280,21 +284,20 @@ export const AdminBannersPage: React.FC = () => {
                 )}
               </div>
 
-              {/* 2. Target Link URL */}
+              {/* 2. Target Link URL (Optional) */}
               <div>
                 <label className="block font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                  Target Link URL *
+                  Target Link URL (Optional)
                 </label>
                 <input
                   type="text"
-                  required
                   value={bannerForm.link_url}
                   onChange={(e) => setBannerForm({ ...bannerForm, link_url: e.target.value })}
-                  placeholder="/category/sofas or /product/slug or https://..."
+                  placeholder="Optional: e.g. /category/sofas (leave blank if no link)"
                   className="w-full p-2.5 bg-stone-50 rounded-xl border border-stone-200 focus:bg-white focus:outline-hidden font-mono"
                 />
                 <p className="text-[11px] text-stone-400 mt-1">
-                  When visitors click this offer banner, they will be taken to this link.
+                  Optional. If a link is provided, clicking the banner will open this URL. If left blank, clicking the banner does nothing.
                 </p>
               </div>
 

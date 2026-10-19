@@ -199,7 +199,7 @@ export const AdminSettingsPage: React.FC = () => {
                 Google Maps Location URL (Showroom Directions)
               </label>
               <input
-                type="url"
+                type="text"
                 value={settings.google_maps_url || ''}
                 onChange={(e) => setSettings({ ...settings, google_maps_url: e.target.value })}
                 placeholder="https://maps.app.goo.gl/..."

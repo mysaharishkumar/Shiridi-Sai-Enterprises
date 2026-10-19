@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import {
   FolderTree, Plus, Edit, Trash2, Upload, LayoutGrid, List,
   Eye, PackagePlus, Search, ArrowLeft, ArrowRight, CheckCircle2,
-  Package, Tag, Palette, Sparkles, RefreshCw
+  Package, Tag, Palette, Sparkles, RefreshCw, X
 } from 'lucide-react';
 import { Category, Subcategory, Product } from '../../types';
 import { adminApi } from '../../api/client';
@@ -597,21 +597,14 @@ export const AdminCategoriesPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
                   Category Cover Image
                 </label>
-                <div className="space-y-2">
-                  <div className="flex gap-2">
-                    <input
-                      type="url"
-                      placeholder="Image URL or upload..."
-                      value={categoryForm.image_url}
-                      onChange={(e) => setCategoryForm({ ...categoryForm, image_url: e.target.value })}
-                      className="flex-1 p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden"
-                    />
-                    <label className="px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-semibold cursor-pointer flex items-center gap-1.5 shrink-0">
+                <div className="space-y-3">
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <label className="px-4 py-2.5 bg-stone-800 hover:bg-stone-900 text-white rounded-xl text-xs font-semibold cursor-pointer inline-flex items-center justify-center gap-2 shrink-0 shadow-xs transition-colors">
                       <Upload className="w-3.5 h-3.5" />
-                      <span>{uploadingImage ? '...' : 'Upload'}</span>
+                      <span>{uploadingImage ? 'Uploading...' : 'Upload Image from Device'}</span>
                       <input
                         type="file"
                         accept="image/*"
@@ -620,15 +613,31 @@ export const AdminCategoriesPage: React.FC = () => {
                         disabled={uploadingImage}
                       />
                     </label>
+
+                    <input
+                      type="text"
+                      placeholder="Or paste image URL (https://...)"
+                      value={categoryForm.image_url}
+                      onChange={(e) => setCategoryForm({ ...categoryForm, image_url: e.target.value })}
+                      className="flex-1 p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs focus:bg-white focus:outline-hidden"
+                    />
                   </div>
 
                   {categoryForm.image_url && (
-                    <div className="relative aspect-16/9 rounded-xl overflow-hidden border border-stone-200 max-h-36">
+                    <div className="relative rounded-2xl overflow-hidden border border-stone-200 bg-stone-50 p-2 flex items-center justify-center max-h-48">
                       <img
                         src={categoryForm.image_url}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
+                        alt="Category Preview"
+                        className="max-h-40 w-auto object-contain rounded-lg"
                       />
+                      <button
+                        type="button"
+                        onClick={() => setCategoryForm({ ...categoryForm, image_url: '' })}
+                        className="absolute top-3 right-3 p-1.5 rounded-full bg-stone-900/70 hover:bg-stone-900 text-white shadow-md transition-colors cursor-pointer"
+                        title="Remove Image"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   )}
                 </div>

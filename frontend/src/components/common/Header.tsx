@@ -70,7 +70,7 @@ export const Header: React.FC = () => {
     : `https://wa.me/919876543210`;
 
   return (
-    <header className="sticky top-0 z-40 bg-white/98 backdrop-blur-md border-b border-stone-200/80 shadow-xs">
+    <header className="sticky top-0 z-40 bg-white border-b border-stone-200 shadow-xs">
 
       {/* Main Header Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

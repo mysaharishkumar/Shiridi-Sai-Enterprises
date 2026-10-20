@@ -216,9 +216,9 @@ export const AdminCategoriesPage: React.FC = () => {
       {/* (Triggered when clicking a category, e.g. "Sofas")              */}
       {/* ============================================================== */}
       {selectedCategory ? (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+        <div className="space-y-6">
           {/* Top Bar: Back button & Search Bar (STAYS FIXED AT TOP-16 ALONG WITH HEADER) */}
-          <div className="sticky top-16 z-30 bg-white/95 backdrop-blur-md py-3 -mx-3.5 px-3.5 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 border-b border-stone-200 shadow-xs flex items-center gap-2">
+          <div className="sticky top-16 z-30 bg-white py-3 -mx-3.5 px-3.5 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 border-b border-stone-200 shadow-xs flex items-center gap-2">
             <button
               type="button"
               onClick={handleBackToCategories}
@@ -420,7 +420,7 @@ export const AdminCategoriesPage: React.FC = () => {
         /* ============================================================== */
         <div className="space-y-6">
           {/* 1. Sticky Top Bar: Back button & Search Bar (STAYS FIXED AT TOP-16 ALONG WITH HEADER) */}
-          <div className="sticky top-16 z-30 bg-white/95 backdrop-blur-md py-3 -mx-3.5 px-3.5 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 border-b border-stone-200 shadow-xs flex items-center gap-2">
+          <div className="sticky top-16 z-30 bg-white py-3 -mx-3.5 px-3.5 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 border-b border-stone-200 shadow-xs flex items-center gap-2">
             <button
               type="button"
               onClick={() => {

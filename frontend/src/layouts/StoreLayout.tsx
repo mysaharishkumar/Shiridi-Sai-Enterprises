@@ -5,9 +5,9 @@ import { Footer } from '../components/common/Footer';
 
 export const StoreLayout: React.FC = () => {
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#FCFBF9] text-[#1C1917]">
+    <div className="min-h-screen w-full flex flex-col bg-[#FCFBF9] text-[#1C1917]">
       <Header />
-      <main className="flex-1 w-full max-w-full overflow-x-hidden">
+      <main className="flex-1 w-full">
         <Outlet />
       </main>
       <Footer />

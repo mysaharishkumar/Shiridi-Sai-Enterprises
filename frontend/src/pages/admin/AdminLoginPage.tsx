@@ -43,8 +43,8 @@ export const AdminLoginPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-stone-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 text-stone-200">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-3">
-        <div className="flex justify-center brightness-125">
-          <Logo admin />
+        <div className="flex justify-center">
+          <Logo admin light />
         </div>
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-800/70 text-stone-300 border border-stone-700 text-xs font-semibold uppercase tracking-wider">
           <ShieldCheck className="w-3.5 h-3.5" />

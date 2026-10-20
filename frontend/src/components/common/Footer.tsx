@@ -60,9 +60,7 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand Info & Address */}
           <div className="space-y-4">
-            <div className="brightness-125">
-              <Logo className="text-white" />
-            </div>
+            <Logo light />
             <p className="text-stone-400 text-xs leading-relaxed max-w-sm">
               {settings?.about_us ||
                 'Shiridi Sai Enterprises has been a trusted symbol of premium wood craftsmanship and contemporary home luxury. We craft heirloom solid wood pieces engineered for modern living.'}

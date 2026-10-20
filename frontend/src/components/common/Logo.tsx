@@ -6,12 +6,14 @@ import { useStore } from '../../context/StoreContext';
 interface LogoProps {
   className?: string;
   admin?: boolean;
+  light?: boolean;
 }
 
-export const Logo: React.FC<LogoProps> = ({ className = '', admin = false }) => {
+export const Logo: React.FC<LogoProps> = ({ className = '', admin = false, light = false }) => {
   const { settings } = useStore();
   const storeName = settings?.store_name || 'Shiridi Sai Enterprises';
   const logoUrl = settings?.logo_url || '/logo.jpg';
+  const isLight = light || className.includes('text-white') || className.includes('light');
 
   return (
     <Link
@@ -31,10 +33,22 @@ export const Logo: React.FC<LogoProps> = ({ className = '', admin = false }) => 
       )}
 
       <div className="flex flex-col text-left min-w-0">
-        <span className="font-bold text-base sm:text-lg md:text-xl tracking-tight text-stone-900 group-hover:text-stone-700 transition-colors font-serif leading-none truncate">
+        <span
+          className={`font-bold text-base sm:text-lg md:text-xl tracking-tight transition-colors font-serif leading-none truncate ${
+            isLight
+              ? 'text-white group-hover:text-stone-100'
+              : 'text-stone-900 group-hover:text-stone-700'
+          }`}
+        >
           {storeName}
         </span>
-        <span className="text-[9px] sm:text-[10px] md:text-[11px] font-medium tracking-wider sm:tracking-widest text-stone-500 uppercase mt-0.5 truncate">
+        <span
+          className={`text-[9px] sm:text-[10px] md:text-[11px] font-medium tracking-wider sm:tracking-widest uppercase mt-0.5 truncate ${
+            isLight
+              ? 'text-stone-300'
+              : 'text-stone-500'
+          }`}
+        >
           {admin ? 'Management Portal' : 'Fine Furniture & Furnishings'}
         </span>
       </div>

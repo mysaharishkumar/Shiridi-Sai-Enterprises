@@ -74,14 +74,14 @@ export const Header: React.FC = () => {
 
       {/* Main Header Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-4 h-20">
+        <div className="flex items-center justify-between gap-3 h-16 sm:h-20">
           {/* Left Side: Mobile Menu Button + Shop Name Logo */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             {/* Mobile menu button */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 -ml-1 rounded-lg text-stone-700 hover:text-stone-900 hover:bg-stone-100 cursor-pointer"
+              className="lg:hidden p-2 -ml-1 rounded-lg text-stone-700 hover:text-stone-900 hover:bg-stone-100 cursor-pointer shrink-0"
               aria-label="Open navigation menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -177,20 +177,6 @@ export const Header: React.FC = () => {
                   </button>
                 </div>
               </div>
-            )}
-          </div>
-
-          {/* Right Header Actions: ONLY Call */}
-          <div className="flex items-center shrink-0">
-            {settings?.phone && (
-              <a
-                href={`tel:${settings.phone}`}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
-                title="Call showroom directly"
-              >
-                <Phone className="w-3.5 h-3.5" />
-                <span>Call</span>
-              </a>
             )}
           </div>
         </div>

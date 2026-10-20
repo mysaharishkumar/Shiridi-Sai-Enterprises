@@ -42,7 +42,6 @@ services:
     name: shiridi-sai-enterprises-store
     env: static
     rootDir: frontend
-    plan: free
     buildCommand: "npm install && npm run build"
     staticPublishPath: "./dist"
     routes:
